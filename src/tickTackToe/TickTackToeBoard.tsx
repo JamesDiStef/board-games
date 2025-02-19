@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import Square from "./Square";
+import Square from "../tickTackToe/Square";
 
 const Board = () => {
+  const [numClicks, setNumClicks] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [isPlayerOne, setIsPlayerOne] = useState(true);
   const [board, setBoard] = useState([
@@ -16,6 +17,22 @@ const Board = () => {
     { num: 8, value: "" },
   ]);
 
+  const checkGameOver = (squareNumber: number) => {
+    setNumClicks(numClicks + 1);
+    if (numClicks < 4) return;
+    console.log("ok");
+
+    switch (squareNumber) {
+      case 0:
+        if (board[0] === board[1] && board[1] === board[2]) setGameOver(true);
+        else if (board[0] === board[3] && board[3] === board[6])
+          setGameOver(true);
+        else if (board[0] === board[4] && board[4] == board[8])
+          setGameOver(true);
+        break;
+    }
+  };
+
   const handleClick = (squareNumber: number) => {
     const nextValue = isPlayerOne ? "X" : "O";
     setBoard(
@@ -24,48 +41,8 @@ const Board = () => {
       )
     );
     setIsPlayerOne(!isPlayerOne);
+    checkGameOver(squareNumber);
   };
-
-  useEffect(() => {
-    setGameOver(false);
-    if (board[0].value === board[1].value && board[1].value === board[2].value)
-      setGameOver(true);
-    else if (
-      board[3].value === board[4].value &&
-      board[4].value === board[5].value
-    )
-      setGameOver(true);
-    else if (
-      board[6].value === board[7].value &&
-      board[7].value === board[8].value
-    )
-      setGameOver(true);
-    else if (
-      board[0].value === board[3].value &&
-      board[3].value === board[6].value
-    )
-      setGameOver(true);
-    else if (
-      board[0].value === board[1].value &&
-      board[1].value === board[2].value
-    )
-      setGameOver(true);
-    else if (
-      board[0].value === board[1].value &&
-      board[1].value === board[2].value
-    )
-      setGameOver(true);
-    else if (
-      board[0].value === board[1].value &&
-      board[1].value === board[2].value
-    )
-      setGameOver(true);
-    else if (
-      board[0].value === board[1].value &&
-      board[1].value === board[2].value
-    )
-      setGameOver(true);
-  }, [board]);
 
   return (
     <div
