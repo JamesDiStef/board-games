@@ -1,19 +1,12 @@
-import { useState } from "react";
+interface Props {
+  column: any;
+  handleClick: any;
+}
 
-const ConnectFourRow = () => {
-  const [column, setColumn] = useState([
-    { id: 0, color: "" },
-    { id: 1, color: "" },
-    { id: 2, color: "" },
-    { id: 3, color: "" },
-    { id: 4, color: "" },
-    { id: 5, color: "" },
-  ]);
-
-  const handleClick = () => {};
-
+const ConnectFourRow = ({ column, handleClick }: Props) => {
   return (
     <div
+      onClick={() => handleClick(column)}
       style={{
         display: "flex",
         flexDirection: "column",
@@ -22,8 +15,9 @@ const ConnectFourRow = () => {
         border: "2px solid black",
       }}
     >
-      {column.map((s) => (
+      {column.squares.map((s: any) => (
         <div
+          key={s.id}
           style={{
             display: "flex",
             flexDirection: "column",
@@ -32,10 +26,9 @@ const ConnectFourRow = () => {
             borderRadius: "100%",
             border: "2px solid black",
             textAlign: "center",
+            backgroundColor: `${s.color}`,
           }}
-        >
-          Square
-        </div>
+        ></div>
       ))}
     </div>
   );

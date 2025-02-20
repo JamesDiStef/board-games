@@ -18,7 +18,7 @@ function App() {
             <Link to="/tickTackToe">Tick Tack Toe</Link>
           </li>
           <li>
-            <Link to="/connectFourBoard">Connect Four</Link>
+            <Link to="/connectFour">Connect Four</Link>
           </li>
         </ul>
       </nav>
