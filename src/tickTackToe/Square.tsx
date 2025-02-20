@@ -10,11 +10,11 @@ const Square = ({ num, value, handleClick }: Props) => {
       <button
         onClick={() => handleClick(num)}
         style={{
-          height: "40px",
-          minWidth: "100px",
+          height: "100px",
+          width: "200px",
           border: "2px solid black",
           borderRadius: "2px",
-          fontSize: "large",
+          fontSize: "36px",
         }}
       >
         {value}

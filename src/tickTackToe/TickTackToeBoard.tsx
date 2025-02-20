@@ -17,23 +17,39 @@ const Board = () => {
     { num: 8, value: "" },
   ]);
 
-  const checkGameOver = (squareNumber: number) => {
+  const gameOverCombos = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+  ];
+
+  const checkGameOver = () => {
     setNumClicks(numClicks + 1);
     if (numClicks < 4) return;
     console.log("ok");
 
-    switch (squareNumber) {
-      case 0:
-        if (board[0] === board[1] && board[1] === board[2]) setGameOver(true);
-        else if (board[0] === board[3] && board[3] === board[6])
-          setGameOver(true);
-        else if (board[0] === board[4] && board[4] == board[8])
-          setGameOver(true);
-        break;
+    for (let i = 0; i < gameOverCombos.length; i++) {
+      const [a, b, c] = gameOverCombos[i];
+      if (
+        board[a].value === board[b].value &&
+        board[b].value === board[c].value &&
+        board[a].value !== ""
+      ) {
+        console.log("ayyyyyy");
+        console.log(a, b, c);
+        return true;
+      }
     }
+    return false;
   };
 
   const handleClick = (squareNumber: number) => {
+    if (gameOver) return;
     const nextValue = isPlayerOne ? "X" : "O";
     setBoard(
       board.map((s) =>
@@ -41,13 +57,17 @@ const Board = () => {
       )
     );
     setIsPlayerOne(!isPlayerOne);
-    checkGameOver(squareNumber);
+    checkGameOver();
   };
+
+  useEffect(() => {
+    if (checkGameOver()) setGameOver(true);
+  }, [board]);
 
   return (
     <div
       style={{
-        marginTop: "20%",
+        marginTop: "30px",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
