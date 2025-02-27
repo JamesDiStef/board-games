@@ -1,4 +1,9 @@
-const HangmanWord = ({ wordToGuess, guessedLetters }) => {
+interface Props {
+  wordToGuess: string;
+  guessedLetters: string[];
+}
+
+const HangmanWord = ({ wordToGuess, guessedLetters }: Props) => {
   return (
     <div
       style={{

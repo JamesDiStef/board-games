@@ -1,4 +1,8 @@
-const Keyboard = ({ handleGuess }) => {
+interface Props {
+  handleGuess: (arg: string) => void;
+}
+
+const Keyboard = ({ handleGuess }: Props) => {
   return (
     <div
       style={{
