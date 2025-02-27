@@ -2,26 +2,13 @@ import { Link, Routes, Route } from "react-router-dom";
 import HangmanBoard from "./hangman/HangmanBoard";
 import Board from "./tickTackToe/TickTackToeBoard";
 import ConnectFourBoard from "./connectFour/ConnectFourBoard";
+import NavBar from "./NavBar";
+import "./global.css";
 
 function App() {
   return (
     <div>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/tickTackToe">Home</Link>
-          </li>
-          <li>
-            <Link to="/hangman">Hangman</Link>
-          </li>
-          <li>
-            <Link to="/tickTackToe">Tick Tack Toe</Link>
-          </li>
-          <li>
-            <Link to="/connectFour">Connect Four</Link>
-          </li>
-        </ul>
-      </nav>
+      <NavBar />
 
       <Routes>
         <Route path="/" element={<HangmanBoard />} />
