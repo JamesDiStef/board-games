@@ -172,7 +172,7 @@ const ConnectFourBoard = () => {
   };
 
   return (
-    <div className="flex justify-center space-x-2">
+    <div className="flex justify-center sm:space-x-2">
       <ConnectFourRow column={column1} handleClick={handleClickColumn1} />
       <ConnectFourRow column={column2} handleClick={handleClickColumn2} />
       <ConnectFourRow column={column3} handleClick={handleClickColumn3} />
