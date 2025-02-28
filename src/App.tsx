@@ -11,9 +11,9 @@ function App() {
       <NavBar />
 
       <Routes>
-        <Route path="/" element={<HangmanBoard />} />
+        <Route path="/" element={<Board />} />
         <Route path="/hangman" element={<HangmanBoard />} />
-        <Route path="/tickTackToe" element={<Board />} />
+        <Route path="/ticTacToe" element={<Board />} />
         <Route path="/connectFour" element={<ConnectFourBoard />} />
       </Routes>
     </div>

@@ -16,13 +16,13 @@ const NavBar = () => {
       <nav>
         <ul className="hidden sm:flex mr-6 py-3 bg-amber-500 w-full">
           <li className="mr-6">
-            <Link to="/tickTackToe">Home</Link>
+            <Link to="/ticTacToe">Home</Link>
           </li>
           <li className="mr-6">
             <Link to="/hangman">Hangman</Link>
           </li>
           <li className="mr-6">
-            <Link to="/tickTackToe">Tick Tack Toe</Link>
+            <Link to="/ticTacToe">Tic-Tac-Toe</Link>
           </li>
           <li className="mr-6">
             <Link to="/connectFour">Connect Four</Link>
@@ -32,13 +32,13 @@ const NavBar = () => {
         {isOpen && (
           <ul className="block sm:hidden bg-amber-500">
             <li className="ml-3">
-              <Link to="/tickTackToe">Home</Link>
+              <Link to="/ticTacToe">Home</Link>
             </li>
             <li className="ml-3">
               <Link to="/hangman">Hangman</Link>
             </li>
             <li className="ml-3">
-              <Link to="/tickTackToe">Tick Tack Toe</Link>
+              <Link to="/ticTacToe">Tic-Tac-Toe</Link>
             </li>
             <li className="ml-3">
               <Link to="/connectFour">Connect Four</Link>
