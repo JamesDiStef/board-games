@@ -1,88 +1,25 @@
 const HEAD = (
-  <div
-    style={{
-      height: "80px",
-      width: "80px",
-      border: "10px solid black",
-      borderRadius: "100%",
-      position: "absolute",
-      top: "50px",
-      right: "-45px",
-    }}
-  ></div>
+  <div className="h-[40px] lg:h-[80px] w-[40px] lg:w-[80px] border-[10px] border-black rounded-full absolute top-[20px] lg:top-[50px] right-[-15px] lg:right-[-45px]"></div>
 );
 
 const BODY = (
-  <div
-    style={{
-      height: "100px",
-      width: "10px",
-      background: "black",
-      position: "absolute",
-      top: "150px",
-      right: "0",
-    }}
-  ></div>
+  <div className="h-[50px] lg:h-[100px] w-[10px] bg-black absolute top-[50px] lg:top-[150px] right-0"></div>
 );
 
 const LEFT_ARM = (
-  <div
-    style={{
-      height: "10px",
-      width: "100px",
-      background: "black",
-      position: "absolute",
-      top: "180px",
-      right: "10px",
-      rotate: "30deg",
-      transformOrigin: "right bottom",
-    }}
-  ></div>
+  <div className="h-[10px] w-[50px] lg:w-[100px] bg-black absolute top-[70px] lg:top-[180px] right-[10px] rotate-[30deg] origin-bottom-right"></div>
 );
 
 const RIGHT_ARM = (
-  <div
-    style={{
-      height: "10px",
-      width: "100px",
-      background: "black",
-      position: "absolute",
-      top: "180px",
-      right: "-100px",
-      rotate: "-30deg",
-      transformOrigin: "left bottom",
-    }}
-  ></div>
+  <div className="h-[10px] w-[50px] lg:w-[100px] bg-black absolute top-[70px] lg:top-[180px] right-[-50px] lg:right-[-100px] rotate-[-30deg] origin-bottom-left"></div>
 );
 
 const RIGHT_LEG = (
-  <div
-    style={{
-      height: "10px",
-      width: "100px",
-      background: "black",
-      position: "absolute",
-      top: "290px",
-      right: "-80px",
-      rotate: "30deg",
-      transformOrigin: "right bottom",
-    }}
-  ></div>
+  <div className="h-[10px] w-[100px] bg-black absolute lg:top-[290px] right-[-80px] rotate-[30deg] origin-bottom-right"></div>
 );
 
 const LEFT_LEG = (
-  <div
-    style={{
-      height: "10px",
-      width: "100px",
-      background: "black",
-      position: "absolute",
-      top: "290px",
-      right: "-10px",
-      rotate: "-30deg",
-      transformOrigin: "left bottom",
-    }}
-  ></div>
+  <div className="h-[10px] w-[100px] bg-black absolute lg:top-[290px] right-[-10px] rotate-[-30deg] origin-bottom-left"></div>
 );
 
 interface Props {
@@ -98,35 +35,12 @@ const HangmanCrawing = ({ wrongGuesses }: Props) => {
       {wrongGuesses > 3 && LEFT_ARM}
       {wrongGuesses > 4 && RIGHT_LEG}
       {wrongGuesses > 5 && LEFT_LEG}
-      <div
-        style={{
-          height: "50px",
-          width: "10px",
-          background: "black",
-          position: "absolute",
-          top: 0,
-          right: 0,
-        }}
-      ></div>
-      <div
-        style={{
-          marginLeft: "120px",
-          height: "10px",
-          width: "340px",
-          background: "black",
-        }}
-      ></div>
-      <div
-        style={{
-          marginLeft: "120px",
-          height: "400px",
-          width: "10px",
-          background: "black",
-        }}
-      ></div>
-      <div
-        style={{ height: "10px", width: "300px", background: "black" }}
-      ></div>
+
+      <div className="h-[30px] lg:h-[50px] w-[10px] bg-black absolute top-0 right-0"></div>
+
+      <div className="h-[10px] ml-[120px] w-[100px] lg:w-[340px] bg-black"></div>
+      <div className="ml-[120px] h-[200px] lg:h-[400px] w-[10px] bg-black"></div>
+      <div className="ml-[80px] lg:ml-0 h-[10px] w-[80px] lg:w-[300px] bg-black"></div>
     </div>
   );
 };
