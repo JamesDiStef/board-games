@@ -6,7 +6,7 @@ import Keyboard from "./Keyboard";
 
 function HangmanBoard() {
   const [isWin, setIsWin] = useState(false);
-  const [wordToGuess] = useState(() => {
+  const [wordToGuess, setWordtoGuess] = useState(() => {
     return words[Math.floor(Math.random() * words.length)];
   });
   const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
@@ -22,6 +22,15 @@ function HangmanBoard() {
     }
   };
 
+  const handleRestart = () => {
+    setWordtoGuess(() => {
+      return words[Math.floor(Math.random() * words.length)];
+    });
+    setGuessedLetters([]);
+    setIsWin(false);
+    setWrongGuesses(0);
+  };
+
   return (
     <div
       style={{
@@ -33,6 +42,12 @@ function HangmanBoard() {
         alignItems: "center",
       }}
     >
+      <button
+        className="border-2 bg-amber-400 rounded-2xl mb-[20px] p-3"
+        onClick={handleRestart}
+      >
+        Restart
+      </button>
       {wrongGuesses === 6 && (
         <div
           style={{

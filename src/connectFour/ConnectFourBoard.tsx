@@ -171,15 +171,104 @@ const ConnectFourBoard = () => {
     setIsRedTurn(!isRedTurn);
   };
 
+  const handleRestart = () => {
+    setColumn1({
+      counter: 5,
+      squares: [
+        { id: 0, color: "" },
+        { id: 1, color: "" },
+        { id: 2, color: "" },
+        { id: 3, color: "" },
+        { id: 4, color: "" },
+        { id: 5, color: "" },
+      ],
+    });
+    setColumn2({
+      counter: 5,
+      squares: [
+        { id: 0, color: "" },
+        { id: 1, color: "" },
+        { id: 2, color: "" },
+        { id: 3, color: "" },
+        { id: 4, color: "" },
+        { id: 5, color: "" },
+      ],
+    });
+    setColumn3({
+      counter: 5,
+      squares: [
+        { id: 0, color: "" },
+        { id: 1, color: "" },
+        { id: 2, color: "" },
+        { id: 3, color: "" },
+        { id: 4, color: "" },
+        { id: 5, color: "" },
+      ],
+    });
+    setColumn4({
+      counter: 5,
+      squares: [
+        { id: 0, color: "" },
+        { id: 1, color: "" },
+        { id: 2, color: "" },
+        { id: 3, color: "" },
+        { id: 4, color: "" },
+        { id: 5, color: "" },
+      ],
+    });
+    setColumn5({
+      counter: 5,
+      squares: [
+        { id: 0, color: "" },
+        { id: 1, color: "" },
+        { id: 2, color: "" },
+        { id: 3, color: "" },
+        { id: 4, color: "" },
+        { id: 5, color: "" },
+      ],
+    });
+    setColumn6({
+      counter: 5,
+      squares: [
+        { id: 0, color: "" },
+        { id: 1, color: "" },
+        { id: 2, color: "" },
+        { id: 3, color: "" },
+        { id: 4, color: "" },
+        { id: 5, color: "" },
+      ],
+    });
+    setColumn7({
+      counter: 5,
+      squares: [
+        { id: 0, color: "" },
+        { id: 1, color: "" },
+        { id: 2, color: "" },
+        { id: 3, color: "" },
+        { id: 4, color: "" },
+        { id: 5, color: "" },
+      ],
+    });
+  };
+
   return (
-    <div className="flex justify-center sm:space-x-2">
-      <ConnectFourRow column={column1} handleClick={handleClickColumn1} />
-      <ConnectFourRow column={column2} handleClick={handleClickColumn2} />
-      <ConnectFourRow column={column3} handleClick={handleClickColumn3} />
-      <ConnectFourRow column={column4} handleClick={handleClickColumn4} />
-      <ConnectFourRow column={column5} handleClick={handleClickColumn5} />
-      <ConnectFourRow column={column6} handleClick={handleClickColumn6} />
-      <ConnectFourRow column={column7} handleClick={handleClickColumn7} />
+    <div className="">
+      <button
+        className="border-2 bg-amber-400 rounded-2xl mt-[30px] p-3 ml-[45%]"
+        onClick={handleRestart}
+      >
+        Restart
+      </button>
+
+      <div className="flex justify-center sm:space-x-2">
+        <ConnectFourRow column={column1} handleClick={handleClickColumn1} />
+        <ConnectFourRow column={column2} handleClick={handleClickColumn2} />
+        <ConnectFourRow column={column3} handleClick={handleClickColumn3} />
+        <ConnectFourRow column={column4} handleClick={handleClickColumn4} />
+        <ConnectFourRow column={column5} handleClick={handleClickColumn5} />
+        <ConnectFourRow column={column6} handleClick={handleClickColumn6} />
+        <ConnectFourRow column={column7} handleClick={handleClickColumn7} />
+      </div>
     </div>
   );
 };
