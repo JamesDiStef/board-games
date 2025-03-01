@@ -15,11 +15,11 @@ const RIGHT_ARM = (
 );
 
 const RIGHT_LEG = (
-  <div className="h-[10px] w-[100px] bg-black absolute lg:top-[290px] right-[-80px] rotate-[30deg] origin-bottom-right"></div>
+  <div className="h-[10px] w-[50px] lg:w-[100px] bg-black absolute top-[120px] lg:top-[290px] right-[-30px] lg:right-[-80px] rotate-[30deg] origin-bottom-right"></div>
 );
 
 const LEFT_LEG = (
-  <div className="h-[10px] w-[100px] bg-black absolute lg:top-[290px] right-[-10px] rotate-[-30deg] origin-bottom-left"></div>
+  <div className="h-[10px] w-[50px] lg:w-[100px] bg-black absolute top-[120px] lg:top-[290px] right-[-10px] rotate-[-30deg] origin-bottom-left"></div>
 );
 
 interface Props {
