@@ -31,7 +31,6 @@ const Board = () => {
   const checkGameOver = () => {
     setNumClicks(numClicks + 1);
     if (numClicks < 4) return;
-    console.log("ok");
 
     for (let i = 0; i < gameOverCombos.length; i++) {
       const [a, b, c] = gameOverCombos[i];
@@ -40,12 +39,26 @@ const Board = () => {
         board[b].value === board[c].value &&
         board[a].value !== ""
       ) {
-        console.log("ayyyyyy");
-        console.log(a, b, c);
         return true;
       }
     }
     return false;
+  };
+
+  const handleRestart = () => {
+    setBoard([
+      { num: 0, value: "" },
+      { num: 1, value: "" },
+      { num: 2, value: "" },
+      { num: 3, value: "" },
+      { num: 4, value: "" },
+      { num: 5, value: "" },
+      { num: 6, value: "" },
+      { num: 7, value: "" },
+      { num: 8, value: "" },
+    ]);
+    setNumClicks(0);
+    setGameOver(false);
   };
 
   const handleClick = (squareNumber: number) => {
@@ -74,6 +87,12 @@ const Board = () => {
         alignItems: "center",
       }}
     >
+      <button
+        className="border-2 bg-amber-400 rounded-2xl mb-[20px] p-3"
+        onClick={handleRestart}
+      >
+        Restart
+      </button>
       {gameOver && <p>Game over!!!!</p>}
 
       <div
