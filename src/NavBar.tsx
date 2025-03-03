@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 const NavBar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   return (
     <>
       <button
