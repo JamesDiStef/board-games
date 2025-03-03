@@ -3,15 +3,18 @@ import { Link } from "react-router-dom";
 interface Props {
   open: boolean;
   close: () => void;
+  isFirstOpen: boolean;
 }
 
-const MobileNav = ({ open, close }: Props) => {
+const MobileNav = ({ open, close, isFirstOpen }: Props) => {
   if (!open) return null;
   return (
     <ul className="flex flex-col sm:hidden bg-amber-500 h-screen text-4xl">
-      <li className="mx-auto mb-auto" onClick={() => close()}>
-        Resume game
-      </li>
+      {!isFirstOpen && (
+        <li className="mx-auto mb-auto" onClick={() => close()}>
+          Resume game
+        </li>
+      )}
       <li className="mx-auto mb-auto">
         <button onClick={() => close()}>
           <Link to="/hangman">Hangman</Link>

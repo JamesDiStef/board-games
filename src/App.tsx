@@ -10,7 +10,12 @@ import MobileNav from "./MobileNav";
 import { useState } from "react";
 
 function App() {
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState(true);
+  const [isFirstOpen, setIsFirstOpen] = useState(true);
+  const close = () => {
+    setOpenModal(false);
+    setIsFirstOpen(false);
+  };
   return (
     <div>
       <div className="block sm:hidden bg-amber-500">
@@ -20,7 +25,11 @@ function App() {
         >
           <FontAwesomeIcon icon={faBars} />
         </button>
-        <MobileNav open={openModal} close={() => setOpenModal(false)} />
+        <MobileNav
+          open={openModal}
+          close={() => close()}
+          isFirstOpen={isFirstOpen}
+        />
       </div>
       <div className="hidden sm:block">
         <NavBar />
