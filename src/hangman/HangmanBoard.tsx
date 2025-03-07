@@ -17,10 +17,6 @@ function HangmanBoard() {
   const handleGuess = (letter: string) => {
     setGuessedLetters([...guessedLetters, letter]);
     if (!wordToGuess.includes(letter)) setWrongGuesses(wrongGuesses + 1);
-    for (let i = 0; i < wordToGuess.length; i++) {
-      if (!guessedLetters.includes(wordToGuess.charAt(i))) break;
-      if (i === wordToGuess.length - 1) setIsWin(true);
-    }
   };
 
   const handleRestart = () => {
@@ -35,11 +31,13 @@ function HangmanBoard() {
   useEffect(() => {
     for (let i = 0; i < wordToGuess.length; i++) {
       if (!guessedLetters.includes(wordToGuess.charAt(i))) break;
-      if (i === wordToGuess.length - 1) setIsWin(true);
-      confetti({
-        particleCount: 150,
-        spread: 60,
-      });
+      if (i === wordToGuess.length - 1) {
+        setIsWin(true);
+        confetti({
+          particleCount: 150,
+          spread: 60,
+        });
+      }
     }
   });
 
