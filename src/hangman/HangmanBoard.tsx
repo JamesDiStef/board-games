@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import words from "./words.json";
 import HangmanDrawing from "./HangmanDrawing";
 import HangmanWord from "./HangmanWord";
 import Keyboard from "./Keyboard";
+import confetti from "canvas-confetti";
 
 function HangmanBoard() {
   const [isWin, setIsWin] = useState(false);
@@ -31,6 +32,17 @@ function HangmanBoard() {
     setWrongGuesses(0);
   };
 
+  useEffect(() => {
+    for (let i = 0; i < wordToGuess.length; i++) {
+      if (!guessedLetters.includes(wordToGuess.charAt(i))) break;
+      if (i === wordToGuess.length - 1) setIsWin(true);
+      confetti({
+        particleCount: 150,
+        spread: 60,
+      });
+    }
+  });
+
   return (
     <div
       style={{
@@ -48,7 +60,7 @@ function HangmanBoard() {
       >
         Restart
       </button>
-      {wrongGuesses === 6 && (
+      {wrongGuesses === 6 && !isWin && (
         <div
           style={{
             fontSize: "2rem",
@@ -58,7 +70,7 @@ function HangmanBoard() {
           You lose :(
         </div>
       )}
-      {isWin && (
+      {isWin && wrongGuesses !== 6 && (
         <div
           style={{
             fontSize: "2rem",
