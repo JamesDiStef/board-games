@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Square from "../tickTackToe/Square";
+import confetti from "canvas-confetti";
 
 const Board = () => {
   const [numClicks, setNumClicks] = useState(0);
@@ -39,6 +40,10 @@ const Board = () => {
         board[b].value === board[c].value &&
         board[a].value !== ""
       ) {
+        confetti({
+          particleCount: 150,
+          spread: 60,
+        });
         return true;
       }
     }
