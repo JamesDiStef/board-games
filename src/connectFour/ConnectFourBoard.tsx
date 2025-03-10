@@ -46,6 +46,7 @@ const ConnectFourBoard = () => {
     setIsRedTurn(!isRedTurn);
     checkVerticalWin(updatedColumns);
     checkHorizontalWin(updatedColumns);
+    checkDiagonalWin(updatedColumns);
   };
 
   const checkVerticalWin = (updatedColumns: Column[]) => {
@@ -70,13 +71,50 @@ const ConnectFourBoard = () => {
   const checkHorizontalWin = (updatedColumns: Column[]) => {
     for (let row = 0; row < 6; row++) {
       for (let col = 0; col < 4; col++) {
-        console.log(row, col);
         const color = updatedColumns[col].squares[row].color;
         if (
           color !== "" &&
           color === updatedColumns[col + 1].squares[row].color &&
           color === updatedColumns[col + 2].squares[row].color &&
           color === updatedColumns[col + 3].squares[row].color
+        ) {
+          setIsGameOver(true);
+          confetti({
+            particleCount: 150,
+            spread: 60,
+          });
+        }
+      }
+    }
+  };
+
+  const checkDiagonalWin = (updatedColumns: Column[]) => {
+    for (let row = 0; row < 6; row++) {
+      for (let col = 0; col < 4; col++) {
+        const color = updatedColumns[col].squares[row].color;
+        if (
+          color !== "" &&
+          color === updatedColumns[col + 1].squares[row - 1].color &&
+          color === updatedColumns[col + 2].squares[row - 2].color &&
+          color === updatedColumns[col + 3].squares[row - 3].color
+        ) {
+          setIsGameOver(true);
+          confetti({
+            particleCount: 150,
+            spread: 60,
+          });
+        }
+      }
+    }
+
+    for (let row = 0; row < 3; row++) {
+      for (let col = 0; col < 4; col++) {
+        const color = updatedColumns[col].squares[row].color;
+        if (
+          color !== "" &&
+          color === updatedColumns[col + 1].squares[row + 1].color &&
+          color === updatedColumns[col + 2].squares[row + 2].color &&
+          color === updatedColumns[col + 3].squares[row + 3].color
         ) {
           setIsGameOver(true);
           confetti({
