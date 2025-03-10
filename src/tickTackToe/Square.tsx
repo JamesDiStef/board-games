@@ -1,7 +1,7 @@
 interface Props {
   num: number;
   value: string;
-  handleClick: any;
+  handleClick: (num: number) => void;
 }
 
 const Square = ({ num, value, handleClick }: Props) => {
