@@ -15,7 +15,7 @@ const NavBar = () => {
       </button>
       <nav>
         <ul className="hidden sm:flex mr-6 py-3 bg-amber-500 w-full">
-          <li className="mr-6">
+          <li className="ml-3 mr-6">
             <Link to="/ticTacToe">Home</Link>
           </li>
           <li className="mr-6">

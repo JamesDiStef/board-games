@@ -35,11 +35,9 @@ const HangmanCrawing = ({ wrongGuesses }: Props) => {
       {wrongGuesses > 3 && LEFT_ARM}
       {wrongGuesses > 4 && RIGHT_LEG}
       {wrongGuesses > 5 && LEFT_LEG}
-
       <div className="h-[30px] lg:h-[50px] w-[10px] bg-black absolute top-0 right-0"></div>
-
       <div className="h-[10px] ml-[120px] w-[100px] lg:w-[340px] bg-black"></div>
-      <div className="ml-[120px] h-[200px] lg:h-[400px] w-[10px] bg-black"></div>
+      <div className="ml-[120px] h-[150px] lg:h-[300px] w-[10px] bg-black"></div>
       <div className="ml-[80px] lg:ml-0 h-[10px] w-[80px] lg:w-[300px] bg-black"></div>
     </div>
   );
