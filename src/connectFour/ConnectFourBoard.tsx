@@ -31,6 +31,7 @@ const ConnectFourBoard = () => {
   const [columns, setColumns] = useState(initialColumns);
 
   const handleClickColumn = (index: number, column: Column) => {
+    if (isGameOver) return;
     const updatedColumns = [...columns];
     updatedColumns[index] = {
       ...updatedColumns[index],
@@ -44,13 +45,13 @@ const ConnectFourBoard = () => {
     setColumns(updatedColumns);
     setIsRedTurn(!isRedTurn);
     checkVerticalWin(updatedColumns);
-    // checkHorizontalWin(updatedColumns);
+    checkHorizontalWin(updatedColumns);
   };
 
   const checkVerticalWin = (updatedColumns: Column[]) => {
     for (let col of updatedColumns) {
       if (col.counter > 2) continue;
-      for (let i = 0; i < col.squares.length; i++) {
+      for (let i = 0; i < col.squares.length - 3; i++) {
         if (
           col.squares[i].color === col.squares[i + 1].color &&
           col.squares[i + 1].color === col.squares[i + 2].color &&
@@ -66,22 +67,26 @@ const ConnectFourBoard = () => {
     }
   };
 
-  // const checkHorizontalWin = (updatedColumns: Column[]) => {
-  //   for (let i = 0; i < updatedColumns.length; i++) {
-  //     console.log(updatedColumns[0].squares[i].color);
-  //     if (
-  //       updatedColumns[0].squares[i].color !== "" &&
-  //       updatedColumns[0].squares[i].color ===
-  //         updatedColumns[1].squares[i].color &&
-  //       updatedColumns[1].squares[i].color ===
-  //         updatedColumns[2].squares[i].color &&
-  //       updatedColumns[2].squares[i].color ===
-  //         updatedColumns[3].squares[i].color
-  //     ) {
-  //       setIsGameOver(true);
-  //     }
-  //   }
-  // };
+  const checkHorizontalWin = (updatedColumns: Column[]) => {
+    for (let row = 0; row < 6; row++) {
+      for (let col = 0; col < 4; col++) {
+        console.log(row, col);
+        const color = updatedColumns[col].squares[row].color;
+        if (
+          color !== "" &&
+          color === updatedColumns[col + 1].squares[row].color &&
+          color === updatedColumns[col + 2].squares[row].color &&
+          color === updatedColumns[col + 3].squares[row].color
+        ) {
+          setIsGameOver(true);
+          confetti({
+            particleCount: 150,
+            spread: 60,
+          });
+        }
+      }
+    }
+  };
 
   const handleRestart = () => {
     setColumns(initialColumns);
@@ -96,7 +101,7 @@ const ConnectFourBoard = () => {
       >
         Restart
       </button>
-      {isGameOver && <div>Game over</div>}
+      {isGameOver && <div className="flex justify-center">Game over!!!</div>}
 
       <div className="flex justify-center sm:space-x-2">
         {columns.map((column, index) => (
