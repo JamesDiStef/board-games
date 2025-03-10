@@ -2,11 +2,16 @@ import { useEffect, useState } from "react";
 import Square from "../tickTackToe/Square";
 import confetti from "canvas-confetti";
 
+interface Square {
+  num: number;
+  value: string;
+}
+
 const Board = () => {
   const [numClicks, setNumClicks] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [isPlayerOne, setIsPlayerOne] = useState(true);
-  const [board, setBoard] = useState([
+  const [board, setBoard] = useState<Square[]>([
     { num: 0, value: "" },
     { num: 1, value: "" },
     { num: 2, value: "" },
@@ -108,7 +113,7 @@ const Board = () => {
           columnGap: "10px",
         }}
       >
-        {board.map((s: any) => (
+        {board.map((s: Square) => (
           <Square
             key={s.num}
             num={s.num}
