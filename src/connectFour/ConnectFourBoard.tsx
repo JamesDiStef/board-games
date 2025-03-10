@@ -1,12 +1,12 @@
 import { useState } from "react";
 import ConnectFourColumn from "./ConnectFourColumn";
 
-interface Column {
+export interface Column {
   counter: number;
   squares: Square[];
 }
 
-interface Square {
+export interface Square {
   id: number;
   color: string;
 }
@@ -61,7 +61,7 @@ const ConnectFourBoard = () => {
           <ConnectFourColumn
             key={index}
             column={column}
-            handleClick={(col: any) => handleClickColumn(index, col)}
+            handleClick={(col: Column) => handleClickColumn(index, col)}
           />
         ))}
       </div>

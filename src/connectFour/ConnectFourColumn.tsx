@@ -1,6 +1,8 @@
+import { Column } from "./ConnectFourBoard";
+
 interface Props {
-  column: any;
-  handleClick: any;
+  column: Column;
+  handleClick: (col: Column) => void;
 }
 
 const ConnectFourColumn = ({ column, handleClick }: Props) => {
