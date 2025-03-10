@@ -3,7 +3,7 @@ interface Props {
   handleClick: any;
 }
 
-const ConnectFourRow = ({ column, handleClick }: Props) => {
+const ConnectFourColumn = ({ column, handleClick }: Props) => {
   return (
     <div
       onClick={() => handleClick(column)}
@@ -22,4 +22,4 @@ const ConnectFourRow = ({ column, handleClick }: Props) => {
   );
 };
 
-export default ConnectFourRow;
+export default ConnectFourColumn;
