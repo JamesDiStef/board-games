@@ -26,9 +26,9 @@ const rooms = [
 ];
 
 const GuessPanel = ({ room, confidential }: Props) => {
-  const [eliminatedPeople, setEliminatedPeople] = useState(["Professor Plum"]);
-  const [eliminatedWeapons, setEliminatedWeapons] = useState(["Lead Pipe"]);
-  const [eliminateddRooms, setEliminatedRooms] = useState(["Ballroom"]);
+  const [eliminatedPeople] = useState(["Professor Plum"]);
+  const [eliminatedWeapons] = useState(["Lead Pipe"]);
+  const [eliminateddRooms] = useState(["Ballroom"]);
   const [guesses, setGuesses] = useState({
     person: "",
     weapon: "",
@@ -47,6 +47,28 @@ const GuessPanel = ({ room, confidential }: Props) => {
       ...guesses,
       person: person,
     });
+  };
+
+  const onGuess = () => {
+    console.log(confidential);
+    const revealIndex = Math.floor(Math.random() * 3);
+    switch (revealIndex) {
+      case 0:
+        if (!eliminatedPeople.includes(confidential.murderer))
+          console.log(confidential.murderer);
+        else if (!eliminateddRooms.includes(confidential.location))
+          console.log(confidential.location);
+        else if (!eliminatedWeapons.includes(confidential.weapons))
+          console.log(confidential.weapon);
+        break;
+      case 1:
+        console.log(confidential.location);
+        break;
+      case 2:
+        console.log(confidential.weapon);
+        break;
+    }
+    // if(confidential.room === room)
   };
 
   return (
@@ -107,7 +129,10 @@ const GuessPanel = ({ room, confidential }: Props) => {
         <div className="text-lg">with the</div>
 
         <div className="text-xl font-medium mt-2">{guesses.weapon}</div>
-        <button className="rounded border-2 bg-yellow-100 w-full ml-[20%] cursor-pointer">
+        <button
+          onClick={onGuess}
+          className="rounded border-2 bg-yellow-100 w-full ml-[20%] cursor-pointer"
+        >
           Guess
         </button>
       </div>

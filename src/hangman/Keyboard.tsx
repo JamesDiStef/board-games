@@ -1,7 +1,7 @@
 interface Props {
   handleGuess: (arg: string) => void;
   guessedLetters: string[];
-  wordToGuess: string[];
+  wordToGuess: string;
 }
 
 const alphabet: string[] = [

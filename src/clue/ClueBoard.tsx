@@ -27,7 +27,7 @@ export const ClueBoard = () => {
     roomId: 0,
   });
   const [currentRoom, setCurrentRoom] = useState("Study");
-  const [board, setBoard] = useState([
+  const [board] = useState([
     { id: 0, type: "Study" },
     { id: 1, type: "Library" },
     { id: 2, type: "Dining Room" },
@@ -194,7 +194,7 @@ export const ClueBoard = () => {
     setIsOpenModal(!isOpenModal);
   };
 
-  const [confidential, setConfidential] = useState({
+  const [confidential] = useState({
     murderer: characters[Math.floor(Math.random() * 6)],
     weapon: weapons[Math.floor(Math.random() * 6)],
     location: board[Math.floor(Math.random() * 16)].type,
