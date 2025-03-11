@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { characters, weapons } from "./ClueBoard";
+import Report from "./Report";
 
 interface Props {
   room: string;
@@ -30,6 +31,8 @@ const rooms = [
 ];
 
 const GuessPanel = ({ room, confidential }: Props) => {
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isGameOver, setIsGameOver] = useState(false);
   const [eliminatedPeople, setEliminatedPeople] = useState<string[]>([]);
   const [eliminatedWeapons, setEliminatedWeapons] = useState<string[]>([]);
   const [eliminatedRooms, setEliminatedRooms] = useState<string[]>([]);
@@ -54,7 +57,14 @@ const GuessPanel = ({ room, confidential }: Props) => {
   };
 
   const onGuess = () => {
-    console.log(confidential);
+    if (
+      guesses.person === confidential.murderer &&
+      guesses.weapon === confidential.weapon &&
+      guesses.room === confidential.location
+    ) {
+      setIsGameOver(true);
+      setIsOpenModal(true);
+    }
     const revealIndex = Math.floor(Math.random() * 3);
     switch (revealIndex) {
       case 0:
@@ -86,12 +96,14 @@ const GuessPanel = ({ room, confidential }: Props) => {
         } else alert("I've got nothing to tell you");
         break;
     }
+    setIsOpenModal(true);
   };
 
   return (
-    <div className="flex ml-[10%] mt-[3%] fixed h-[80%] w-[80%] bg-amber-700">
-      <div className="w-3/4 flex flex-col">
-        <div className="h-1/4 flex">
+    <div className="flex flex-col ml-[10%] mt-[3%] fixed h-[80%] w-[80%] bg-amber-700">
+      {isOpenModal && <Report isGameOver={isGameOver} />}
+      <div className="h-3/4 flex ">
+        <div className="w-1/4 flex flex-col">
           {characters.map((char: string) => (
             <div>
               {eliminatedPeople.includes(char) && (
@@ -110,7 +122,7 @@ const GuessPanel = ({ room, confidential }: Props) => {
             </div>
           ))}
         </div>
-        <div className="h-1/4 flex">
+        <div className="w-1/4 flex flex-col">
           {weapons.map((weapon: string) => (
             <div>
               {eliminatedWeapons.includes(weapon) && (
@@ -129,7 +141,7 @@ const GuessPanel = ({ room, confidential }: Props) => {
             </div>
           ))}
         </div>
-        <div className="h-1/4 flex flex-wrap">
+        <div className="w-1/2 flex flex-wrap">
           {rooms.map((room: string) => (
             <div>
               <input type="checkbox" checked={guesses.room === room} />
@@ -139,17 +151,14 @@ const GuessPanel = ({ room, confidential }: Props) => {
         </div>
       </div>
       <div className="flex flex-col items-center space-y-4 text-center">
-        <div className="text-lg font-semibold">I accuse:</div>
-        <div className="text-xl font-medium mt-2">{guesses.person}</div>
-        <div className="text-lg">In the</div>
-        <div className="text-xl font-medium mt-2">{guesses.room}</div>
-        <div className="text-lg">with the</div>
-
-        <div className="text-xl font-medium mt-2">{guesses.weapon}</div>
+        <div className="text-lg font-semibold">
+          I accuse {guesses.person} in the {guesses.room} with the{" "}
+          {guesses.weapon}
+        </div>
         <button
           disabled={guesses.person === "" || guesses.weapon === ""}
           onClick={onGuess}
-          className="rounded border-2 bg-yellow-100 w-full ml-[20%] cursor-pointer disabled:bg-red-500"
+          className="rounded border-2 bg-yellow-100 w-1/2 cursor-pointer disabled:bg-red-500"
         >
           Guess
         </button>
