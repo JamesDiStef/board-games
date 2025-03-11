@@ -27,6 +27,9 @@ const NavBar = () => {
           <li className="mr-6">
             <Link to="/connectFour">Connect Four</Link>
           </li>
+          <li className="mr-6">
+            <Link to="/clue">Clue</Link>
+          </li>
         </ul>
 
         {isOpen && (
