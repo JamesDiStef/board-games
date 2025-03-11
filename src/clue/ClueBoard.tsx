@@ -1,5 +1,6 @@
-import { KeyboardEventHandler, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import GuessPanel from "./GuessPanel";
+import ClueComingSoon from "./ClueComingSoon";
 
 export const ClueBoard = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -198,6 +199,7 @@ export const ClueBoard = () => {
 
   return (
     <div>
+      <ClueComingSoon />
       {isOpenModal && <GuessPanel />}
       <div className="grid grid-cols-4 gap-2">
         {board.map((room) => (
