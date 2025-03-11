@@ -3,7 +3,11 @@ import { characters, weapons } from "./ClueBoard";
 
 interface Props {
   room: string;
-  confidential: any;
+  confidential: {
+    murderer: string;
+    weapon: string;
+    location: string;
+  };
 }
 
 const rooms = [
@@ -26,9 +30,9 @@ const rooms = [
 ];
 
 const GuessPanel = ({ room, confidential }: Props) => {
-  const [eliminatedPeople] = useState(["Professor Plum"]);
-  const [eliminatedWeapons] = useState(["Lead Pipe"]);
-  const [eliminateddRooms] = useState(["Ballroom"]);
+  const [eliminatedPeople, setEliminatedPeople] = useState<string[]>([]);
+  const [eliminatedWeapons, setEliminatedWeapons] = useState<string[]>([]);
+  const [eliminatedRooms, setEliminatedRooms] = useState<string[]>([]);
   const [guesses, setGuesses] = useState({
     person: "",
     weapon: "",
@@ -54,21 +58,34 @@ const GuessPanel = ({ room, confidential }: Props) => {
     const revealIndex = Math.floor(Math.random() * 3);
     switch (revealIndex) {
       case 0:
-        if (!eliminatedPeople.includes(confidential.murderer))
-          console.log(confidential.murderer);
-        else if (!eliminateddRooms.includes(confidential.location))
-          console.log(confidential.location);
-        else if (!eliminatedWeapons.includes(confidential.weapons))
-          console.log(confidential.weapon);
+        if (confidential.murderer !== guesses.person) {
+          setEliminatedPeople([...eliminatedPeople, guesses.person]);
+        } else if (confidential.location !== guesses.room) {
+          setEliminatedRooms([...eliminatedRooms, guesses.room]);
+        } else if (confidential.weapon !== guesses.weapon) {
+          setEliminatedWeapons([...eliminatedWeapons, guesses.weapon]);
+        } else alert("I've got nothing to tell you");
+
         break;
       case 1:
-        console.log(confidential.location);
+        if (confidential.location !== guesses.room) {
+          setEliminatedRooms([...eliminatedRooms, guesses.room]);
+        } else if (confidential.weapon !== guesses.weapon) {
+          setEliminatedWeapons([...eliminatedWeapons, guesses.weapon]);
+        } else if (confidential.murderer !== guesses.person) {
+          setEliminatedPeople([...eliminatedPeople, guesses.person]);
+        } else alert("I've got nothing to tell you");
         break;
       case 2:
-        console.log(confidential.weapon);
+        if (confidential.murderer !== guesses.person) {
+          setEliminatedPeople([...eliminatedPeople, guesses.person]);
+        } else if (confidential.weapon !== guesses.weapon) {
+          setEliminatedWeapons([...eliminatedWeapons, guesses.weapon]);
+        } else if (confidential.location !== guesses.room) {
+          setEliminatedRooms([...eliminatedRooms, guesses.room]);
+        } else alert("I've got nothing to tell you");
         break;
     }
-    // if(confidential.room === room)
   };
 
   return (
@@ -130,8 +147,9 @@ const GuessPanel = ({ room, confidential }: Props) => {
 
         <div className="text-xl font-medium mt-2">{guesses.weapon}</div>
         <button
+          disabled={guesses.person === "" || guesses.weapon === ""}
           onClick={onGuess}
-          className="rounded border-2 bg-yellow-100 w-full ml-[20%] cursor-pointer"
+          className="rounded border-2 bg-yellow-100 w-full ml-[20%] cursor-pointer disabled:bg-red-500"
         >
           Guess
         </button>
