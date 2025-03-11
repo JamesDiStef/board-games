@@ -101,7 +101,9 @@ const GuessPanel = ({ room, confidential }: Props) => {
 
   return (
     <div className="flex flex-col ml-[10%] mt-[3%] fixed h-[80%] w-[80%] bg-amber-700">
-      {isOpenModal && <Report isGameOver={isGameOver} />}
+      {isOpenModal && (
+        <Report isGameOver={isGameOver} personGuessed={guesses.person} />
+      )}
       <div className="h-3/4 flex ">
         <div className="w-1/4 flex flex-col">
           {characters.map((char: string) => (
@@ -151,10 +153,21 @@ const GuessPanel = ({ room, confidential }: Props) => {
         </div>
       </div>
       <div className="flex flex-col items-center space-y-4 text-center">
-        <div className="text-lg font-semibold">
-          I accuse {guesses.person} in the {guesses.room} with the{" "}
-          {guesses.weapon}
-        </div>
+        {guesses.person === "" && guesses.weapon === "" && (
+          <div>Please choose a person and weapon</div>
+        )}
+        {guesses.person === "" && guesses.weapon !== "" && (
+          <div>Please choose a person</div>
+        )}
+        {guesses.person !== "" && guesses.weapon === "" && (
+          <div>Please choose a weapon</div>
+        )}
+        {guesses.person !== "" && guesses.weapon !== "" && (
+          <div className="text-lg font-semibold">
+            I accuse {guesses.person} in the {guesses.room} with the{" "}
+            {guesses.weapon}
+          </div>
+        )}
         <button
           disabled={guesses.person === "" || guesses.weapon === ""}
           onClick={onGuess}
