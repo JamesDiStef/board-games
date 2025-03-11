@@ -2,24 +2,43 @@ import { useEffect, useState } from "react";
 import GuessPanel from "./GuessPanel";
 import ClueComingSoon from "./ClueComingSoon";
 
+export const characters = [
+  "Professor Plum",
+  "Colonel Mustard",
+  "Ms. Peacock",
+  "Ms. Scarlett",
+  "Mrs. White",
+  "Mr. Green",
+];
+
+export const weapons = [
+  "Candlestick",
+  "Lead Pipe",
+  "Revolver",
+  "Wrench",
+  "Rope",
+  "Dagger",
+];
+
 export const ClueBoard = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [player, setPlayer] = useState({
     name: "james",
     roomId: 0,
   });
+  const [currentRoom, setCurrentRoom] = useState("Study");
   const [board, setBoard] = useState([
     { id: 0, type: "Study" },
     { id: 1, type: "Library" },
     { id: 2, type: "Dining Room" },
     { id: 3, type: "Kitchen" },
     { id: 4, type: "Pool Room" },
-    { id: 5, type: "" },
-    { id: 6, type: "" },
+    { id: 5, type: "Bedroom" },
+    { id: 6, type: "Walk in Closet" },
     { id: 7, type: "Hall" },
     { id: 8, type: "Billiards Room" },
-    { id: 9, type: "" },
-    { id: 10, type: "" },
+    { id: 9, type: "Secret Lab" },
+    { id: 10, type: "Storage Room" },
     { id: 11, type: "Ballroom" },
     { id: 12, type: "Bathroom" },
     { id: 13, type: "Conservatory" },
@@ -175,7 +194,14 @@ export const ClueBoard = () => {
     setIsOpenModal(!isOpenModal);
   };
 
+  const [confidential, setConfidential] = useState({
+    murderer: characters[Math.floor(Math.random() * 6)],
+    weapon: weapons[Math.floor(Math.random() * 6)],
+    location: board[Math.floor(Math.random() * 16)].type,
+  });
+
   useEffect(() => {
+    setCurrentRoom(board.find((room) => room.id === player.roomId)!.type);
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowDown") {
         arrowDownSwitch();
@@ -200,7 +226,9 @@ export const ClueBoard = () => {
   return (
     <div>
       <ClueComingSoon />
-      {isOpenModal && <GuessPanel />}
+      {isOpenModal && (
+        <GuessPanel room={currentRoom} confidential={confidential} />
+      )}
       <div className="grid grid-cols-4 gap-2">
         {board.map((room) => (
           <div className="border-2 border-black bg-pink-300 h-[180px] w-full">
