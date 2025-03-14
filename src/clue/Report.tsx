@@ -13,6 +13,7 @@ interface Props {
     weapon: string;
     room: string;
   };
+  handleNewGame: () => void;
 }
 
 const Report = ({
@@ -20,12 +21,18 @@ const Report = ({
   confidential,
   thingToReveal,
   guesses,
+  handleNewGame,
 }: Props) => {
   console.log(thingToReveal, confidential);
 
   return (
     <div className="flex flex-col fixed h-[80%] w-[80%] bg-amber-700">
-      {isGameOver && <div>Game Over!! You win!!!</div>}
+      {isGameOver && (
+        <div>
+          Game Over!! You win!!! Click the button below to play a new game
+          <button onClick={handleNewGame}>New game</button>
+        </div>
+      )}
       {!isGameOver && (
         <div>
           <div>So here's the deal</div>

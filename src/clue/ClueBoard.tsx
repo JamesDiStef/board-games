@@ -198,11 +198,22 @@ export const ClueBoard = () => {
     setIsOpenModal(!isOpenModal);
   };
 
-  const [confidential] = useState({
+  const [confidential, setConfidential] = useState({
     murderer: characters[Math.floor(Math.random() * 6)],
     weapon: weapons[Math.floor(Math.random() * 6)],
     location: board[Math.floor(Math.random() * 16)].type,
   });
+
+  const handleNewGame = () => {
+    setConfidential({
+      murderer: characters[Math.floor(Math.random() * 6)],
+      weapon: weapons[Math.floor(Math.random() * 6)],
+      location: board[Math.floor(Math.random() * 16)].type,
+    });
+    setEliminatedPeople([]);
+    setEliminatedRooms([]);
+    setEliminatedWeapons([]);
+  };
 
   useEffect(() => {
     setCurrentRoom(board.find((room) => room.id === player.roomId)!.type);
@@ -242,11 +253,15 @@ export const ClueBoard = () => {
           setEliminatedRooms={setEliminatedRooms}
           eliminatedWeapons={eliminatedWeapons}
           setEliminatedWeapons={setEliminatedWeapons}
+          handleNewGame={handleNewGame}
         />
       )}
       <div className="grid grid-cols-4 gap-2">
         {board.map((room) => (
-          <div className="border-2 border-black bg-pink-300 h-[180px] w-full">
+          <div
+            key={room.id}
+            className="border-2 border-black bg-pink-300 h-[180px] w-full"
+          >
             {player.roomId === room.id && <div>{player.name}</div>}
             <div className="flex justify-center items-center text-3xl">
               {room.type}

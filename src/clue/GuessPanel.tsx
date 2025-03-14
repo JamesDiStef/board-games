@@ -17,6 +17,7 @@ interface Props {
   setEliminatedWeapons: (weapons: string[]) => void;
   isGameOver: boolean;
   setIsGameOver: (isGameOver: boolean) => void;
+  handleNewGame: () => void;
 }
 
 const rooms = [
@@ -49,8 +50,8 @@ const GuessPanel = ({
   setEliminatedRooms,
   eliminatedWeapons,
   setEliminatedWeapons,
+  handleNewGame,
 }: Props) => {
-  console.log(confidential);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [thingToReveal, setThingToReveal] = useState("");
   const [guesses, setGuesses] = useState({
@@ -133,13 +134,14 @@ const GuessPanel = ({
           thingToReveal={thingToReveal}
           confidential={confidential}
           guesses={guesses}
+          handleNewGame={handleNewGame}
         />
       )}
       <div className="h-3/4 flex ">
         <div className="w-1/4 flex flex-col">
           <div className="text-2xl m-3">Suspects</div>
           {characters.map((char: string) => (
-            <div className="mr-5 mt-2">
+            <div key={char} className="mr-5 mt-2">
               {eliminatedPeople.includes(char) && (
                 <div className="line-through">{char}</div>
               )}
@@ -160,7 +162,7 @@ const GuessPanel = ({
           <div className="text-2xl m-3">Weapons</div>
 
           {weapons.map((weapon: string) => (
-            <div className="mr-5 mt-2">
+            <div key={weapon} className="mr-5 mt-2">
               {eliminatedWeapons.includes(weapon) && (
                 <div className="line-through">{weapon}</div>
               )}
@@ -181,13 +183,17 @@ const GuessPanel = ({
           <div className="text-2xl self-center ">Rooms</div>
 
           {rooms.map((room: string) => (
-            <div className="mr-5 mt-2">
+            <div key={room} className="mr-5 mt-2">
               {eliminatedRooms.includes(room) && (
                 <div className=" line-through">{room}</div>
               )}
               {!eliminatedRooms.includes(room) && (
                 <div className="flex">
-                  <input type="checkbox" checked={guesses.room === room} />
+                  <input
+                    type="checkbox"
+                    readOnly
+                    checked={guesses.room === room}
+                  />
                   <div className="mr-5">{room}</div>
                 </div>
               )}
