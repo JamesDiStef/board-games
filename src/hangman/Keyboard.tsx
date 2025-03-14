@@ -44,6 +44,7 @@ const Keyboard = ({ guessedLetters, handleGuess, wordToGuess }: Props) => {
     >
       {alphabet.map((letter) => (
         <button
+          key={letter}
           style={{
             backgroundColor:
               guessedLetters.includes(letter) && !wordToGuess.includes(letter)
