@@ -31,6 +31,7 @@ const rooms = [
 ];
 
 const GuessPanel = ({ room, confidential }: Props) => {
+  console.log(confidential);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
   const [eliminatedPeople, setEliminatedPeople] = useState<string[]>([]);

@@ -22,22 +22,29 @@ const Report = ({
           {personGuessed !== "" && (
             <div>
               <div className="mb-10">It can't have been {personGuessed}</div>
-              <div className="mb-5">
+              {/* <div className="mb-5">
                 I saw {personGuessed} two minutes before sneaking up the stairs
-              </div>
-              <div>{alibis[0]}</div>
+              </div> */}
+              <div>{alibis[Math.floor(Math.random() * 5)]}</div>
             </div>
           )}
           {roomGuessed !== "" && (
             <div>
               <div>It can't have been {roomGuessed}</div>
-              <div>I saw them two minutes before sneaking up the stairs</div>
+              <div>
+                That room shows up on the security cameras and we can see that
+                no one went in the whole night.
+              </div>
             </div>
           )}
           {weaponGuessed !== "" && (
             <div>
               <div>It can't have been {weaponGuessed}</div>
-              <div>I saw them two minutes before sneaking up the stairs</div>
+              <div>
+                I had that weapon in my backpack the whole time cause I've been
+                planning to use it to kill the old man myself! But somebody got
+                to him first
+              </div>
             </div>
           )}
         </div>
