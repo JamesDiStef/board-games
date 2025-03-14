@@ -1,36 +1,24 @@
+import { useSelector, useDispatch } from "react-redux";
 import { alibis } from "./alibis";
+import { startNewGame } from "./clueSlice";
 
-interface Props {
-  isGameOver: boolean;
-  confidential: {
-    murderer: string;
-    weapon: string;
-    location: string;
-  };
-  thingToReveal: string;
-  guesses: {
-    person: string;
-    weapon: string;
-    room: string;
-  };
-  handleNewGame: () => void;
-}
-
-const Report = ({
-  isGameOver,
-  confidential,
-  thingToReveal,
-  guesses,
-  handleNewGame,
-}: Props) => {
+const Report = () => {
+  const guesses = useSelector((state: any) => state.clue.guesses);
+  const confidential = useSelector((state: any) => state.clue.confidential);
+  const isGameOver = useSelector((state: any) => state.clue.isGameOver);
+  const thingToReveal = useSelector((state: any) => state.clue.thingToReveal);
   console.log(thingToReveal, confidential);
+  const dispatch = useDispatch();
 
   return (
     <div className="flex flex-col fixed h-[80%] w-[80%] bg-amber-700">
       {isGameOver && (
         <div className="flex flex-col">
           Game Over!! You win!!! Click the button below to play a new game
-          <button className="mt-10" onClick={handleNewGame}>
+          <button
+            className="mt-10 cursor-pointer"
+            onClick={() => dispatch(startNewGame())}
+          >
             New game
           </button>
         </div>
