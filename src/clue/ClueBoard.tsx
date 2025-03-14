@@ -213,6 +213,8 @@ export const ClueBoard = () => {
     setEliminatedPeople([]);
     setEliminatedRooms([]);
     setEliminatedWeapons([]);
+    setIsOpenModal(false);
+    setIsGameOver(false);
   };
 
   useEffect(() => {

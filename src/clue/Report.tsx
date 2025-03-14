@@ -28,9 +28,11 @@ const Report = ({
   return (
     <div className="flex flex-col fixed h-[80%] w-[80%] bg-amber-700">
       {isGameOver && (
-        <div>
+        <div className="flex flex-col">
           Game Over!! You win!!! Click the button below to play a new game
-          <button onClick={handleNewGame}>New game</button>
+          <button className="mt-10" onClick={handleNewGame}>
+            New game
+          </button>
         </div>
       )}
       {!isGameOver && (
