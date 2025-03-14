@@ -21,6 +21,10 @@ export const weapons = [
 ];
 
 export const ClueBoard = () => {
+  const [isGameOver, setIsGameOver] = useState(false);
+  const [eliminatedPeople, setEliminatedPeople] = useState<string[]>([]);
+  const [eliminatedWeapons, setEliminatedWeapons] = useState<string[]>([]);
+  const [eliminatedRooms, setEliminatedRooms] = useState<string[]>([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [player, setPlayer] = useState({
     name: "james",
@@ -227,7 +231,18 @@ export const ClueBoard = () => {
     <div>
       <ClueComingSoon />
       {isOpenModal && (
-        <GuessPanel room={currentRoom} confidential={confidential} />
+        <GuessPanel
+          room={currentRoom}
+          confidential={confidential}
+          isGameOver={isGameOver}
+          setIsGameOver={setIsGameOver}
+          eliminatedPeople={eliminatedPeople}
+          setEliminatedPeople={setEliminatedPeople}
+          eliminatedRooms={eliminatedRooms}
+          setEliminatedRooms={setEliminatedRooms}
+          eliminatedWeapons={eliminatedWeapons}
+          setEliminatedWeapons={setEliminatedWeapons}
+        />
       )}
       <div className="grid grid-cols-4 gap-2">
         {board.map((room) => (
