@@ -166,7 +166,7 @@ export const ClueBoard = () => {
     dispatch(openModal());
   };
 
-  const confidential = useSelector((state: any) => state.clue.confidential);
+  // const confidential = useSelector((state: any) => state.clue.confidential);
 
   useEffect(() => {
     dispatch(
