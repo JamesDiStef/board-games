@@ -1,54 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import GuessPanel from "./GuessPanel";
 import ClueComingSoon from "./ClueComingSoon";
-
-export const characters = [
-  "Professor Plum",
-  "Colonel Mustard",
-  "Ms. Peacock",
-  "Ms. Scarlett",
-  "Mrs. White",
-  "Mr. Green",
-];
-
-export const weapons = [
-  "Candlestick",
-  "Lead Pipe",
-  "Revolver",
-  "Wrench",
-  "Rope",
-  "Dagger",
-];
+import { useSelector, useDispatch } from "react-redux";
+import {
+  openModal,
+  setPlayer,
+  setCurrentRoom,
+  openResponseModal,
+} from "./clueSlice";
 
 export const ClueBoard = () => {
-  const [isGameOver, setIsGameOver] = useState(false);
-  const [eliminatedPeople, setEliminatedPeople] = useState<string[]>([]);
-  const [eliminatedWeapons, setEliminatedWeapons] = useState<string[]>([]);
-  const [eliminatedRooms, setEliminatedRooms] = useState<string[]>([]);
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const [player, setPlayer] = useState({
-    name: "james",
-    roomId: 0,
-  });
-  const [currentRoom, setCurrentRoom] = useState("Study");
-  const [board] = useState([
-    { id: 0, type: "Study" },
-    { id: 1, type: "Library" },
-    { id: 2, type: "Dining Room" },
-    { id: 3, type: "Kitchen" },
-    { id: 4, type: "Pool Room" },
-    { id: 5, type: "Bedroom" },
-    { id: 6, type: "Walk in Closet" },
-    { id: 7, type: "Hall" },
-    { id: 8, type: "Billiards Room" },
-    { id: 9, type: "Secret Lab" },
-    { id: 10, type: "Storage Room" },
-    { id: 11, type: "Ballroom" },
-    { id: 12, type: "Bathroom" },
-    { id: 13, type: "Conservatory" },
-    { id: 14, type: "Lounge" },
-    { id: 15, type: "Attic" },
-  ]);
+  const isOpenModal = useSelector((state: any) => state.clue.isOpenModal);
+  const isOpenResponseModal = useSelector(
+    (state: any) => state.clue.isOpenResponseModal
+  );
+  const player = useSelector((state: any) => state.clue.player);
+  const dispatch = useDispatch();
+  const board = useSelector((state: any) => state.clue.board);
 
   const arrowDownSwitch = () => {
     switch (player.roomId) {
@@ -64,19 +32,19 @@ export const ClueBoard = () => {
       case 9:
       case 10:
       case 11:
-        setPlayer({ ...player, roomId: player.roomId + 4 });
+        dispatch(setPlayer(player.roomId + 4));
         break;
       case 12:
-        setPlayer({ ...player, roomId: 0 });
+        dispatch(setPlayer(0));
         break;
       case 13:
-        setPlayer({ ...player, roomId: 1 });
+        dispatch(setPlayer(1));
         break;
       case 14:
-        setPlayer({ ...player, roomId: 2 });
+        dispatch(setPlayer(2));
         break;
       case 15:
-        setPlayer({ ...player, roomId: 3 });
+        dispatch(setPlayer(3));
         break;
       default:
         break;
@@ -86,16 +54,16 @@ export const ClueBoard = () => {
   const arrowUpSwitch = () => {
     switch (player.roomId) {
       case 0:
-        setPlayer({ ...player, roomId: 12 });
+        dispatch(setPlayer(12));
         break;
       case 1:
-        setPlayer({ ...player, roomId: 13 });
+        dispatch(setPlayer(13));
         break;
       case 2:
-        setPlayer({ ...player, roomId: 14 });
+        dispatch(setPlayer(14));
         break;
       case 3:
-        setPlayer({ ...player, roomId: 15 });
+        dispatch(setPlayer(15));
         break;
       case 4:
       case 5:
@@ -109,7 +77,7 @@ export const ClueBoard = () => {
       case 13:
       case 14:
       case 15:
-        setPlayer({ ...player, roomId: player.roomId - 4 });
+        dispatch(setPlayer(player.roomId - 4));
         break;
       default:
         break;
@@ -121,34 +89,34 @@ export const ClueBoard = () => {
       case 0:
       case 1:
       case 2:
-        setPlayer({ ...player, roomId: player.roomId + 1 });
+        dispatch(setPlayer(player.roomId + 1));
         break;
       case 3:
-        setPlayer({ ...player, roomId: 0 });
+        dispatch(setPlayer(0));
         break;
       case 4:
       case 5:
       case 6:
-        setPlayer({ ...player, roomId: player.roomId + 1 });
+        dispatch(setPlayer(player.roomId + 1));
         break;
       case 7:
-        setPlayer({ ...player, roomId: 4 });
+        dispatch(setPlayer(4));
         break;
       case 8:
       case 9:
       case 10:
-        setPlayer({ ...player, roomId: player.roomId + 1 });
+        dispatch(setPlayer(player.roomId + 1));
         break;
       case 11:
-        setPlayer({ ...player, roomId: 8 });
+        dispatch(setPlayer(8));
         break;
       case 12:
       case 13:
       case 14:
-        setPlayer({ ...player, roomId: player.roomId + 1 });
+        dispatch(setPlayer(player.roomId + 1));
         break;
       case 15:
-        setPlayer({ ...player, roomId: 12 });
+        dispatch(setPlayer(12));
         break;
       default:
         break;
@@ -158,67 +126,52 @@ export const ClueBoard = () => {
   const arrowLeftSwitch = () => {
     switch (player.roomId) {
       case 0:
-        setPlayer({ ...player, roomId: 3 });
+        dispatch(setPlayer(3));
         break;
       case 1:
       case 2:
       case 3:
-        setPlayer({ ...player, roomId: player.roomId - 1 });
+        dispatch(setPlayer(player.roomId - 1));
         break;
       case 4:
-        setPlayer({ ...player, roomId: 7 });
+        dispatch(setPlayer(7));
         break;
       case 5:
       case 6:
       case 7:
-        setPlayer({ ...player, roomId: player.roomId - 1 });
+        dispatch(setPlayer(player.roomId - 1));
         break;
       case 8:
-        setPlayer({ ...player, roomId: 11 });
+        dispatch(setPlayer(11));
         break;
       case 9:
       case 10:
       case 11:
-        setPlayer({ ...player, roomId: player.roomId - 1 });
+        dispatch(setPlayer(player.roomId - 1));
         break;
       case 12:
-        setPlayer({ ...player, roomId: 15 });
+        dispatch(setPlayer(15));
         break;
       case 13:
       case 14:
       case 15:
-        setPlayer({ ...player, roomId: player.roomId - 1 });
+        dispatch(setPlayer(player.roomId - 1));
         break;
       default:
         break;
     }
   };
 
-  const openModal = () => {
-    setIsOpenModal(!isOpenModal);
+  const handleModal = () => {
+    dispatch(openModal());
   };
 
-  const [confidential, setConfidential] = useState({
-    murderer: characters[Math.floor(Math.random() * 6)],
-    weapon: weapons[Math.floor(Math.random() * 6)],
-    location: board[Math.floor(Math.random() * 16)].type,
-  });
-
-  const handleNewGame = () => {
-    setConfidential({
-      murderer: characters[Math.floor(Math.random() * 6)],
-      weapon: weapons[Math.floor(Math.random() * 6)],
-      location: board[Math.floor(Math.random() * 16)].type,
-    });
-    setEliminatedPeople([]);
-    setEliminatedRooms([]);
-    setEliminatedWeapons([]);
-    setIsOpenModal(false);
-    setIsGameOver(false);
-  };
+  const confidential = useSelector((state: any) => state.clue.confidential);
 
   useEffect(() => {
-    setCurrentRoom(board.find((room) => room.id === player.roomId)!.type);
+    dispatch(
+      setCurrentRoom(board.find((room: any) => room.id === player.roomId)!.type)
+    );
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowDown") {
         arrowDownSwitch();
@@ -229,7 +182,8 @@ export const ClueBoard = () => {
       } else if (e.key === "ArrowLeft") {
         arrowLeftSwitch();
       } else if (e.key === "Enter") {
-        openModal();
+        if (isOpenResponseModal) dispatch(openResponseModal());
+        handleModal();
       }
     };
 
@@ -243,23 +197,9 @@ export const ClueBoard = () => {
   return (
     <div>
       <ClueComingSoon />
-      {isOpenModal && (
-        <GuessPanel
-          room={currentRoom}
-          confidential={confidential}
-          isGameOver={isGameOver}
-          setIsGameOver={setIsGameOver}
-          eliminatedPeople={eliminatedPeople}
-          setEliminatedPeople={setEliminatedPeople}
-          eliminatedRooms={eliminatedRooms}
-          setEliminatedRooms={setEliminatedRooms}
-          eliminatedWeapons={eliminatedWeapons}
-          setEliminatedWeapons={setEliminatedWeapons}
-          handleNewGame={handleNewGame}
-        />
-      )}
+      {isOpenModal && <GuessPanel />}
       <div className="grid grid-cols-4 gap-2">
-        {board.map((room) => (
+        {board.map((room: any) => (
           <div
             key={room.id}
             className="border-2 border-black bg-pink-300 h-[180px] w-full"
