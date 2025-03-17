@@ -93,6 +93,9 @@ export const clueSlice = createSlice({
     setPersonGuess: (state, action) => {
       state.guesses.person = action.payload;
     },
+    setRoomGuess: (state, action) => {
+      state.guesses.room = action.payload;
+    },
     setPlayer: (state, action) => {
       state.player.roomId = action.payload;
     },
@@ -130,6 +133,7 @@ export const {
   setThingToReveal,
   setCurrentRoom,
   openResponseModal,
+  setRoomGuess,
 } = clueSlice.actions;
 
 export default clueSlice.reducer;

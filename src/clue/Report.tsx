@@ -26,34 +26,37 @@ const Report = () => {
       {!isGameOver && (
         <div>
           <div>So here's the deal</div>
-          {thingToReveal === guesses.person && (
-            <div>
-              <div className="mb-10">It can't have been {thingToReveal}</div>
-              {/* <div className="mb-5">
+          {thingToReveal === guesses.person &&
+            thingToReveal !== confidential.person && (
+              <div>
+                <div className="mb-10">It can't have been {thingToReveal}</div>
+                {/* <div className="mb-5">
                 I saw {personGuessed} two minutes before sneaking up the stairs
               </div> */}
-              <div>{alibis[Math.floor(Math.random() * 5)]}</div>
-            </div>
-          )}
-          {thingToReveal === guesses.room && (
-            <div>
-              <div>It can't have been {thingToReveal}</div>
-              <div>
-                That room shows up on the security cameras and we can see that
-                no one went in the whole night.
+                <div>{alibis[Math.floor(Math.random() * 5)]}</div>
               </div>
-            </div>
-          )}
-          {thingToReveal === guesses.weapon && (
-            <div>
-              <div>It can't have been {thingToReveal}</div>
+            )}
+          {thingToReveal === guesses.room &&
+            thingToReveal !== confidential.room && (
               <div>
-                I had that weapon in my backpack the whole time cause I've been
-                planning to use it to kill the old man myself! But somebody got
-                to him first
+                <div>It can't have been {thingToReveal}</div>
+                <div>
+                  That room shows up on the security cameras and we can see that
+                  no one went in the whole night.
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          {thingToReveal === guesses.weapon &&
+            thingToReveal !== confidential.weapon && (
+              <div>
+                <div>It can't have been {thingToReveal}</div>
+                <div>
+                  I had that weapon in my backpack the whole time cause I've
+                  been planning to use it to kill the old man myself! But
+                  somebody got to him first
+                </div>
+              </div>
+            )}
         </div>
       )}
     </div>

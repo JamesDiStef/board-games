@@ -2,40 +2,22 @@ import Report from "./Report";
 import { useSelector, useDispatch } from "react-redux";
 import {
   endGame,
-  openModal,
   openResponseModal,
   setEliminatedPeople,
   setEliminatedRooms,
   setEliminatedWeapons,
   setPersonGuess,
+  setRoomGuess,
   setThingToReveal,
   setWeaponGuess,
 } from "./clueSlice";
-
-const rooms = [
-  "Study",
-  "Library",
-  "Dining Room",
-  "Kitchen",
-  "Pool Room",
-  "Bedroom",
-  "Walk in Closet",
-  "Hall",
-  "Billiards Room",
-  "Secret Lab",
-  "Storage Room",
-  "Ballroom",
-  "Bathroom",
-  "Conservatory",
-  "Lounge",
-  "Attic",
-];
 
 const GuessPanel = () => {
   const guesses = useSelector((state: any) => state.clue.guesses);
   const confidential = useSelector((state: any) => state.clue.confidential);
   const weapons = useSelector((state: any) => state.clue.weapons);
   const characters = useSelector((state: any) => state.clue.characters);
+  const rooms = useSelector((state: any) => state.clue.board);
   const currentRoom = useSelector((state: any) => state.clue.currentRoom);
   const isOpenModal = useSelector(
     (state: any) => state.clue.isOpenResponseModal
@@ -50,7 +32,11 @@ const GuessPanel = () => {
     (state: any) => state.clue.eliminatedRooms
   );
 
+  console.log(confidential);
+  console.log(eliminatedRooms);
+
   const dispatch = useDispatch();
+  dispatch(setRoomGuess(currentRoom));
 
   const selectWeapon = (weapon: string) => {
     dispatch(setWeaponGuess(weapon));
@@ -65,55 +51,60 @@ const GuessPanel = () => {
   };
 
   const onGuess = () => {
+    console.log(confidential);
+    console.log(guesses);
     if (
-      guesses.person === confidential.murderer &&
+      guesses.person === confidential.person &&
       guesses.weapon === confidential.weapon &&
-      guesses.room === confidential.location
+      guesses.room === confidential.room
     ) {
+      console.log("test");
       handleNewGame();
       dispatch(openResponseModal());
-    }
-    const revealIndex = Math.floor(Math.random() * 3);
-    switch (revealIndex) {
-      case 0:
-        if (confidential.murderer !== guesses.person) {
-          dispatch(setEliminatedPeople(guesses.person));
-          dispatch(dispatch(setThingToReveal(guesses.person)));
-        } else if (confidential.location !== guesses.room) {
-          dispatch(setEliminatedRooms(guesses.room));
-          dispatch(setThingToReveal(guesses.room));
-        } else if (confidential.weapon !== guesses.weapon) {
-          dispatch(setEliminatedWeapons(guesses.weapons));
-          dispatch(setThingToReveal(guesses.weapon));
-        } else alert("I've got nothing to tell you");
+    } else {
+      const revealIndex = Math.floor(Math.random() * 3);
+      switch (revealIndex) {
+        case 0:
+          if (confidential.person !== guesses.person) {
+            dispatch(setEliminatedPeople(guesses.person));
+            dispatch(dispatch(setThingToReveal(guesses.person)));
+          } else if (confidential.room !== guesses.room) {
+            dispatch(setEliminatedRooms(guesses.room));
+            dispatch(setThingToReveal(guesses.room));
+          } else if (confidential.weapon !== guesses.weapon) {
+            dispatch(setEliminatedWeapons(guesses.weapons));
+            dispatch(setThingToReveal(guesses.weapon));
+          } else alert("I've got nothing to tell you");
 
-        break;
-      case 1:
-        if (confidential.location !== guesses.room) {
-          dispatch(setEliminatedRooms(guesses.room));
-          dispatch(setThingToReveal(guesses.room));
-        } else if (confidential.weapon !== guesses.weapon) {
-          dispatch(setEliminatedWeapons(guesses.weapons));
-          dispatch(setThingToReveal(guesses.weapon));
-        } else if (confidential.murderer !== guesses.person) {
-          dispatch(setEliminatedPeople(guesses.person));
-          dispatch(setThingToReveal(guesses.person));
-        } else alert("I've got nothing to tell you");
-        break;
-      case 2:
-        if (confidential.murderer !== guesses.person) {
-          dispatch(setEliminatedPeople(guesses.person));
-          dispatch(setThingToReveal(guesses.person));
-        } else if (confidential.weapon !== guesses.weapon) {
-          dispatch(setEliminatedWeapons(guesses.weapons));
-          dispatch(setThingToReveal(guesses.weapon));
-        } else if (confidential.location !== guesses.room) {
-          dispatch(setEliminatedRooms(guesses.room));
-          dispatch(setThingToReveal(guesses.room));
-        } else alert("I've got nothing to tell you");
-        break;
+          break;
+        case 1:
+          if (confidential.room !== guesses.room) {
+            dispatch(setEliminatedRooms(guesses.room));
+            dispatch(setThingToReveal(guesses.room));
+          } else if (confidential.weapon !== guesses.weapon) {
+            dispatch(setEliminatedWeapons(guesses.weapons));
+            dispatch(setThingToReveal(guesses.weapon));
+          } else if (confidential.person !== guesses.person) {
+            dispatch(setEliminatedPeople(guesses.person));
+            dispatch(setThingToReveal(guesses.person));
+          } else alert("I've got nothing to tell you");
+          break;
+        case 2:
+          if (confidential.person !== guesses.person) {
+            dispatch(setEliminatedPeople(guesses.person));
+            dispatch(setThingToReveal(guesses.person));
+          } else if (confidential.weapon !== guesses.weapon) {
+            dispatch(setEliminatedWeapons(guesses.weapons));
+            dispatch(setThingToReveal(guesses.weapon));
+          } else if (confidential.room !== guesses.room) {
+            dispatch(setEliminatedRooms(guesses.room));
+            dispatch(setThingToReveal(guesses.room));
+          } else alert("I've got nothing to tell you");
+          break;
+      }
+      dispatch(openResponseModal());
     }
-    dispatch(openResponseModal());
+
     // dispatch(openModal());
   };
 
@@ -165,19 +156,19 @@ const GuessPanel = () => {
         <div className="h-3/5 w-1/2 flex flex-col flex-wrap">
           <div className="text-2xl self-center ">Rooms</div>
 
-          {rooms.map((room: string) => (
-            <div key={room} className="mr-5 mt-2">
-              {eliminatedRooms.includes(room) && (
-                <div className=" line-through">{room}</div>
+          {rooms.map((room: any) => (
+            <div key={room.id} className="mr-5 mt-2">
+              {eliminatedRooms.includes(room.type) && (
+                <div className="line-through">{room.type}</div>
               )}
-              {!eliminatedRooms.includes(room) && (
+              {!eliminatedRooms.includes(room.type) && (
                 <div className="flex">
                   <input
                     type="checkbox"
                     readOnly
-                    checked={room === currentRoom}
+                    checked={room.type === currentRoom}
                   />
-                  <div className="mr-5">{room}</div>
+                  <div className="mr-5">{room.type}</div>
                 </div>
               )}
             </div>
