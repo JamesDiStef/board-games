@@ -1,5 +1,33 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export interface clueState {
+  characters: string[];
+  weapons: string[];
+  isGameOver: boolean;
+  eliminatedPeople: string[];
+  eliminatedWeapons: string[];
+  eliminatedRooms: string[];
+  isOpenModal: boolean;
+  player: {
+    name: string;
+    roomId: number;
+  };
+  currentRoom: string;
+  board: { id: number; type: string }[];
+  isOpenResponseModal: boolean;
+  thingToReveal: string;
+  guesses: {
+    person: string;
+    weapon: string;
+    room: string;
+  };
+  confidential: {
+    person: string;
+    weapon: string;
+    room: string;
+  };
+}
+
 const characters = [
   "Professor Plum",
   "Colonel Mustard",
@@ -37,7 +65,7 @@ const board = [
   { id: 15, type: "Attic" },
 ];
 
-const initialState = {
+const initialState: clueState = {
   characters: characters,
   weapons: weapons,
   isGameOver: false,
@@ -64,6 +92,8 @@ const initialState = {
     room: board[Math.floor(Math.random() * 16)].type,
   },
 };
+
+console.log(typeof initialState);
 
 export const clueSlice = createSlice({
   name: "clue",
