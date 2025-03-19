@@ -13,6 +13,23 @@ import {
 } from "./clueSlice";
 
 const GuessPanel = () => {
+  const saveGame = async (gameId: string, stuffToPatch: any) => {
+    //should be called on every state update
+    const url =
+      "https://us-central1-xenon-heading-433720-j4.cloudfunctions.net/api/clue/" +
+      gameId;
+    const response = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      //need to pass in the relevant field dynamically here
+      body: JSON.stringify(stuffToPatch),
+    });
+    const game = await response.json();
+  };
+
+  const gameId = useSelector((state: any) => state.clue.gameId);
   const guesses = useSelector((state: any) => state.clue.guesses);
   const confidential = useSelector((state: any) => state.clue.confidential);
   const weapons = useSelector((state: any) => state.clue.weapons);
@@ -22,18 +39,15 @@ const GuessPanel = () => {
   const isOpenModal = useSelector(
     (state: any) => state.clue.isOpenResponseModal
   );
-  const eliminatedPeople = useSelector(
+  const eliminatedPeople: string[] = useSelector(
     (state: any) => state.clue.eliminatedPeople
   );
-  const eliminatedWeapons = useSelector(
+  const eliminatedWeapons: string[] = useSelector(
     (state: any) => state.clue.eliminatedWeapons
   );
-  const eliminatedRooms = useSelector(
+  const eliminatedRooms: string[] = useSelector(
     (state: any) => state.clue.eliminatedRooms
   );
-
-  console.log(confidential);
-  console.log(eliminatedRooms);
 
   const dispatch = useDispatch();
   dispatch(setRoomGuess(currentRoom));
@@ -47,18 +61,42 @@ const GuessPanel = () => {
   };
 
   const handleNewGame = () => {
+    saveGame(gameId, { isGameOver: false });
     dispatch(endGame());
   };
 
+  const handleEliminatePerson = () => {
+    const newEliminatedPeople = [...eliminatedPeople[0], guesses.person];
+    dispatch(setEliminatedPeople(newEliminatedPeople));
+    saveGame(gameId, {
+      eliminatedPeople: newEliminatedPeople,
+    });
+    dispatch(dispatch(setThingToReveal(guesses.person)));
+  };
+
+  const handleEliminateRoom = () => {
+    const newEliminatedRooms = [...eliminatedRooms[0], guesses.room];
+    dispatch(setEliminatedRooms(newEliminatedRooms));
+    saveGame(gameId, {
+      eliminatedRooms: newEliminatedRooms,
+    });
+    dispatch(setThingToReveal(guesses.room));
+  };
+
+  const handleEliminateWeapon = () => {
+    const newEliminatedWeapons = [...eliminatedWeapons[0], guesses.weapon];
+    dispatch(setEliminatedWeapons(newEliminatedWeapons));
+    saveGame(gameId, {
+      eliminatedWeapon: newEliminatedWeapons,
+    });
+  };
+
   const onGuess = () => {
-    console.log(confidential);
-    console.log(guesses);
     if (
       guesses.person === confidential.person &&
       guesses.weapon === confidential.weapon &&
       guesses.room === confidential.room
     ) {
-      console.log("test");
       handleNewGame();
       dispatch(openResponseModal());
     } else {
@@ -66,39 +104,30 @@ const GuessPanel = () => {
       switch (revealIndex) {
         case 0:
           if (confidential.person !== guesses.person) {
-            dispatch(setEliminatedPeople(guesses.person));
-            dispatch(dispatch(setThingToReveal(guesses.person)));
+            handleEliminatePerson();
           } else if (confidential.room !== guesses.room) {
-            dispatch(setEliminatedRooms(guesses.room));
-            dispatch(setThingToReveal(guesses.room));
+            handleEliminateRoom();
           } else if (confidential.weapon !== guesses.weapon) {
-            dispatch(setEliminatedWeapons(guesses.weapons));
-            dispatch(setThingToReveal(guesses.weapon));
+            handleEliminateWeapon();
           } else alert("I've got nothing to tell you");
 
           break;
         case 1:
           if (confidential.room !== guesses.room) {
-            dispatch(setEliminatedRooms(guesses.room));
-            dispatch(setThingToReveal(guesses.room));
+            handleEliminateRoom();
           } else if (confidential.weapon !== guesses.weapon) {
-            dispatch(setEliminatedWeapons(guesses.weapons));
-            dispatch(setThingToReveal(guesses.weapon));
+            handleEliminateWeapon();
           } else if (confidential.person !== guesses.person) {
-            dispatch(setEliminatedPeople(guesses.person));
-            dispatch(setThingToReveal(guesses.person));
+            handleEliminatePerson();
           } else alert("I've got nothing to tell you");
           break;
         case 2:
           if (confidential.person !== guesses.person) {
-            dispatch(setEliminatedPeople(guesses.person));
-            dispatch(setThingToReveal(guesses.person));
+            handleEliminatePerson();
           } else if (confidential.weapon !== guesses.weapon) {
-            dispatch(setEliminatedWeapons(guesses.weapons));
-            dispatch(setThingToReveal(guesses.weapon));
+            handleEliminateWeapon();
           } else if (confidential.room !== guesses.room) {
-            dispatch(setEliminatedRooms(guesses.room));
-            dispatch(setThingToReveal(guesses.room));
+            handleEliminateRoom();
           } else alert("I've got nothing to tell you");
           break;
       }

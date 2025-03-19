@@ -73,9 +73,9 @@ const initialState: clueState = {
   characters: characters,
   weapons: weapons,
   isGameOver: false,
-  eliminatedPeople: [""],
-  eliminatedWeapons: [""],
-  eliminatedRooms: [""],
+  eliminatedPeople: [],
+  eliminatedWeapons: [],
+  eliminatedRooms: [],
   isOpenModal: false,
   player: {
     name: "james",
@@ -138,13 +138,13 @@ export const clueSlice = createSlice({
       state.player.roomId = action.payload;
     },
     setEliminatedPeople: (state, action) => {
-      state.eliminatedPeople = [...state.eliminatedPeople, action.payload];
+      state.eliminatedPeople = action.payload;
     },
     setEliminatedRooms: (state, action) => {
-      state.eliminatedRooms = [...state.eliminatedRooms, action.payload];
+      state.eliminatedRooms = action.payload;
     },
     setEliminatedWeapons: (state, action) => {
-      state.eliminatedWeapons = [...state.eliminatedWeapons, action.payload];
+      state.eliminatedWeapons = action.payload;
     },
     setThingToReveal: (state, action) => {
       state.thingToReveal = action.payload;

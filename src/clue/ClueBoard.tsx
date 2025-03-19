@@ -8,6 +8,9 @@ import {
   setCurrentRoom,
   openResponseModal,
   setGameId,
+  setEliminatedWeapons,
+  setEliminatedRooms,
+  setEliminatedPeople,
 } from "./clueSlice";
 
 export const ClueBoard = () => {
@@ -172,13 +175,11 @@ export const ClueBoard = () => {
   // const confidential = useSelector((state: any) => state.clue.confidential);
 
   useEffect(() => {
-    console.log("in this effect");
+    // createGame();
     fetchGame();
-    // if (!theGame) createGame();
   }, []);
 
   useEffect(() => {
-    console.log("in real effect", clueGame);
     dispatch(
       setCurrentRoom(board.find((room: any) => room.id === player.roomId)!.type)
     );
@@ -198,8 +199,6 @@ export const ClueBoard = () => {
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    console.log(gameId);
-    if (gameId !== "") saveGame(gameId);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
@@ -207,17 +206,19 @@ export const ClueBoard = () => {
   });
 
   const fetchGame = async () => {
+    //this is where used id has to be passed dynamically from context
     const response = await fetch(
       "https://us-central1-xenon-heading-433720-j4.cloudfunctions.net/api/clue/james"
     );
     const game = await response.json();
-    console.log(game);
-    console.log(game[0]._id);
     dispatch(setGameId(game[0]._id));
-    // saveGame(game[0]._id);
+    dispatch(setEliminatedWeapons(game[0].eliminatedWeapons));
+    dispatch(setEliminatedRooms(game[0].eliminatedRooms));
+    dispatch(setEliminatedPeople([...game[0].eliminatedPeople]));
   };
 
   const createGame = async () => {
+    //should be called only when a user plays for the very first time..otherwise they should always have an existing gae instance that can be reset to a new game
     const response = await fetch(
       "https://us-central1-xenon-heading-433720-j4.cloudfunctions.net/api/clue",
       {
@@ -231,25 +232,6 @@ export const ClueBoard = () => {
       }
     );
     const game = await response.json();
-  };
-
-  const saveGame = async (gameId: string) => {
-    console.log(gameId, "being saved");
-    const url =
-      "https://us-central1-xenon-heading-433720-j4.cloudfunctions.net/api/clue/" +
-      gameId;
-    console.log(url);
-    const response = await fetch(url, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        clueGame,
-      }),
-    });
-    const game = await response.json();
-    console.log(game);
   };
 
   return (
