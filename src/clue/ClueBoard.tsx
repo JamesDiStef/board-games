@@ -7,9 +7,15 @@ import {
   setPlayer,
   setCurrentRoom,
   openResponseModal,
+  setGameId,
+  setEliminatedWeapons,
+  setEliminatedRooms,
+  setEliminatedPeople,
 } from "./clueSlice";
 
 export const ClueBoard = () => {
+  const clueGame = useSelector((state: any) => state.clue);
+  // const gameId = useSelector((state: any) => state.clue.gameId);
   const isOpenModal = useSelector((state: any) => state.clue.isOpenModal);
   const isOpenResponseModal = useSelector(
     (state: any) => state.clue.isOpenResponseModal
@@ -169,6 +175,11 @@ export const ClueBoard = () => {
   // const confidential = useSelector((state: any) => state.clue.confidential);
 
   useEffect(() => {
+    // createGame();
+    fetchGame();
+  }, []);
+
+  useEffect(() => {
     dispatch(
       setCurrentRoom(board.find((room: any) => room.id === player.roomId)!.type)
     );
@@ -193,6 +204,41 @@ export const ClueBoard = () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   });
+
+  const fetchGame = async () => {
+    //this is where used id has to be passed dynamically from context
+    const response = await fetch(
+      "https://us-central1-xenon-heading-433720-j4.cloudfunctions.net/api/clue/james"
+    );
+    const game = await response.json();
+    console.log(game.length);
+    if (game.length > 0) {
+      dispatch(setGameId(game[0]._id));
+      dispatch(setEliminatedWeapons(game[0].eliminatedWeapons));
+      dispatch(setEliminatedRooms(game[0].eliminatedRooms));
+      dispatch(setEliminatedPeople(game[0].eliminatedPeople));
+    } else {
+      createGame();
+    }
+  };
+
+  const createGame = async () => {
+    //should be called only when a user plays for the very first time..otherwise they should always have an existing gae instance that can be reset to a new game
+    const response = await fetch(
+      "https://us-central1-xenon-heading-433720-j4.cloudfunctions.net/api/clue",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          clueGame,
+        }),
+      }
+    );
+    const game = await response.json();
+    console.log(game);
+  };
 
   return (
     <div>
