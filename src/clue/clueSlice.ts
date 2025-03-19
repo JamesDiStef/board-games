@@ -68,7 +68,7 @@ const board = [
 ];
 
 const initialState: clueState = {
-  playerName: "james",
+  playerName: "",
   gameId: "",
   characters: characters,
   weapons: weapons,
@@ -78,7 +78,7 @@ const initialState: clueState = {
   eliminatedRooms: [],
   isOpenModal: false,
   player: {
-    name: "james",
+    name: "",
     roomId: 0,
   },
   currentRoom: "study",
@@ -97,14 +97,15 @@ const initialState: clueState = {
   },
 };
 
-console.log(typeof initialState);
-
 export const clueSlice = createSlice({
   name: "clue",
   initialState,
   reducers: {
+    setPlayerName: (state, action) => {
+      console.log("setting player name to ", action.payload);
+      state.playerName = action.payload;
+    },
     setGameId: (state, action) => {
-      console.log("ok is this being set");
       state.gameId = action.payload;
     },
     openModal: (state) => {
@@ -173,6 +174,7 @@ export const {
   openResponseModal,
   setRoomGuess,
   setGameId,
+  setPlayerName,
 } = clueSlice.actions;
 
 export default clueSlice.reducer;

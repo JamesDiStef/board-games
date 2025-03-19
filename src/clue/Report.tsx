@@ -7,7 +7,6 @@ const Report = () => {
   const confidential = useSelector((state: any) => state.clue.confidential);
   const isGameOver = useSelector((state: any) => state.clue.isGameOver);
   const thingToReveal = useSelector((state: any) => state.clue.thingToReveal);
-  console.log(thingToReveal, confidential);
   const dispatch = useDispatch();
 
   return (
