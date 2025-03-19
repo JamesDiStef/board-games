@@ -27,6 +27,7 @@ const GuessPanel = () => {
       body: JSON.stringify(stuffToPatch),
     });
     const game = await response.json();
+    console.log(game);
   };
 
   const gameId = useSelector((state: any) => state.clue.gameId);

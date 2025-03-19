@@ -15,7 +15,7 @@ import {
 
 export const ClueBoard = () => {
   const clueGame = useSelector((state: any) => state.clue);
-  const gameId = useSelector((state: any) => state.clue.gameId);
+  // const gameId = useSelector((state: any) => state.clue.gameId);
   const isOpenModal = useSelector((state: any) => state.clue.isOpenModal);
   const isOpenResponseModal = useSelector(
     (state: any) => state.clue.isOpenResponseModal
@@ -237,6 +237,7 @@ export const ClueBoard = () => {
       }
     );
     const game = await response.json();
+    console.log(game);
   };
 
   return (

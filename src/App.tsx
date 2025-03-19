@@ -9,7 +9,7 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import MobileNav from "./MobileNav";
 import { useState } from "react";
 import ClueBoard from "./clue/ClueBoard";
-import Home from "./home/home";
+import Home from "./home/Home";
 
 function App() {
   const [openModal, setOpenModal] = useState(true);
