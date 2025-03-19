@@ -9,6 +9,7 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import MobileNav from "./MobileNav";
 import { useState } from "react";
 import ClueBoard from "./clue/ClueBoard";
+import Home from "./home/home";
 
 function App() {
   const [openModal, setOpenModal] = useState(true);
@@ -36,7 +37,8 @@ function App() {
         <NavBar />
       </div>
       <Routes>
-        <Route path="/" element={<Board />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/hangman" element={<HangmanBoard />} />
         <Route path="/ticTacToe" element={<Board />} />
         <Route path="/connectFour" element={<ConnectFourBoard />} />

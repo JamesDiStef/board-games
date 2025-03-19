@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface clueState {
+  playerName: string;
+  gameId: string;
   characters: string[];
   weapons: string[];
   isGameOver: boolean;
@@ -66,6 +68,8 @@ const board = [
 ];
 
 const initialState: clueState = {
+  playerName: "james",
+  gameId: "",
   characters: characters,
   weapons: weapons,
   isGameOver: false,
@@ -99,6 +103,10 @@ export const clueSlice = createSlice({
   name: "clue",
   initialState,
   reducers: {
+    setGameId: (state, action) => {
+      console.log("ok is this being set");
+      state.gameId = action.payload;
+    },
     openModal: (state) => {
       state.isOpenModal = !state.isOpenModal;
     },
@@ -164,6 +172,7 @@ export const {
   setCurrentRoom,
   openResponseModal,
   setRoomGuess,
+  setGameId,
 } = clueSlice.actions;
 
 export default clueSlice.reducer;

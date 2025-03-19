@@ -7,9 +7,12 @@ import {
   setPlayer,
   setCurrentRoom,
   openResponseModal,
+  setGameId,
 } from "./clueSlice";
 
 export const ClueBoard = () => {
+  const clueGame = useSelector((state: any) => state.clue);
+  const gameId = useSelector((state: any) => state.clue.gameId);
   const isOpenModal = useSelector((state: any) => state.clue.isOpenModal);
   const isOpenResponseModal = useSelector(
     (state: any) => state.clue.isOpenResponseModal
@@ -169,6 +172,13 @@ export const ClueBoard = () => {
   // const confidential = useSelector((state: any) => state.clue.confidential);
 
   useEffect(() => {
+    console.log("in this effect");
+    fetchGame();
+    // if (!theGame) createGame();
+  }, []);
+
+  useEffect(() => {
+    console.log("in real effect", clueGame);
     dispatch(
       setCurrentRoom(board.find((room: any) => room.id === player.roomId)!.type)
     );
@@ -188,11 +198,59 @@ export const ClueBoard = () => {
     };
 
     window.addEventListener("keydown", handleKeyDown);
+    console.log(gameId);
+    if (gameId !== "") saveGame(gameId);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   });
+
+  const fetchGame = async () => {
+    const response = await fetch(
+      "https://us-central1-xenon-heading-433720-j4.cloudfunctions.net/api/clue/james"
+    );
+    const game = await response.json();
+    console.log(game);
+    console.log(game[0]._id);
+    dispatch(setGameId(game[0]._id));
+    // saveGame(game[0]._id);
+  };
+
+  const createGame = async () => {
+    const response = await fetch(
+      "https://us-central1-xenon-heading-433720-j4.cloudfunctions.net/api/clue",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          clueGame,
+        }),
+      }
+    );
+    const game = await response.json();
+  };
+
+  const saveGame = async (gameId: string) => {
+    console.log(gameId, "being saved");
+    const url =
+      "https://us-central1-xenon-heading-433720-j4.cloudfunctions.net/api/clue/" +
+      gameId;
+    console.log(url);
+    const response = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        clueGame,
+      }),
+    });
+    const game = await response.json();
+    console.log(game);
+  };
 
   return (
     <div>

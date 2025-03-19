@@ -16,7 +16,7 @@ const NavBar = () => {
       <nav>
         <ul className="hidden sm:flex mr-6 py-3 bg-amber-500 w-full">
           <li className="ml-3 mr-6">
-            <Link to="/ticTacToe">Home</Link>
+            <Link to="/home">Home</Link>
           </li>
           <li className="mr-6">
             <Link to="/hangman">Hangman</Link>
