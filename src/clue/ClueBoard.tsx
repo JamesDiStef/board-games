@@ -211,10 +211,15 @@ export const ClueBoard = () => {
       "https://us-central1-xenon-heading-433720-j4.cloudfunctions.net/api/clue/james"
     );
     const game = await response.json();
-    dispatch(setGameId(game[0]._id));
-    dispatch(setEliminatedWeapons(game[0].eliminatedWeapons));
-    dispatch(setEliminatedRooms(game[0].eliminatedRooms));
-    dispatch(setEliminatedPeople([...game[0].eliminatedPeople]));
+    console.log(game.length);
+    if (game.length > 0) {
+      dispatch(setGameId(game[0]._id));
+      dispatch(setEliminatedWeapons(game[0].eliminatedWeapons));
+      dispatch(setEliminatedRooms(game[0].eliminatedRooms));
+      dispatch(setEliminatedPeople(game[0].eliminatedPeople));
+    } else {
+      createGame();
+    }
   };
 
   const createGame = async () => {

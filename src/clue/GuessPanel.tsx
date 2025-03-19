@@ -66,7 +66,7 @@ const GuessPanel = () => {
   };
 
   const handleEliminatePerson = () => {
-    const newEliminatedPeople = [...eliminatedPeople[0], guesses.person];
+    const newEliminatedPeople = [...eliminatedPeople, guesses.person];
     dispatch(setEliminatedPeople(newEliminatedPeople));
     saveGame(gameId, {
       eliminatedPeople: newEliminatedPeople,
@@ -75,7 +75,7 @@ const GuessPanel = () => {
   };
 
   const handleEliminateRoom = () => {
-    const newEliminatedRooms = [...eliminatedRooms[0], guesses.room];
+    const newEliminatedRooms = [...eliminatedRooms, guesses.room];
     dispatch(setEliminatedRooms(newEliminatedRooms));
     saveGame(gameId, {
       eliminatedRooms: newEliminatedRooms,
@@ -84,7 +84,7 @@ const GuessPanel = () => {
   };
 
   const handleEliminateWeapon = () => {
-    const newEliminatedWeapons = [...eliminatedWeapons[0], guesses.weapon];
+    const newEliminatedWeapons = [...eliminatedWeapons, guesses.weapon];
     dispatch(setEliminatedWeapons(newEliminatedWeapons));
     saveGame(gameId, {
       eliminatedWeapon: newEliminatedWeapons,
