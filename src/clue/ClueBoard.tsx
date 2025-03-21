@@ -224,6 +224,8 @@ export const ClueBoard = () => {
 
   const createGame = async () => {
     //should be called only when a user plays for the very first time..otherwise they should always have an existing gae instance that can be reset to a new game
+    // const response = await fetch(`${newApi}/clue/${playerName}`, {
+    console.log(newApi + "/clue/" + playerName);
     const response = await fetch(`${newApi}/clue/${playerName}`, {
       method: "POST",
       headers: {
