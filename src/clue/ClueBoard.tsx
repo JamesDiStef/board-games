@@ -14,6 +14,8 @@ import {
 } from "./clueSlice";
 
 export const ClueBoard = () => {
+  const newApi = import.meta.env.VITE_NEW_API_URL;
+
   const playerName = useSelector((state: any) => state.clue.playerName);
   const clueGame = useSelector((state: any) => state.clue);
   // const gameId = useSelector((state: any) => state.clue.gameId);
@@ -208,11 +210,7 @@ export const ClueBoard = () => {
   });
 
   const fetchGame = async () => {
-    //this is where used id has to be passed dynamically from context
-    console.log(playerName);
-    const response = await fetch(
-      `https://us-central1-xenon-heading-433720-j4.cloudfunctions.net/api/clue/${playerName}`
-    );
+    const response = await fetch(`${newApi}/clue/${playerName}`);
     const game = await response.json();
     if (game.length > 0) {
       dispatch(setGameId(game[0]._id));
@@ -226,20 +224,21 @@ export const ClueBoard = () => {
 
   const createGame = async () => {
     //should be called only when a user plays for the very first time..otherwise they should always have an existing gae instance that can be reset to a new game
-    const response = await fetch(
-      `https://us-central1-xenon-heading-433720-j4.cloudfunctions.net/api/clue/${playerName}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          clueGame,
-        }),
-      }
-    );
+    const response = await fetch(`${newApi}/clue/${playerName}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        clueGame,
+      }),
+    });
     const game = await response.json();
     console.log(game);
+    dispatch(setGameId(game[0]._id));
+    dispatch(setEliminatedWeapons(game[0].eliminatedWeapons));
+    dispatch(setEliminatedRooms(game[0].eliminatedRooms));
+    dispatch(setEliminatedPeople(game[0].eliminatedPeople));
   };
 
   return (

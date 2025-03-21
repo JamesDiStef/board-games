@@ -13,11 +13,10 @@ import {
 } from "./clueSlice";
 
 const GuessPanel = () => {
+  const newApi = import.meta.env.VITE_NEW_API_URL;
   const saveGame = async (gameId: string, stuffToPatch: any) => {
     //should be called on every state update
-    const url =
-      "https://us-central1-xenon-heading-433720-j4.cloudfunctions.net/api/clue/" +
-      gameId;
+    const url = `${newApi}/clue/${gameId}`;
     const response = await fetch(url, {
       method: "PATCH",
       headers: {
