@@ -13,10 +13,12 @@ import {
   setEliminatedPeople,
 } from "./clueSlice";
 
+import { setClueGame } from "../home/homeSlice";
+
 export const ClueBoard = () => {
   const newApi = import.meta.env.VITE_NEW_API_URL;
 
-  const playerName = useSelector((state: any) => state.clue.playerName);
+  const playerName = useSelector((state: any) => state.user.userId);
   const clueGame = useSelector((state: any) => state.clue);
   // const gameId = useSelector((state: any) => state.clue.gameId);
   const isOpenModal = useSelector((state: any) => state.clue.isOpenModal);
@@ -213,13 +215,33 @@ export const ClueBoard = () => {
     const response = await fetch(`${newApi}/clue/${playerName}`);
     const game = await response.json();
     if (game.length > 0) {
-      dispatch(setGameId(game[0]._id));
-      dispatch(setEliminatedWeapons(game[0].eliminatedWeapons));
-      dispatch(setEliminatedRooms(game[0].eliminatedRooms));
-      dispatch(setEliminatedPeople(game[0].eliminatedPeople));
+      console.log(game[0]);
+      //error is with line 218 right here
+      dispatch(setGameId(game[0]?._id));
+      dispatch(setEliminatedWeapons(game[0]?.eliminatedWeapons));
+      dispatch(setEliminatedRooms(game[0]?.eliminatedRooms));
+      dispatch(setEliminatedPeople(game[0]?.eliminatedPeople));
+      dispatch(setClueGame(game[0]?._id));
+      updateUsersClueGame({ clueId: game[0]?._id });
     } else {
       createGame();
     }
+  };
+
+  const updateUsersClueGame = async (stuffToPatch: any) => {
+    //should be called on every state update
+    console.log(stuffToPatch);
+    const url = `${newApi}/user/${playerName}`;
+    const response = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      //need to pass in the relevant field dynamically here
+      body: JSON.stringify(stuffToPatch),
+    });
+    const game = await response.json();
+    console.log(game);
   };
 
   const createGame = async () => {
@@ -237,10 +259,6 @@ export const ClueBoard = () => {
     });
     const game = await response.json();
     console.log(game);
-    dispatch(setGameId(game[0]._id));
-    dispatch(setEliminatedWeapons(game[0].eliminatedWeapons));
-    dispatch(setEliminatedRooms(game[0].eliminatedRooms));
-    dispatch(setEliminatedPeople(game[0].eliminatedPeople));
   };
 
   return (

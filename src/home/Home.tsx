@@ -1,17 +1,33 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setPlayerName } from "../clue/clueSlice";
+import { setUserId } from "./homeSlice";
 
 const Home = () => {
-  const playerName = useSelector((state: any) => state.clue.playerName);
+  const newApi = import.meta.env.VITE_NEW_API_URL;
+
+  const userId = useSelector((state: any) => state.user.userId);
   const dispatch = useDispatch();
 
-  const handleSetPlayerName = (name: string) => {
-    dispatch(setPlayerName(name));
+  const fetchUser = async () => {
+    const response = await fetch(`${newApi}/user/${userId}`);
+    const user = await response.json();
+    if (user.length > 0) {
+      console.log(user[0]);
+      dispatch(setUserId(userId));
+    } else {
+      createUser();
+    }
   };
 
-  const handleLogin = () => {
-    dispatch(setPlayerName(name));
+  const createUser = async () => {
+    const response = await fetch(`${newApi}/user/${userId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    await response.json();
   };
+
   return (
     <div className="flex justify-center">
       <div className="flex flex-col ">
@@ -22,26 +38,29 @@ const Home = () => {
             playing
           </p>
         </div>
-        <form className="mt-36 mx-auto w-1/2 flex flex-col bg-slate-300">
+        <form
+          className="mt-36 mx-auto w-1/2 flex flex-col bg-slate-300"
+          onSubmit={(e) => e.preventDefault()}
+        >
           <input
             className="mx-10 my-6 h-10 p-2"
             type="text"
             placeholder="username"
-            value={playerName}
-            onChange={(e) => handleSetPlayerName(e.target.value)}
+            value={userId}
+            onChange={(e) => dispatch(setUserId(e.target.value))}
           />
           <input
             className="mx-10 my-6 h-10 p-2"
             type="password"
             placeholder="password"
           />
-          <button className="bg-lime-100 h-10 mx-auto mt-2 w-1/4 border-2 button cursor-pointer rounded-xl">
+          <button
+            onClick={() => fetchUser()}
+            className="bg-lime-100 h-10 mx-auto mt-2 w-1/4 border-2 button cursor-pointer rounded-xl"
+          >
             Sign In
           </button>
-          <button
-            onClick={handleLogin}
-            className="bg-lime-100 h-10 mx-auto mt-2 mb-4 w-1/4 border-2 button cursor-pointer rounded-xl"
-          >
+          <button className="bg-lime-100 h-10 mx-auto mt-2 mb-4 w-1/4 border-2 button cursor-pointer rounded-xl">
             Create Account
           </button>
         </form>
