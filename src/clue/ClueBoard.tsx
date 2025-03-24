@@ -261,6 +261,7 @@ export const ClueBoard = () => {
     console.log(game);
   };
 
+  console.log(player.roomId, board[0].id);
   return (
     <div>
       <ClueComingSoon />
@@ -271,10 +272,10 @@ export const ClueBoard = () => {
             key={room.id}
             className="border-2 border-black bg-pink-300 h-[180px] w-full"
           >
-            {player.roomId === room.id && <div>{player.name}</div>}
             <div className="flex justify-center items-center text-3xl">
               {room.type}
             </div>
+            {player.roomId === room.id && <div>{playerName}</div>}
           </div>
         ))}
       </div>
