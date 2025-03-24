@@ -45,7 +45,6 @@ export const ticTacToeSlice = createSlice({
     setBoardUpdate: (state, action) => {
       state.board = action.payload;
     },
-    handleRestart: (state, action) => {},
   },
 });
 
