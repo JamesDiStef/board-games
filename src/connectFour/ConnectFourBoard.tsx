@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import ConnectFourColumn from "./ConnectFourColumn";
 import confetti from "canvas-confetti";
+import { useDispatch, useSelector } from "react-redux";
+import { handleDropPiece, restart, toggleGameOver } from "./connectFourSlice";
 
 export interface Column {
   counter: number;
@@ -13,8 +15,11 @@ export interface Square {
 }
 
 const ConnectFourBoard = () => {
-  const [isRedTurn, setIsRedTurn] = useState(true);
-  const [isGameOver, setIsGameOver] = useState(false);
+  const api = import.meta.env.VITE_NEW_API_URL;
+  const userId = useSelector((state: any) => state.user.userId);
+  const isRedTurn = useSelector((state: any) => state.connectFour.isRedTurn);
+  const isGameOver = useSelector((state: any) => state.connectFour.isGameOver);
+  const dispatch = useDispatch();
 
   const initialColumns = Array(7).fill({
     counter: 5,
@@ -28,7 +33,7 @@ const ConnectFourBoard = () => {
     ],
   });
 
-  const [columns, setColumns] = useState(initialColumns);
+  const columns = useSelector((state: any) => state.connectFour.columns);
 
   const handleClickColumn = (index: number, column: Column) => {
     if (isGameOver) return;
@@ -42,11 +47,11 @@ const ConnectFourBoard = () => {
           : s
       ),
     };
-    setColumns(updatedColumns);
-    setIsRedTurn(!isRedTurn);
+    dispatch(handleDropPiece(updatedColumns));
     checkVerticalWin(updatedColumns);
     checkHorizontalWin(updatedColumns);
     checkDiagonalWin(updatedColumns);
+    saveGame({ columns: updatedColumns });
   };
 
   const checkVerticalWin = (updatedColumns: Column[]) => {
@@ -58,7 +63,7 @@ const ConnectFourBoard = () => {
           col.squares[i + 1].color === col.squares[i + 2].color &&
           col.squares[i + 2].color === col.squares[i + 3].color
         ) {
-          setIsGameOver(true);
+          dispatch(toggleGameOver());
           confetti({
             particleCount: 150,
             spread: 60,
@@ -78,7 +83,7 @@ const ConnectFourBoard = () => {
           color === updatedColumns[col + 2].squares[row].color &&
           color === updatedColumns[col + 3].squares[row].color
         ) {
-          setIsGameOver(true);
+          dispatch(toggleGameOver());
           confetti({
             particleCount: 150,
             spread: 60,
@@ -98,7 +103,7 @@ const ConnectFourBoard = () => {
           color === updatedColumns[col + 2].squares[row - 2].color &&
           color === updatedColumns[col + 3].squares[row - 3].color
         ) {
-          setIsGameOver(true);
+          dispatch(toggleGameOver());
           confetti({
             particleCount: 150,
             spread: 60,
@@ -116,7 +121,7 @@ const ConnectFourBoard = () => {
           color === updatedColumns[col + 2].squares[row + 2].color &&
           color === updatedColumns[col + 3].squares[row + 3].color
         ) {
-          setIsGameOver(true);
+          dispatch(toggleGameOver());
           confetti({
             particleCount: 150,
             spread: 60,
@@ -127,9 +132,45 @@ const ConnectFourBoard = () => {
   };
 
   const handleRestart = () => {
-    setColumns(initialColumns);
-    setIsGameOver(false);
+    dispatch(restart());
   };
+
+  const fetchGame = async () => {
+    const response = await fetch(`${api}/connectFour/${userId}`);
+    const game = await response.json();
+    if (game.length === 0) createGame();
+    dispatch(handleDropPiece(game[0].columns));
+    console.log("is it happenng");
+  };
+
+  const createGame = async () => {
+    const response = await fetch(`${api}/connectFour/${userId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const game = await response.json();
+  };
+
+  const saveGame = async (stuffToPatch: any) => {
+    console.log(stuffToPatch);
+    console.log(userId);
+    console.log(`${api}/connectFour/${userId}`);
+    const response = await fetch(`${api}/connectFour/${userId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(stuffToPatch),
+    });
+    const game = await response.json();
+    console.log(game);
+  };
+
+  useEffect(() => {
+    fetchGame();
+  }, []);
 
   return (
     <div className="">
@@ -142,7 +183,7 @@ const ConnectFourBoard = () => {
       {isGameOver && <div className="flex justify-center">Game over!!!</div>}
 
       <div className="flex justify-center sm:space-x-2">
-        {columns.map((column, index) => (
+        {columns.map((column: Column, index: number) => (
           <ConnectFourColumn
             key={index}
             column={column}
