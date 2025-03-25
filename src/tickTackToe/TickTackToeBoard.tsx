@@ -82,6 +82,7 @@ const Board = () => {
       ])
     );
     dispatch(setIsPlayerOne());
+    dispatch(setIsGameOver(false));
     updateGame({ board: blankBoard });
   };
 
@@ -150,7 +151,7 @@ const Board = () => {
   }, []);
 
   useEffect(() => {
-    if (checkGameOver()) dispatch(setIsGameOver());
+    if (checkGameOver()) dispatch(setIsGameOver(true));
   }, [board]);
 
   return (

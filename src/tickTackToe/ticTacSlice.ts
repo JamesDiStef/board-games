@@ -39,8 +39,8 @@ export const ticTacToeSlice = createSlice({
     setIsPlayerOne: (state) => {
       state.isPlayerOne = !state.isPlayerOne;
     },
-    setIsGameOver: (state) => {
-      state.isGameOver = !state.isGameOver;
+    setIsGameOver: (state, action) => {
+      state.isGameOver = action.payload;
     },
     setBoardUpdate: (state, action) => {
       state.board = action.payload;
