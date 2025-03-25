@@ -21,17 +21,17 @@ const ConnectFourBoard = () => {
   const isGameOver = useSelector((state: any) => state.connectFour.isGameOver);
   const dispatch = useDispatch();
 
-  const initialColumns = Array(7).fill({
-    counter: 5,
-    squares: [
-      { id: 0, color: "" },
-      { id: 1, color: "" },
-      { id: 2, color: "" },
-      { id: 3, color: "" },
-      { id: 4, color: "" },
-      { id: 5, color: "" },
-    ],
-  });
+  // const initialColumns = Array(7).fill({
+  //   counter: 5,
+  //   squares: [
+  //     { id: 0, color: "" },
+  //     { id: 1, color: "" },
+  //     { id: 2, color: "" },
+  //     { id: 3, color: "" },
+  //     { id: 4, color: "" },
+  //     { id: 5, color: "" },
+  //   ],
+  // });
 
   const columns = useSelector((state: any) => state.connectFour.columns);
 
@@ -151,6 +151,7 @@ const ConnectFourBoard = () => {
       },
     });
     const game = await response.json();
+    console.log(game);
   };
 
   const saveGame = async (stuffToPatch: any) => {
