@@ -18,9 +18,6 @@ export const hangmanSlice = createSlice({
   name: "hangman",
   initialState,
   reducers: {
-    setWordtoGuess: (state, action) => {
-      state.wordToGuess = action.payload;
-    },
     setIsWin: (state, action) => {
       state.isWin = action.payload;
     },
@@ -30,10 +27,16 @@ export const hangmanSlice = createSlice({
     setWrongGuesses: (state, action) => {
       state.wrongGuesses = action.payload;
     },
+    setGame: (state, action) => {
+      state.wordToGuess = action.payload.wordToGuess;
+      state.isWin = action.payload.isWin;
+      state.guessedLetters = action.payload.guessedLetters;
+      state.wrongGuesses = action.payload.wrongGuesses;
+    },
   },
 });
 
-export const { setWordtoGuess, setIsWin, setGuessedLetters, setWrongGuesses } =
+export const { setIsWin, setGuessedLetters, setWrongGuesses, setGame } =
   hangmanSlice.actions;
 
 export default hangmanSlice.reducer;

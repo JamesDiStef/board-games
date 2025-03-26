@@ -6,9 +6,9 @@ import Keyboard from "./Keyboard";
 import confetti from "canvas-confetti";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  setGame,
   setGuessedLetters,
   setIsWin,
-  setWordtoGuess,
   setWrongGuesses,
 } from "./hangmanSlice";
 
@@ -37,10 +37,13 @@ function HangmanBoard() {
 
   const handleRestart = () => {
     const newWord = words[Math.floor(Math.random() * words.length)];
-    dispatch(setWordtoGuess(newWord));
-    dispatch(setGuessedLetters([]));
-    dispatch(setIsWin(false));
-    dispatch(setWrongGuesses(0));
+    const newGame = {
+      wordToGuess: newWord,
+      guessedLetters: [],
+      isWin: false,
+      wrongGuesses: 0,
+    };
+    dispatch(setGame(newGame));
     updateGame({ guessedLetters: [] });
     updateGame({ wordToGuess: wordToGuess });
     updateGame({ isWin: false });
@@ -61,29 +64,28 @@ function HangmanBoard() {
   });
 
   const updateGame = async (stuffToPatch: any) => {
-    console.log(`${api}/hangman/${userId}`);
-    const response = await fetch(`${api}/hangman/${userId}`, {
+    await fetch(`${api}/hangman/${userId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(stuffToPatch),
     });
-    const game = response.json();
-    console.log(game);
   };
 
   const fetchCurrentGame = async () => {
     const response = await fetch(`${api}/hangman/${userId}`);
     const game = await response.json();
-    console.log(game);
     if (game.length === 0) {
       createNewGame();
     } else {
-      dispatch(setGuessedLetters(game[0].guessedLetters));
-      dispatch(setWordtoGuess(game[0].wordToGuess));
-      dispatch(setWrongGuesses(game[0].wrongGuesses));
-      dispatch(setIsWin(game[0].isWin));
+      const theGame = {
+        guessedLetters: game[0].guessedLetters,
+        isWin: game[0].isWin,
+        wrongGuesses: game[0].wrongGuesses,
+        wordToGuess: game[0].wordToGuess,
+      };
+      dispatch(setGame(theGame));
     }
   };
 
