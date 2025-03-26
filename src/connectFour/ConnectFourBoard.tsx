@@ -19,21 +19,9 @@ const ConnectFourBoard = () => {
   const userId = useSelector((state: any) => state.user.userId);
   const isRedTurn = useSelector((state: any) => state.connectFour.isRedTurn);
   const isGameOver = useSelector((state: any) => state.connectFour.isGameOver);
-  const dispatch = useDispatch();
-
-  // const initialColumns = Array(7).fill({
-  //   counter: 5,
-  //   squares: [
-  //     { id: 0, color: "" },
-  //     { id: 1, color: "" },
-  //     { id: 2, color: "" },
-  //     { id: 3, color: "" },
-  //     { id: 4, color: "" },
-  //     { id: 5, color: "" },
-  //   ],
-  // });
-
   const columns = useSelector((state: any) => state.connectFour.columns);
+
+  const dispatch = useDispatch();
 
   const handleClickColumn = (index: number, column: Column) => {
     if (isGameOver) return;
@@ -140,33 +128,25 @@ const ConnectFourBoard = () => {
     const game = await response.json();
     if (game.length === 0) createGame();
     dispatch(handleDropPiece(game[0].columns));
-    console.log("is it happenng");
   };
 
   const createGame = async () => {
-    const response = await fetch(`${api}/connectFour/${userId}`, {
+    await fetch(`${api}/connectFour/${userId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
     });
-    const game = await response.json();
-    console.log(game);
   };
 
   const saveGame = async (stuffToPatch: any) => {
-    console.log(stuffToPatch);
-    console.log(userId);
-    console.log(`${api}/connectFour/${userId}`);
-    const response = await fetch(`${api}/connectFour/${userId}`, {
+    await fetch(`${api}/connectFour/${userId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(stuffToPatch),
     });
-    const game = await response.json();
-    console.log(game);
   };
 
   useEffect(() => {
