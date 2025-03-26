@@ -14,20 +14,6 @@ import {
 
 const GuessPanel = () => {
   const newApi = import.meta.env.VITE_NEW_API_URL;
-  const saveGame = async (gameId: string, stuffToPatch: any) => {
-    //should be called on every state update
-    const url = `${newApi}/clue/${gameId}`;
-    const response = await fetch(url, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      //need to pass in the relevant field dynamically here
-      body: JSON.stringify(stuffToPatch),
-    });
-    const game = await response.json();
-    console.log(game);
-  };
 
   const gameId = useSelector((state: any) => state.clue.gameId);
   const guesses = useSelector((state: any) => state.clue.guesses);
@@ -51,6 +37,22 @@ const GuessPanel = () => {
 
   const dispatch = useDispatch();
   dispatch(setRoomGuess(currentRoom));
+
+  const saveGame = async (gameId: string, stuffToPatch: any) => {
+    console.log(gameId);
+    //should be called on every state update
+    const url = `${newApi}/clue/${gameId}`;
+    const response = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      //need to pass in the relevant field dynamically here
+      body: JSON.stringify(stuffToPatch),
+    });
+    const game = await response.json();
+    console.log(game);
+  };
 
   const selectWeapon = (weapon: string) => {
     dispatch(setWeaponGuess(weapon));

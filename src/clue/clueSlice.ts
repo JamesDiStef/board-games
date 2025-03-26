@@ -105,9 +105,6 @@ export const clueSlice = createSlice({
       console.log("setting player name to ", action.payload);
       state.playerName = action.payload;
     },
-    setGameId: (state, action) => {
-      state.gameId = action.payload;
-    },
     openModal: (state) => {
       state.isOpenModal = !state.isOpenModal;
     },
@@ -156,6 +153,13 @@ export const clueSlice = createSlice({
     openResponseModal: (state) => {
       state.isOpenResponseModal = !state.isOpenResponseModal;
     },
+    setUpGame: (state, action) => {
+      state.eliminatedPeople = action.payload.eliminatedPeople;
+      state.eliminatedRooms = action.payload.eliminatedRooms;
+      state.eliminatedWeapons = action.payload.eliminatedWeapons;
+      state.confidential = action.payload.confidential;
+      state.gameId = action.payload.gameId;
+    },
   },
 });
 
@@ -173,8 +177,8 @@ export const {
   setCurrentRoom,
   openResponseModal,
   setRoomGuess,
-  setGameId,
   setPlayerName,
+  setUpGame,
 } = clueSlice.actions;
 
 export default clueSlice.reducer;

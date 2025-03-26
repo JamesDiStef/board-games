@@ -7,13 +7,8 @@ import {
   setPlayer,
   setCurrentRoom,
   openResponseModal,
-  setGameId,
-  setEliminatedWeapons,
-  setEliminatedRooms,
-  setEliminatedPeople,
+  setUpGame,
 } from "./clueSlice";
-
-import { setClueGame } from "../home/homeSlice";
 
 export const ClueBoard = () => {
   const newApi = import.meta.env.VITE_NEW_API_URL;
@@ -177,11 +172,7 @@ export const ClueBoard = () => {
     dispatch(openModal());
   };
 
-  // const confidential = useSelector((state: any) => state.clue.confidential);
-
   useEffect(() => {
-    // createGame();
-    console.log(playerName);
     fetchGame();
   }, []);
 
@@ -217,31 +208,18 @@ export const ClueBoard = () => {
     if (game.length > 0) {
       console.log(game[0]);
       //error is with line 218 right here
-      dispatch(setGameId(game[0]?._id));
-      dispatch(setEliminatedWeapons(game[0]?.eliminatedWeapons));
-      dispatch(setEliminatedRooms(game[0]?.eliminatedRooms));
-      dispatch(setEliminatedPeople(game[0]?.eliminatedPeople));
-      dispatch(setClueGame(game[0]?._id));
-      updateUsersClueGame({ clueId: game[0]?._id });
+      dispatch(
+        setUpGame({
+          gameId: game[0]?._id,
+          eliminatedRooms: game[0]?.eliminatedRooms,
+          eliminatedWeapons: game[0]?.eliminatedWeapons,
+          eliminatedPeople: game[0]?.eliminatedPeople,
+          confidential: game[0]?.confidential,
+        })
+      );
     } else {
       createGame();
     }
-  };
-
-  const updateUsersClueGame = async (stuffToPatch: any) => {
-    //should be called on every state update
-    console.log(stuffToPatch);
-    const url = `${newApi}/user/${playerName}`;
-    const response = await fetch(url, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      //need to pass in the relevant field dynamically here
-      body: JSON.stringify(stuffToPatch),
-    });
-    const game = await response.json();
-    console.log(game);
   };
 
   const createGame = async () => {
@@ -258,10 +236,8 @@ export const ClueBoard = () => {
       }),
     });
     const game = await response.json();
-    console.log(game);
   };
 
-  console.log(player.roomId, board[0].id);
   return (
     <div>
       <ClueComingSoon />
