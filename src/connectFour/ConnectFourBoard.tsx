@@ -120,6 +120,19 @@ const ConnectFourBoard = () => {
   };
 
   const handleRestart = () => {
+    saveGame({
+      columns: Array(7).fill({
+        counter: 5,
+        squares: [
+          { id: 0, color: "" },
+          { id: 1, color: "" },
+          { id: 2, color: "" },
+          { id: 3, color: "" },
+          { id: 4, color: "" },
+          { id: 5, color: "" },
+        ],
+      }),
+    });
     dispatch(restart());
   };
 

@@ -42,13 +42,24 @@ export const ticTacToeSlice = createSlice({
     setIsGameOver: (state, action) => {
       state.isGameOver = action.payload;
     },
+    setUpGame: (state, action) => {
+      state.board = action.payload.board;
+      state.numClicks = action.payload.numClicks;
+      state.isPlayerOne = action.payload.isPlayerOne;
+      state.isGameOver = action.payload.isGameOver;
+    },
     setBoardUpdate: (state, action) => {
       state.board = action.payload;
     },
   },
 });
 
-export const { setNumClick, setIsGameOver, setIsPlayerOne, setBoardUpdate } =
-  ticTacToeSlice.actions;
+export const {
+  setNumClick,
+  setIsGameOver,
+  setIsPlayerOne,
+  setBoardUpdate,
+  setUpGame,
+} = ticTacToeSlice.actions;
 
 export default ticTacToeSlice.reducer;

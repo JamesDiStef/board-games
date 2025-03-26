@@ -3,10 +3,11 @@ import Square from "../tickTackToe/Square";
 import confetti from "canvas-confetti";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setBoardUpdate,
   setIsGameOver,
   setIsPlayerOne,
   setNumClick,
+  setBoardUpdate,
+  setUpGame,
 } from "./ticTacSlice";
 
 interface Square {
@@ -21,6 +22,7 @@ const Board = () => {
   const gameOver = useSelector((state: any) => state.ticTacToe.isGameOver);
   const isPlayerOne = useSelector((state: any) => state.ticTacToe.isPlayerOne);
   const board = useSelector((state: any) => state.ticTacToe.board);
+
   const dispatch = useDispatch();
 
   const gameOverCombos = [
@@ -68,22 +70,14 @@ const Board = () => {
   };
 
   const handleRestart = () => {
-    dispatch(
-      setBoardUpdate([
-        { num: 0, value: "" },
-        { num: 1, value: "" },
-        { num: 2, value: "" },
-        { num: 3, value: "" },
-        { num: 4, value: "" },
-        { num: 5, value: "" },
-        { num: 6, value: "" },
-        { num: 7, value: "" },
-        { num: 8, value: "" },
-      ])
-    );
-    dispatch(setIsPlayerOne());
-    dispatch(setIsGameOver(false));
-    updateGame({ board: blankBoard });
+    const newGame = {
+      board: blankBoard,
+      isPlayerOne: true,
+      isGameOver: false,
+      numClicks: 0,
+    };
+    dispatch(setUpGame(newGame));
+    updateGame({ board: newGame.board });
   };
 
   const handleClick = (squareNumber: number) => {
@@ -96,8 +90,8 @@ const Board = () => {
     console.log(nextBoard);
     dispatch(setBoardUpdate(nextBoard));
     dispatch(setIsPlayerOne());
-    checkGameOver();
     updateGame({ board: nextBoard });
+    checkGameOver();
   };
 
   const updateGame = async (stuffToPatch: any) => {
@@ -116,22 +110,26 @@ const Board = () => {
   const fetchCurrentGame = async () => {
     const response = await fetch(`${api}/ticTacToe/${userId}`);
     const game = await response.json();
-    console.log(game);
     if (game.length === 0) {
       createNewGame();
     } else {
       dispatch(
-        setBoardUpdate([
-          { num: 0, value: game[0].board[0].value },
-          { num: 1, value: game[0].board[1].value },
-          { num: 2, value: game[0].board[2].value },
-          { num: 3, value: game[0].board[3].value },
-          { num: 4, value: game[0].board[4].value },
-          { num: 5, value: game[0].board[5].value },
-          { num: 6, value: game[0].board[6].value },
-          { num: 7, value: game[0].board[7].value },
-          { num: 8, value: game[0].board[8].value },
-        ])
+        setUpGame({
+          board: [
+            { num: 0, value: game[0].board[0].value },
+            { num: 1, value: game[0].board[1].value },
+            { num: 2, value: game[0].board[2].value },
+            { num: 3, value: game[0].board[3].value },
+            { num: 4, value: game[0].board[4].value },
+            { num: 5, value: game[0].board[5].value },
+            { num: 6, value: game[0].board[6].value },
+            { num: 7, value: game[0].board[7].value },
+            { num: 8, value: game[0].board[8].value },
+          ],
+          isPlayerOne: game[0].isPlayerOne,
+          isGameOver: game[0].isGameOver,
+          numClicks: game[0].numClicks,
+        })
       );
     }
   };
