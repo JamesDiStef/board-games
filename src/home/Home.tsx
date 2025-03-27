@@ -44,7 +44,7 @@ const Home = () => {
     <div className="flex justify-center">
       <div className="flex flex-col w-full">
         <form
-          className="mt-36 mx-auto w-1/2 flex flex-col bg-slate-300"
+          className="mt-36 mx-auto w-2/3 md:w-3/5 lg:w-2/5 flex flex-col bg-slate-300"
           onSubmit={(e) => e.preventDefault()}
         >
           <input
@@ -62,21 +62,21 @@ const Home = () => {
           <button
             disabled={userId.length === 0}
             onClick={() => fetchUser()}
-            className="bg-lime-100 h-12 mx-auto mt-2 w-1/2 md:w-1/4 border-2 button cursor-pointer rounded-xl"
+            className="bg-lime-100 h-12 mx-auto mt-2 w-1/2 md:w-1/3 border-2 button cursor-pointer rounded-xl"
           >
             Sign In
           </button>
           <button
             disabled={userId.length === 0}
             onClick={() => fetchUser()}
-            className="bg-lime-100 h-12 mx-auto mt-4 mb-4 w-1/2 md:w-1/4 border-2 button cursor-pointer rounded-xl"
+            className="bg-lime-100 h-12 mx-auto mt-4 mb-4 w-1/2 md:w-1/3 border-2 button cursor-pointer rounded-xl"
           >
             Create Account
           </button>
         </form>
         <button
           onClick={continueAsGuest}
-          className="bg-lime-100 h-10 mx-auto mt-8 mb-4 w-1/2 md:w-1/4 border-2 button cursor-pointer rounded-xl"
+          className="bg-lime-100 h-10 mx-auto mt-8 mb-4 w-1/2 md:w-1/3 lg:w-1/6 border-2 button cursor-pointer rounded-xl"
         >
           Continue as Guest
         </button>
