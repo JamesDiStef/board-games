@@ -17,6 +17,11 @@ const MobileNav = ({ open, close, isFirstOpen }: Props) => {
       )}
       <li className="mx-auto mb-auto">
         <button onClick={() => close()}>
+          <Link to="/home">Log In Page</Link>
+        </button>
+      </li>
+      <li className="mx-auto mb-auto">
+        <button onClick={() => close()}>
           <Link to="/hangman">Hangman</Link>
         </button>
       </li>

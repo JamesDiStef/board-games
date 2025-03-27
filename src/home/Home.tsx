@@ -62,21 +62,21 @@ const Home = () => {
           <button
             disabled={userId.length === 0}
             onClick={() => fetchUser()}
-            className="bg-lime-100 h-12 mx-auto mt-2 w-1/4 border-2 button cursor-pointer rounded-xl"
+            className="bg-lime-100 h-12 mx-auto mt-2 w-1/2 md:w-1/4 border-2 button cursor-pointer rounded-xl"
           >
             Sign In
           </button>
           <button
             disabled={userId.length === 0}
             onClick={() => fetchUser()}
-            className="bg-lime-100 h-12 mx-auto mt-4 mb-4 w-1/4 border-2 button cursor-pointer rounded-xl"
+            className="bg-lime-100 h-12 mx-auto mt-4 mb-4 w-1/2 md:w-1/4 border-2 button cursor-pointer rounded-xl"
           >
             Create Account
           </button>
         </form>
         <button
           onClick={continueAsGuest}
-          className="bg-lime-100 h-10 mx-auto mt-8 mb-4 w-1/4 border-2 button cursor-pointer rounded-xl"
+          className="bg-lime-100 h-10 mx-auto mt-8 mb-4 w-1/2 md:w-1/4 border-2 button cursor-pointer rounded-xl"
         >
           Continue as Guest
         </button>

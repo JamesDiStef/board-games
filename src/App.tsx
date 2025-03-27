@@ -16,7 +16,7 @@ function App() {
   console.log(location.pathname);
   const isHome = location.pathname === "/home" || location.pathname === "/";
   console.log(isHome);
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
   const [isFirstOpen, setIsFirstOpen] = useState(true);
   const close = () => {
     setOpenModal(false);
@@ -27,7 +27,7 @@ function App() {
       <div className="block sm:hidden bg-amber-500">
         <button
           className="flex p-3 sm:hidden text-3xl "
-          onClick={() => setOpenModal(true)}
+          onClick={() => setOpenModal(!openModal)}
         >
           <FontAwesomeIcon icon={faBars} />
         </button>
