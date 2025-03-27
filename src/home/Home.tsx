@@ -60,12 +60,14 @@ const Home = () => {
             placeholder="password"
           />
           <button
+            disabled={userId.length === 0}
             onClick={() => fetchUser()}
             className="bg-lime-100 h-12 mx-auto mt-2 w-1/4 border-2 button cursor-pointer rounded-xl"
           >
             Sign In
           </button>
           <button
+            disabled={userId.length === 0}
             onClick={() => fetchUser()}
             className="bg-lime-100 h-12 mx-auto mt-4 mb-4 w-1/4 border-2 button cursor-pointer rounded-xl"
           >
