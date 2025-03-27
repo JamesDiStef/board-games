@@ -1,11 +1,22 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setUserId } from "./homeSlice";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const newApi = import.meta.env.VITE_NEW_API_URL;
 
   const userId = useSelector((state: any) => state.user.userId);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const goToNextPage = () => {
+    navigate("/connectFour");
+  };
+
+  const continueAsGuest = () => {
+    dispatch(setUserId(""));
+    goToNextPage();
+  };
 
   const fetchUser = async () => {
     const response = await fetch(`${newApi}/user/${userId}`);
@@ -16,6 +27,7 @@ const Home = () => {
     } else {
       createUser();
     }
+    goToNextPage();
   };
 
   const createUser = async () => {
@@ -30,14 +42,7 @@ const Home = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="flex flex-col ">
-        <div className="flex justify-center mt-10">
-          <p>
-            Sign in to rejoin your existing games. Don't want to make an
-            account? No problem. Just click one of the link on the top to start
-            playing
-          </p>
-        </div>
+      <div className="flex flex-col w-full">
         <form
           className="mt-36 mx-auto w-1/2 flex flex-col bg-slate-300"
           onSubmit={(e) => e.preventDefault()}
@@ -56,14 +61,23 @@ const Home = () => {
           />
           <button
             onClick={() => fetchUser()}
-            className="bg-lime-100 h-10 mx-auto mt-2 w-1/4 border-2 button cursor-pointer rounded-xl"
+            className="bg-lime-100 h-12 mx-auto mt-2 w-1/4 border-2 button cursor-pointer rounded-xl"
           >
             Sign In
           </button>
-          <button className="bg-lime-100 h-10 mx-auto mt-2 mb-4 w-1/4 border-2 button cursor-pointer rounded-xl">
+          <button
+            onClick={() => fetchUser()}
+            className="bg-lime-100 h-12 mx-auto mt-4 mb-4 w-1/4 border-2 button cursor-pointer rounded-xl"
+          >
             Create Account
           </button>
         </form>
+        <button
+          onClick={continueAsGuest}
+          className="bg-lime-100 h-10 mx-auto mt-8 mb-4 w-1/4 border-2 button cursor-pointer rounded-xl"
+        >
+          Continue as Guest
+        </button>
       </div>
     </div>
   );

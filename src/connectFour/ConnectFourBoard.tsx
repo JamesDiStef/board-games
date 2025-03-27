@@ -137,6 +137,8 @@ const ConnectFourBoard = () => {
   };
 
   const fetchGame = async () => {
+    if (userId === "") return;
+
     const response = await fetch(`${api}/connectFour/${userId}`);
     const game = await response.json();
     if (game.length === 0) createGame();
@@ -144,6 +146,8 @@ const ConnectFourBoard = () => {
   };
 
   const createGame = async () => {
+    if (userId === "") return;
+
     await fetch(`${api}/connectFour/${userId}`, {
       method: "POST",
       headers: {
@@ -153,6 +157,7 @@ const ConnectFourBoard = () => {
   };
 
   const saveGame = async (stuffToPatch: any) => {
+    if (userId === "") return;
     await fetch(`${api}/connectFour/${userId}`, {
       method: "PATCH",
       headers: {
@@ -163,7 +168,7 @@ const ConnectFourBoard = () => {
   };
 
   useEffect(() => {
-    fetchGame();
+    if (userId !== "") fetchGame();
   }, []);
 
   return (

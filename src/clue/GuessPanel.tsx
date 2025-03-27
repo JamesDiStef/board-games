@@ -14,6 +14,7 @@ import {
 
 const GuessPanel = () => {
   const newApi = import.meta.env.VITE_NEW_API_URL;
+  const playerName = useSelector((state: any) => state.user.userId);
 
   const gameId = useSelector((state: any) => state.clue.gameId);
   const guesses = useSelector((state: any) => state.clue.guesses);
@@ -39,6 +40,8 @@ const GuessPanel = () => {
   dispatch(setRoomGuess(currentRoom));
 
   const saveGame = async (gameId: string, stuffToPatch: any) => {
+    if (playerName === "") return;
+
     console.log(gameId);
     //should be called on every state update
     const url = `${newApi}/clue/${gameId}`;

@@ -95,6 +95,8 @@ const Board = () => {
   };
 
   const updateGame = async (stuffToPatch: any) => {
+    if (userId === "") return;
+
     console.log(`${api}/ticTacToe/${userId}`);
     const response = await fetch(`${api}/ticTacToe/${userId}`, {
       method: "PATCH",
@@ -108,6 +110,8 @@ const Board = () => {
   };
 
   const fetchCurrentGame = async () => {
+    if (userId === "") return;
+
     const response = await fetch(`${api}/ticTacToe/${userId}`);
     const game = await response.json();
     if (game.length === 0) {
@@ -135,6 +139,8 @@ const Board = () => {
   };
 
   const createNewGame = async () => {
+    if (userId === "") return;
+
     const response = await fetch(`${api}/ticTacToe/${userId}`, {
       method: "post",
       headers: {
@@ -145,7 +151,7 @@ const Board = () => {
   };
 
   useEffect(() => {
-    fetchCurrentGame();
+    if (userId !== "") fetchCurrentGame();
   }, []);
 
   useEffect(() => {

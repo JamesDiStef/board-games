@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import HangmanBoard from "./hangman/HangmanBoard";
 import Board from "./tickTackToe/TickTackToeBoard";
 import ConnectFourBoard from "./connectFour/ConnectFourBoard";
@@ -12,6 +12,10 @@ import ClueBoard from "./clue/ClueBoard";
 import Home from "./home/Home";
 
 function App() {
+  const location = useLocation();
+  console.log(location.pathname);
+  const isHome = location.pathname === "/home";
+  console.log(isHome);
   const [openModal, setOpenModal] = useState(true);
   const [isFirstOpen, setIsFirstOpen] = useState(true);
   const close = () => {
@@ -33,9 +37,12 @@ function App() {
           isFirstOpen={isFirstOpen}
         />
       </div>
-      <div className="hidden sm:block">
-        <NavBar />
-      </div>
+      {!isHome && (
+        <div className="hidden sm:block">
+          <NavBar />
+        </div>
+      )}
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />

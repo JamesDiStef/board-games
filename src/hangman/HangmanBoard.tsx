@@ -64,6 +64,8 @@ function HangmanBoard() {
   });
 
   const updateGame = async (stuffToPatch: any) => {
+    if (userId === "") return;
+
     await fetch(`${api}/hangman/${userId}`, {
       method: "PATCH",
       headers: {
@@ -74,6 +76,8 @@ function HangmanBoard() {
   };
 
   const fetchCurrentGame = async () => {
+    if (userId === "") return;
+
     const response = await fetch(`${api}/hangman/${userId}`);
     const game = await response.json();
     if (game.length === 0) {
@@ -90,6 +94,8 @@ function HangmanBoard() {
   };
 
   const createNewGame = async () => {
+    if (userId === "") return;
+
     const response = await fetch(`${api}/hangman/${userId}`, {
       method: "post",
       headers: {
@@ -100,7 +106,7 @@ function HangmanBoard() {
   };
 
   useEffect(() => {
-    fetchCurrentGame();
+    if (userId !== "") fetchCurrentGame();
   }, []);
 
   return (
