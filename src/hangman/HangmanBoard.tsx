@@ -11,7 +11,6 @@ import {
   setIsWin,
   setWrongGuesses,
 } from "./hangmanSlice";
-import { restart } from "../connectFour/connectFourSlice";
 
 function HangmanBoard() {
   const api = import.meta.env.VITE_NEW_API_URL;
