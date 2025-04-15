@@ -41,42 +41,42 @@ const Home = () => {
   };
 
   return (
-    <div className="flex justify-center bg-[url('https://boardgamesj.s3.us-east-2.amazonaws.com/checkers.avif')] bg-cover bg-no-repeat bg-center h-screen w-full">
-      <div className="flex flex-col w-full">
+    <div className="flex justify-center items-center bg-[url('https://boardgamesj.s3.us-east-2.amazonaws.com/checkers.avif')] bg-cover bg-no-repeat bg-center min-h-screen w-full">
+      <div className="flex flex-col w-full items-center">
         <form
-          className="mt-36 mx-auto w-2/3 md:w-3/5 lg:w-2/5 flex flex-col bg-slate-300"
+          className="w-11/12 max-w-md flex flex-col bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-8"
           onSubmit={(e) => e.preventDefault()}
         >
           <input
-            className="mx-10 my-6 h-10 p-2"
+            className="mb-4 h-11 px-4 rounded-md border border-gray-300"
             type="text"
-            placeholder="username"
+            placeholder="Username"
             value={userId}
             onChange={(e) => dispatch(setUserId(e.target.value))}
           />
           <input
-            className="mx-10 my-6 h-10 p-2"
+            className="mb-4 h-11 px-4 rounded-md border border-gray-300"
             type="password"
-            placeholder="password"
+            placeholder="Password"
           />
           <button
             disabled={userId.length === 0}
             onClick={() => fetchUser()}
-            className="bg-lime-100 h-12 mx-auto mt-2 w-1/2 md:w-1/3 border-2 button cursor-pointer rounded-xl"
+            className="bg-amber-500 text-black font-semibold h-12 mt-2 w-full rounded-md"
           >
             Sign In
           </button>
           <button
             disabled={userId.length === 0}
             onClick={() => fetchUser()}
-            className="bg-lime-100 h-12 mx-auto mt-4 mb-4 w-1/2 md:w-1/3 border-2 button cursor-pointer rounded-xl"
+            className="bg-amber-500 text-black font-semibold h-12 mt-4 w-full rounded-md"
           >
             Create Account
           </button>
         </form>
         <button
           onClick={continueAsGuest}
-          className="bg-lime-100 h-10 mx-auto mt-8 mb-4 w-1/2 md:w-1/3 lg:w-1/6 border-2 button cursor-pointer rounded-xl"
+          className="bg-amber-500 text-black font-semibold h-10 mt-6 w-11/12 max-w-xs rounded-md"
         >
           Continue as Guest
         </button>
