@@ -41,7 +41,7 @@ const Home = () => {
   };
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center bg-[url('https://boardgamesj.s3.us-east-2.amazonaws.com/checkers.avif')] bg-cover bg-no-repeat bg-center h-screen w-full">
       <div className="flex flex-col w-full">
         <form
           className="mt-36 mx-auto w-2/3 md:w-3/5 lg:w-2/5 flex flex-col bg-slate-300"
