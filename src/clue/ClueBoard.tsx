@@ -9,6 +9,7 @@ import {
   openResponseModal,
   setUpGame,
 } from "./clueSlice";
+import Report from "./Report";
 
 export const ClueBoard = () => {
   const newApi = import.meta.env.VITE_NEW_API_URL;
@@ -243,21 +244,43 @@ export const ClueBoard = () => {
   };
 
   return (
-    <div>
-      <ClueComingSoon />
-      {isOpenModal && <GuessPanel />}
-      <div className="grid grid-cols-4 gap-2">
-        {board.map((room: any) => (
-          <div
-            key={room.id}
-            className="border-2 border-black bg-pink-300 h-[180px] w-full"
-          >
-            <div className="flex justify-center items-center text-3xl">
-              {room.type}
+    <div className="p-4 bg-white min-h-screen text-black">
+      <div className="text-center text-2xl font-bold mb-4">Clue Game</div>
+      <div className="relative">
+        {isOpenResponseModal && (
+          <div className="fixed inset-0 z-40 flex justify-center items-center bg-black/50">
+            <div className="w-full max-w-3xl flex justify-center items-center">
+              <Report />
             </div>
-            {player.roomId === room.id && <div>{playerName}</div>}
           </div>
-        ))}
+        )}
+        {isOpenModal && (
+          <div className="fixed inset-0 z-30 flex justify-center items-center bg-black/50">
+            <div className="w-full max-w-3xl flex justify-center items-center">
+              <GuessPanel />
+            </div>
+          </div>
+        )}
+        <div className="relative z-10">
+          <div className="grid grid-cols-4 gap-4">
+            {board.map((room: any) => (
+              <div
+                key={room.id}
+                className={`border-2 rounded-lg p-4 h-[180px] flex flex-col justify-center items-center cursor-pointer transition-transform transform hover:scale-105 ${
+                  player.roomId === room.id
+                    ? "bg-yellow-400 text-black"
+                    : "bg-pink-300"
+                }`}
+                onClick={() => dispatch(setPlayer(room.id))}
+              >
+                <div className="text-xl font-semibold">{room.type}</div>
+                {player.roomId === room.id && (
+                  <div className="mt-2">{playerName}</div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
