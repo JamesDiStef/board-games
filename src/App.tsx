@@ -21,10 +21,10 @@ function App() {
     setIsFirstOpen(false);
   };
   return (
-    <div>
-      <div className="block sm:hidden bg-amber-500">
+    <div className="h-screen w-screen overflow-hidden flex flex-col">
+      <div className="block sm:hidden bg-amber-600 flex-shrink-0">
         <button
-          className="flex p-3 sm:hidden text-3xl "
+          className="flex p-3 sm:hidden text-3xl text-white"
           onClick={() => setOpenModal(!openModal)}
         >
           <FontAwesomeIcon icon={faBars} />
@@ -36,19 +36,21 @@ function App() {
         />
       </div>
       {!isHome && (
-        <div className="hidden sm:block">
+        <div className="hidden sm:block flex-shrink-0">
           <NavBar />
         </div>
       )}
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/hangman" element={<HangmanBoard />} />
-        <Route path="/ticTacToe" element={<Board />} />
-        <Route path="/connectFour" element={<ConnectFourBoard />} />
-        <Route path="/clue" element={<ClueBoard />} />
-      </Routes>
+      <div className="flex-1 overflow-hidden">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/hangman" element={<HangmanBoard />} />
+          <Route path="/ticTacToe" element={<Board />} />
+          <Route path="/connectFour" element={<ConnectFourBoard />} />
+          <Route path="/clue" element={<ClueBoard />} />
+        </Routes>
+      </div>
     </div>
   );
 }

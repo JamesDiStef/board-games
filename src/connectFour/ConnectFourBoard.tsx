@@ -172,25 +172,25 @@ const ConnectFourBoard = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center min-h-screen py-8 px-4 bg-gradient-to-br from-yellow-50 to-red-100 gap-6">
-      <div className="w-full max-w-4xl">
-        <h1 className="text-4xl font-bold text-center mb-6 text-red-600">Connect Four</h1>
+    <div className="h-full w-full flex flex-col items-center px-4 bg-gradient-to-br from-yellow-50 to-red-100 overflow-hidden">
+      <div className="w-full max-w-6xl flex flex-col h-full">
+        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-2 text-red-600 flex-shrink-0">Connect Four</h1>
         
         <button
           onClick={handleRestart}
-          className="bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg px-6 py-3 w-full transition-all duration-200 shadow-md hover:shadow-lg mb-6"
+          className="bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg px-4 py-2 w-full transition-all duration-200 shadow-md hover:shadow-lg mb-2 flex-shrink-0 text-sm"
         >
           New Game
         </button>
 
         {isGameOver && (
-          <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold text-center rounded-lg p-4 mb-6 text-xl shadow-lg">
+          <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold text-center rounded-lg p-2 mb-2 text-sm shadow-lg flex-shrink-0">
             🎉 Game Over! 🎉
           </div>
         )}
 
-        <div className="flex justify-center bg-blue-600 rounded-xl shadow-2xl p-4">
-          <div className="flex justify-center sm:space-x-2">
+        <div className="flex justify-center items-center flex-1">
+          <div className="flex gap-2 bg-blue-600 rounded-xl shadow-2xl p-3 h-full">
             {columns.map((column: Column, index: number) => (
               <ConnectFourColumn
                 key={index}

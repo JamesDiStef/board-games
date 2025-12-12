@@ -114,43 +114,45 @@ function HangmanBoard() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center min-h-screen py-8 px-4 bg-gradient-to-br from-purple-50 to-pink-100 gap-6">
-      <div className="w-full max-w-2xl">
-        <h1 className="text-4xl font-bold text-center mb-6 text-purple-600">Hangman</h1>
+    <div className="h-full w-full flex flex-col items-center px-4 bg-gradient-to-br from-purple-50 to-pink-100 overflow-hidden">
+      <div className="w-full max-w-2xl flex flex-col gap-3 h-full overflow-y-auto py-4">
+        <h1 className="text-3xl font-bold text-center mb-3 text-purple-600 flex-shrink-0">Hangman</h1>
         
         <button
           onClick={handleRestart}
-          className="bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg px-6 py-3 w-full transition-all duration-200 shadow-md hover:shadow-lg mb-6"
+          className="bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg px-4 py-2 w-full transition-all duration-200 shadow-md hover:shadow-lg mb-3 flex-shrink-0 text-sm"
         >
           New Game
         </button>
 
         {wrongGuesses === 6 && !isWin && (
-          <div className="bg-red-500 text-white font-bold text-2xl text-center rounded-lg p-4 mb-4 shadow-lg">
+          <div className="bg-red-500 text-white font-bold text-lg text-center rounded-lg p-3 mb-2 shadow-lg flex-shrink-0">
             💀 Game Over - You Lose
           </div>
         )}
         {isWin && wrongGuesses !== 6 && (
-          <div className="bg-green-500 text-white font-bold text-2xl text-center rounded-lg p-4 mb-4 shadow-lg">
+          <div className="bg-green-500 text-white font-bold text-lg text-center rounded-lg p-3 mb-2 shadow-lg flex-shrink-0">
             🎉 You Win!
           </div>
         )}
 
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
-          <div className="flex justify-center mb-4">
+        <div className="bg-white rounded-xl shadow-lg p-4 mb-3 flex-shrink-0">
+          <div className="flex justify-center">
             <div className="text-center">
-              <p className="text-sm text-gray-600 font-semibold mb-2">Wrong Guesses</p>
-              <p className="text-4xl font-bold text-red-600">{wrongGuesses}/6</p>
+              <p className="text-xs text-gray-600 font-semibold mb-1">Wrong Guesses</p>
+              <p className="text-2xl font-bold text-red-600">{wrongGuesses}/6</p>
             </div>
           </div>
-          <HangmanDrawing wrongGuesses={wrongGuesses} />
+          <div className="scale-50 origin-top">
+            <HangmanDrawing wrongGuesses={wrongGuesses} />
+          </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+        <div className="bg-white rounded-xl shadow-lg p-3 mb-3 flex-shrink-0">
           <HangmanWord wordToGuess={wordToGuess} guessedLetters={guessedLetters} />
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white rounded-xl shadow-lg p-3 flex-1 overflow-hidden">
           <Keyboard
             handleGuess={handleGuess}
             guessedLetters={guessedLetters}

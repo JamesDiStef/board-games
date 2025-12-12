@@ -155,32 +155,34 @@ const Board = () => {
   }, [board]);
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen py-8 px-4 bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
-        <h1 className="text-4xl font-bold text-center mb-8 text-blue-600">Tic Tac Toe</h1>
+    <div className="h-full w-full flex flex-col justify-center items-center px-4 bg-gradient-to-br from-blue-50 to-indigo-100 overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full max-h-full flex flex-col overflow-y-auto">
+        <h1 className="text-3xl font-bold text-center mb-4 text-blue-600 flex-shrink-0">Tic Tac Toe</h1>
         
         <button
           onClick={handleRestart}
-          className="bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg mb-8 p-3 w-full transition-all duration-200 shadow-md hover:shadow-lg"
+          className="bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg mb-4 py-2 px-3 w-full transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0 text-sm"
         >
           Restart Game
         </button>
         
         {gameOver && (
-          <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold text-center rounded-lg p-4 mb-6 text-lg shadow-md">
+          <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold text-center rounded-lg p-3 mb-4 text-sm shadow-md flex-shrink-0">
             🎉 Game Over! 🎉
           </div>
         )}
 
-        <div className="grid grid-cols-3 gap-3 mb-4">
-          {board.map((s: Square) => (
-            <Square
-              key={s.num}
-              num={s.num}
-              value={s.value}
-              handleClick={() => handleClick(s.num)}
-            />
-          ))}
+        <div className="flex items-center justify-center flex-1">
+          <div className="grid grid-cols-3 gap-3">
+            {board.map((s: Square) => (
+              <Square
+                key={s.num}
+                num={s.num}
+                value={s.value}
+                handleClick={() => handleClick(s.num)}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>

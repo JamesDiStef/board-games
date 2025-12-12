@@ -35,7 +35,7 @@ const alphabet: string[] = [
 
 const Keyboard = ({ guessedLetters, handleGuess, wordToGuess }: Props) => {
   return (
-    <div className="grid grid-cols-auto gap-3 justify-center max-w-2xl mx-auto" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(45px, 1fr))" }}>
+    <div className="grid gap-1.5 justify-center w-full h-full overflow-y-auto" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(36px, 1fr))" }}>
       {alphabet.map((letter) => {
         const isWrong = guessedLetters.includes(letter) && !wordToGuess.includes(letter);
         const isCorrect = guessedLetters.includes(letter) && wordToGuess.includes(letter);
@@ -47,7 +47,7 @@ const Keyboard = ({ guessedLetters, handleGuess, wordToGuess }: Props) => {
             disabled={isGuessed}
             onClick={() => handleGuess(letter)}
             className={`
-              h-12 font-bold text-sm rounded-lg transition-all duration-200 uppercase
+              h-9 font-bold text-xs rounded-lg transition-all duration-200 uppercase aspect-square
               ${isWrong ? 'bg-red-500 text-white cursor-not-allowed' : 
                 isCorrect ? 'bg-green-500 text-white cursor-not-allowed' :
                 isGuessed ? 'bg-gray-300 text-gray-500 cursor-not-allowed' :
