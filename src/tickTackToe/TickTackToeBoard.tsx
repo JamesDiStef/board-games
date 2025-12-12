@@ -156,7 +156,7 @@ const Board = () => {
 
   return (
     <div className="h-full w-full flex flex-col justify-center items-center px-4 bg-gradient-to-br from-blue-50 to-indigo-100 overflow-hidden">
-      <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full max-h-full flex flex-col overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-md lg:max-w-2xl w-full max-h-full flex flex-col overflow-y-auto">
         <h1 className="text-3xl font-bold text-center mb-4 text-blue-600 flex-shrink-0">Tic Tac Toe</h1>
         
         <button

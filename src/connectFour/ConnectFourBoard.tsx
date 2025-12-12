@@ -172,8 +172,8 @@ const ConnectFourBoard = () => {
   }, []);
 
   return (
-    <div className="h-full w-full flex flex-col items-center px-4 bg-gradient-to-br from-yellow-50 to-red-100 overflow-hidden">
-      <div className="w-full max-w-6xl flex flex-col h-full">
+    <div className="h-full w-full flex flex-col items-center bg-gradient-to-br from-yellow-50 to-red-100 overflow-hidden">
+      <div className="w-full flex flex-col h-full">
         <h1 className="text-2xl sm:text-3xl font-bold text-center mb-2 text-red-600 flex-shrink-0">Connect Four</h1>
         
         <button
@@ -189,8 +189,8 @@ const ConnectFourBoard = () => {
           </div>
         )}
 
-        <div className="flex justify-center items-center flex-1">
-          <div className="flex gap-2 bg-blue-600 rounded-xl shadow-2xl p-3 h-full">
+        <div className="flex-1 w-full flex justify-center">
+          <div className="flex bg-blue-600 h-full w-full lg:w-[calc(100%-12rem)] lg:mx-24">
             {columns.map((column: Column, index: number) => (
               <ConnectFourColumn
                 key={index}
