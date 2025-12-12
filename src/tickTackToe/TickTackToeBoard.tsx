@@ -81,13 +81,11 @@ const Board = () => {
   };
 
   const handleClick = (squareNumber: number) => {
-    console.log("click", squareNumber);
     if (gameOver) return;
     const nextValue = isPlayerOne ? "X" : "O";
     const nextBoard = board.map((s: Square) =>
       s.num === squareNumber ? { ...s, value: nextValue } : s
     );
-    console.log(nextBoard);
     dispatch(setBoardUpdate(nextBoard));
     dispatch(setIsPlayerOne());
     updateGame({ board: nextBoard });
@@ -97,7 +95,6 @@ const Board = () => {
   const updateGame = async (stuffToPatch: any) => {
     if (userId === "") return;
 
-    console.log(`${api}/ticTacToe/${userId}`);
     const response = await fetch(`${api}/ticTacToe/${userId}`, {
       method: "PATCH",
       headers: {
@@ -105,8 +102,7 @@ const Board = () => {
       },
       body: JSON.stringify(stuffToPatch),
     });
-    const game = response.json();
-    console.log(game);
+    response.json();
   };
 
   const fetchCurrentGame = async () => {
@@ -159,39 +155,33 @@ const Board = () => {
   }, [board]);
 
   return (
-    <div
-      style={{
-        marginTop: "30px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <button
-        className="border-2 bg-amber-400 rounded-2xl mb-[20px] p-3"
-        onClick={handleRestart}
-      >
-        Restart
-      </button>
-      {gameOver && <p>Game over!!!!</p>}
+    <div className="flex flex-col justify-center items-center min-h-screen py-8 px-4 bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
+        <h1 className="text-4xl font-bold text-center mb-8 text-blue-600">Tic Tac Toe</h1>
+        
+        <button
+          onClick={handleRestart}
+          className="bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg mb-8 p-3 w-full transition-all duration-200 shadow-md hover:shadow-lg"
+        >
+          Restart Game
+        </button>
+        
+        {gameOver && (
+          <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold text-center rounded-lg p-4 mb-6 text-lg shadow-md">
+            🎉 Game Over! 🎉
+          </div>
+        )}
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 100px)",
-          rowGap: "10px",
-          columnGap: "10px",
-        }}
-      >
-        {board.map((s: Square) => (
-          <Square
-            key={s.num}
-            num={s.num}
-            value={s.value}
-            handleClick={() => handleClick(s.num)}
-          />
-        ))}
+        <div className="grid grid-cols-3 gap-3 mb-4">
+          {board.map((s: Square) => (
+            <Square
+              key={s.num}
+              num={s.num}
+              value={s.value}
+              handleClick={() => handleClick(s.num)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

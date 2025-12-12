@@ -13,9 +13,7 @@ import Home from "./home/Home";
 
 function App() {
   const location = useLocation();
-  console.log(location.pathname);
   const isHome = location.pathname === "/home" || location.pathname === "/";
-  console.log(isHome);
   const [openModal, setOpenModal] = useState(false);
   const [isFirstOpen, setIsFirstOpen] = useState(true);
   const close = () => {

@@ -114,50 +114,49 @@ function HangmanBoard() {
   }, []);
 
   return (
-    <div
-      style={{
-        maxWidth: "800px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "2rem",
-        margin: "0 auto",
-        alignItems: "center",
-      }}
-    >
-      <button
-        className="border-2 bg-amber-400 rounded-2xl mb-[20px] p-3"
-        onClick={handleRestart}
-      >
-        Restart
-      </button>
-      {wrongGuesses === 6 && !isWin && (
-        <div
-          style={{
-            fontSize: "2rem",
-            textAlign: "center",
-          }}
+    <div className="flex flex-col items-center min-h-screen py-8 px-4 bg-gradient-to-br from-purple-50 to-pink-100 gap-6">
+      <div className="w-full max-w-2xl">
+        <h1 className="text-4xl font-bold text-center mb-6 text-purple-600">Hangman</h1>
+        
+        <button
+          onClick={handleRestart}
+          className="bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg px-6 py-3 w-full transition-all duration-200 shadow-md hover:shadow-lg mb-6"
         >
-          You lose :(
+          New Game
+        </button>
+
+        {wrongGuesses === 6 && !isWin && (
+          <div className="bg-red-500 text-white font-bold text-2xl text-center rounded-lg p-4 mb-4 shadow-lg">
+            💀 Game Over - You Lose
+          </div>
+        )}
+        {isWin && wrongGuesses !== 6 && (
+          <div className="bg-green-500 text-white font-bold text-2xl text-center rounded-lg p-4 mb-4 shadow-lg">
+            🎉 You Win!
+          </div>
+        )}
+
+        <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
+          <div className="flex justify-center mb-4">
+            <div className="text-center">
+              <p className="text-sm text-gray-600 font-semibold mb-2">Wrong Guesses</p>
+              <p className="text-4xl font-bold text-red-600">{wrongGuesses}/6</p>
+            </div>
+          </div>
+          <HangmanDrawing wrongGuesses={wrongGuesses} />
         </div>
-      )}
-      {isWin && wrongGuesses !== 6 && (
-        <div
-          style={{
-            fontSize: "2rem",
-            textAlign: "center",
-          }}
-        >
-          You win!
+
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+          <HangmanWord wordToGuess={wordToGuess} guessedLetters={guessedLetters} />
         </div>
-      )}
-      <HangmanDrawing wrongGuesses={wrongGuesses} />
-      <HangmanWord wordToGuess={wordToGuess} guessedLetters={guessedLetters} />
-      <div style={{ alignSelf: "stretch" }}>
-        <Keyboard
-          handleGuess={handleGuess}
-          guessedLetters={guessedLetters}
-          wordToGuess={wordToGuess}
-        />
+
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <Keyboard
+            handleGuess={handleGuess}
+            guessedLetters={guessedLetters}
+            wordToGuess={wordToGuess}
+          />
+        </div>
       </div>
     </div>
   );

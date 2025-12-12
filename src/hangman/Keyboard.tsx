@@ -35,27 +35,30 @@ const alphabet: string[] = [
 
 const Keyboard = ({ guessedLetters, handleGuess, wordToGuess }: Props) => {
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(75px, 1fr))",
-        gap: "1rem",
-      }}
-    >
-      {alphabet.map((letter) => (
-        <button
-          key={letter}
-          style={{
-            backgroundColor:
-              guessedLetters.includes(letter) && !wordToGuess.includes(letter)
-                ? "blue"
-                : "white",
-          }}
-          onClick={() => handleGuess(letter)}
-        >
-          {letter}
-        </button>
-      ))}
+    <div className="grid grid-cols-auto gap-3 justify-center max-w-2xl mx-auto" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(45px, 1fr))" }}>
+      {alphabet.map((letter) => {
+        const isWrong = guessedLetters.includes(letter) && !wordToGuess.includes(letter);
+        const isCorrect = guessedLetters.includes(letter) && wordToGuess.includes(letter);
+        const isGuessed = guessedLetters.includes(letter);
+        
+        return (
+          <button
+            key={letter}
+            disabled={isGuessed}
+            onClick={() => handleGuess(letter)}
+            className={`
+              h-12 font-bold text-sm rounded-lg transition-all duration-200 uppercase
+              ${isWrong ? 'bg-red-500 text-white cursor-not-allowed' : 
+                isCorrect ? 'bg-green-500 text-white cursor-not-allowed' :
+                isGuessed ? 'bg-gray-300 text-gray-500 cursor-not-allowed' :
+                'bg-white border-2 border-amber-500 text-amber-600 hover:bg-amber-50 active:bg-amber-100 cursor-pointer shadow-sm hover:shadow-md'
+              }
+            `}
+          >
+            {letter}
+          </button>
+        );
+      })}
     </div>
   );
 };

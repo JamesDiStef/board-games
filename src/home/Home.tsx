@@ -44,39 +44,40 @@ const Home = () => {
     <div className="flex justify-center items-center bg-[url('https://boardgamesj.s3.us-east-2.amazonaws.com/checkers.avif')] bg-cover bg-no-repeat bg-center min-h-screen w-full">
       <div className="flex flex-col w-full items-center">
         <form
-          className="w-11/12 max-w-md flex flex-col bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-8"
+          className="w-11/12 max-w-md flex flex-col bg-white/90 backdrop-blur-sm rounded-xl shadow-xl p-8 gap-4"
           onSubmit={(e) => e.preventDefault()}
         >
+          <h1 className="text-3xl font-bold text-center mb-2 text-gray-800">Board Games</h1>
           <input
-            className="mb-4 h-11 px-4 rounded-md border border-gray-300"
+            className="h-12 px-4 rounded-lg border-2 border-gray-300 focus:border-amber-500 focus:outline-none transition-colors duration-200 font-medium"
             type="text"
             placeholder="Username"
             value={userId}
             onChange={(e) => dispatch(setUserId(e.target.value))}
           />
           <input
-            className="mb-4 h-11 px-4 rounded-md border border-gray-300"
+            className="h-12 px-4 rounded-lg border-2 border-gray-300 focus:border-amber-500 focus:outline-none transition-colors duration-200 font-medium"
             type="password"
             placeholder="Password"
           />
           <button
             disabled={userId.length === 0}
             onClick={() => fetchUser()}
-            className="bg-amber-500 text-black font-semibold h-12 mt-2 w-full rounded-md"
+            className="bg-amber-500 hover:bg-amber-600 disabled:bg-gray-400 text-black font-bold h-12 w-full rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
           >
             Sign In
           </button>
           <button
             disabled={userId.length === 0}
             onClick={() => fetchUser()}
-            className="bg-amber-500 text-black font-semibold h-12 mt-4 w-full rounded-md"
+            className="bg-amber-500 hover:bg-amber-600 disabled:bg-gray-400 text-black font-bold h-12 w-full rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
           >
             Create Account
           </button>
         </form>
         <button
           onClick={continueAsGuest}
-          className="bg-amber-500 text-black font-semibold h-10 mt-6 w-11/12 max-w-xs rounded-md"
+          className="bg-amber-600 hover:bg-amber-700 text-white font-bold h-12 mt-6 px-8 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
         >
           Continue as Guest
         </button>

@@ -9,35 +9,37 @@ interface Props {
 const MobileNav = ({ open, close, isFirstOpen }: Props) => {
   if (!open) return null;
   return (
-    <ul className="flex flex-col sm:hidden bg-amber-500 h-screen text-4xl">
+    <ul className="flex flex-col sm:hidden bg-gradient-to-b from-amber-500 to-amber-600 h-screen text-xl font-bold space-y-2 p-4">
       {!isFirstOpen && (
-        <li className="mx-auto mb-auto" onClick={() => close()}>
-          Resume game
+        <li className="text-white hover:text-gray-800 transition-colors duration-200 py-3 px-4">
+          <button onClick={() => close()} className="w-full text-left">
+            📱 Resume Game
+          </button>
         </li>
       )}
-      <li className="mx-auto mb-auto">
-        <button onClick={() => close()}>
-          <Link to="/home">Log In Page</Link>
+      <li className="text-white hover:bg-amber-700 transition-colors duration-200 rounded py-3 px-4">
+        <button onClick={() => close()} className="w-full text-left">
+          <Link to="/home">🏠 Home</Link>
         </button>
       </li>
-      <li className="mx-auto mb-auto">
-        <button onClick={() => close()}>
-          <Link to="/hangman">Hangman</Link>
+      <li className="text-white hover:bg-amber-700 transition-colors duration-200 rounded py-3 px-4">
+        <button onClick={() => close()} className="w-full text-left">
+          <Link to="/hangman">🎮 Hangman</Link>
         </button>
       </li>
-      <li className="mx-auto mb-auto">
-        <button onClick={() => close()}>
-          <Link to="/ticTacToe">Tic-Tac-Toe</Link>
+      <li className="text-white hover:bg-amber-700 transition-colors duration-200 rounded py-3 px-4">
+        <button onClick={() => close()} className="w-full text-left">
+          <Link to="/ticTacToe">⭕ Tic-Tac-Toe</Link>
         </button>
       </li>
-      <li className="mx-auto mb-auto">
-        <button onClick={() => close()}>
-          <Link to="/connectFour">Connect Four</Link>
+      <li className="text-white hover:bg-amber-700 transition-colors duration-200 rounded py-3 px-4">
+        <button onClick={() => close()} className="w-full text-left">
+          <Link to="/connectFour">🔴 Connect Four</Link>
         </button>
       </li>
-      <li className="mx-auto mb-auto">
-        <button onClick={() => close()}>
-          <Link to="/clue">Clue</Link>
+      <li className="text-white hover:bg-amber-700 transition-colors duration-200 rounded py-3 px-4">
+        <button onClick={() => close()} className="w-full text-left">
+          <Link to="/clue">🔍 Clue</Link>
         </button>
       </li>
     </ul>
