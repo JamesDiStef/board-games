@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import Square from "../tickTackToe/Square";
 import confetti from "canvas-confetti";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -9,7 +8,7 @@ import {
   setBoardUpdate,
   setUpGame,
 } from "./ticTacSlice";
-
+import Square from "./Square";
 interface Square {
   num: number;
   value: string;
@@ -159,42 +158,45 @@ const Board = () => {
   }, [board]);
 
   return (
-    <div
-      style={{
-        marginTop: "30px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <button
-        className="border-2 bg-amber-400 rounded-2xl mb-[20px] p-3"
-        onClick={handleRestart}
-      >
-        Restart
-      </button>
-      {gameOver && <p>Game over!!!!</p>}
+  <div className="min-h-screen w-full flex flex-col justify-center items-center px-4 bg-gradient-to-br from-blue-50 to-indigo-100 overflow-hidden">
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 100px)",
-          rowGap: "10px",
-          columnGap: "10px",
-        }}
-      >
-        {board.map((s: Square) => (
-          <Square
-            key={s.num}
-            num={s.num}
-            value={s.value}
-            handleClick={() => handleClick(s.num)}
-          />
-        ))}
+    {/* GAME OVER BANNER ABOVE EVERYTHING */}
+    {gameOver && (
+      <div className="mb-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold text-center rounded-lg py-3 px-6 text-lg shadow-md">
+        🎉 Game Over! 🎉
+      </div>
+    )}
+
+    <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full flex flex-col overflow-hidden">
+      <h1 className="text-3xl font-bold text-center mb-4 text-blue-600 flex-shrink-0">
+        Tic Tac Toe
+      </h1>
+
+      <div className="flex justify-center mb-4">
+        <button
+          onClick={handleRestart}
+          className="bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg py-2 px-4 transition-all duration-200 shadow-md hover:shadow-lg text-sm"
+        >
+          Restart Game
+        </button>
+      </div>
+
+      <div className="flex items-center justify-center flex-1">
+        <div className="grid grid-cols-3 gap-3">
+          {board.map((s: Square) => (
+            <Square
+              key={s.num}
+              num={s.num}
+              value={s.value}
+              handleClick={() => handleClick(s.num)}
+            />
+          ))}
+        </div>
       </div>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default Board;
