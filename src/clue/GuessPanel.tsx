@@ -15,8 +15,6 @@ import { saveClueGameState } from "./clueThunks";
 import { AppDispatch } from "../store";
 
 const GuessPanel = () => {
-  const playerName = useSelector((state: any) => state.user.userId);
-
   const gameId = useSelector((state: any) => state.clue.gameId);
   const guesses = useSelector((state: any) => state.clue.guesses);
   const confidential = useSelector((state: any) => state.clue.confidential);

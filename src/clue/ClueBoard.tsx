@@ -1,13 +1,11 @@
 import { useEffect } from "react";
 import GuessPanel from "./GuessPanel";
-import ClueComingSoon from "./ClueComingSoon";
 import { useSelector, useDispatch } from "react-redux";
 import {
   openModal,
   setPlayer,
   setCurrentRoom,
   openResponseModal,
-  setUpGame,
 } from "./clueSlice";
 import Report from "./Report";
 import { fetchClueGame, createClueGame } from "./clueThunks";
