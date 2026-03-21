@@ -3,6 +3,12 @@ import ConnectFourColumn from "./ConnectFourColumn";
 import confetti from "canvas-confetti";
 import { useDispatch, useSelector } from "react-redux";
 import { handleDropPiece, restart, toggleGameOver } from "./connectFourSlice";
+import {
+  fetchConnectFourGame,
+  createConnectFourGame,
+  saveConnectFourGame,
+} from "./connectFourThunks";
+import { AppDispatch } from "../store";
 
 export interface Column {
   counter: number;
@@ -15,13 +21,12 @@ export interface Square {
 }
 
 const ConnectFourBoard = () => {
-  const api = import.meta.env.VITE_NEW_API_URL;
   const userId = useSelector((state: any) => state.user.userId);
   const isRedTurn = useSelector((state: any) => state.connectFour.isRedTurn);
   const isGameOver = useSelector((state: any) => state.connectFour.isGameOver);
   const columns = useSelector((state: any) => state.connectFour.columns);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleClickColumn = (index: number, column: Column) => {
     if (isGameOver) return;
@@ -39,7 +44,12 @@ const ConnectFourBoard = () => {
     checkVerticalWin(updatedColumns);
     checkHorizontalWin(updatedColumns);
     checkDiagonalWin(updatedColumns);
-    saveGame({ columns: updatedColumns });
+    dispatch(
+      saveConnectFourGame({
+        userId,
+        stuffToPatch: { columns: updatedColumns },
+      })
+    );
   };
 
   const checkVerticalWin = (updatedColumns: Column[]) => {
@@ -120,55 +130,42 @@ const ConnectFourBoard = () => {
   };
 
   const handleRestart = () => {
-    saveGame({
-      columns: Array(7).fill({
-        counter: 5,
-        squares: [
-          { id: 0, color: "" },
-          { id: 1, color: "" },
-          { id: 2, color: "" },
-          { id: 3, color: "" },
-          { id: 4, color: "" },
-          { id: 5, color: "" },
-        ],
-      }),
+    const resetColumns = Array(7).fill({
+      counter: 5,
+      squares: [
+        { id: 0, color: "" },
+        { id: 1, color: "" },
+        { id: 2, color: "" },
+        { id: 3, color: "" },
+        { id: 4, color: "" },
+        { id: 5, color: "" },
+      ],
     });
+    dispatch(
+      saveConnectFourGame({
+        userId,
+        stuffToPatch: { columns: resetColumns },
+      })
+    );
     dispatch(restart());
   };
 
-  const fetchGame = async () => {
-    if (userId === "") return;
-
-    const response = await fetch(`${api}/connectFour/${userId}`);
-    const game = await response.json();
-    if (game.length === 0) createGame();
-    dispatch(handleDropPiece(game[0].columns));
-  };
-
-  const createGame = async () => {
-    if (userId === "") return;
-
-    await fetch(`${api}/connectFour/${userId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  };
-
-  const saveGame = async (stuffToPatch: any) => {
-    if (userId === "") return;
-    await fetch(`${api}/connectFour/${userId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(stuffToPatch),
-    });
-  };
-
   useEffect(() => {
-    if (userId !== "") fetchGame();
+    if (userId !== "") {
+      dispatch(fetchConnectFourGame(userId)).then((result) => {
+        if (fetchConnectFourGame.fulfilled.match(result)) {
+          if (
+            result.payload &&
+            Array.isArray(result.payload) &&
+            result.payload.length === 0
+          ) {
+            dispatch(createConnectFourGame(userId));
+          } else if (result.payload && Array.isArray(result.payload)) {
+            dispatch(handleDropPiece(result.payload[0].columns));
+          }
+        }
+      });
+    }
   }, []);
 
   return (

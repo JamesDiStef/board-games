@@ -1,4 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import {
+  fetchCurrentGame,
+  createNewGame,
+  updateTicTacToeGame,
+} from "./ticTacThunks";
 
 interface Square {
   num: number;
@@ -10,6 +15,8 @@ export interface ticTacSlice {
   isPlayerOne: boolean;
   isGameOver: boolean;
   board: Square[];
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: ticTacSlice = {
@@ -27,6 +34,8 @@ const initialState: ticTacSlice = {
     { num: 7, value: "" },
     { num: 8, value: "" },
   ],
+  loading: false,
+  error: null,
 };
 
 export const ticTacToeSlice = createSlice({
@@ -51,6 +60,54 @@ export const ticTacToeSlice = createSlice({
     setBoardUpdate: (state, action) => {
       state.board = action.payload;
     },
+    clearError: (state) => {
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      // fetchCurrentGame
+      .addCase(fetchCurrentGame.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCurrentGame.fulfilled, (state, action) => {
+        state.loading = false;
+        if (action.payload && action.payload.length > 0) {
+          state.board = action.payload[0].board;
+          state.numClicks = action.payload[0].numClicks;
+          state.isPlayerOne = action.payload[0].isPlayerOne;
+          state.isGameOver = action.payload[0].isGameOver;
+        }
+      })
+      .addCase(fetchCurrentGame.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      // createNewGame
+      .addCase(createNewGame.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createNewGame.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(createNewGame.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      // updateTicTacToeGame
+      .addCase(updateTicTacToeGame.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateTicTacToeGame.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(updateTicTacToeGame.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 
@@ -60,6 +117,7 @@ export const {
   setIsPlayerOne,
   setBoardUpdate,
   setUpGame,
+  clearError,
 } = ticTacToeSlice.actions;
 
 export default ticTacToeSlice.reducer;

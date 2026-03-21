@@ -1,4 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import {
+  fetchConnectFourGame,
+  createConnectFourGame,
+  saveConnectFourGame,
+} from "./connectFourThunks";
 
 export interface Column {
   counter: number;
@@ -14,6 +19,8 @@ export interface ConnectFourState {
   isRedTurn: boolean;
   isGameOver: boolean;
   columns: Column[];
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: ConnectFourState = {
@@ -30,6 +37,8 @@ const initialState: ConnectFourState = {
       { id: 5, color: "" },
     ],
   }),
+  loading: false,
+  error: null,
 };
 
 export const connectFourSlice = createSlice({
@@ -48,10 +57,57 @@ export const connectFourSlice = createSlice({
       state.isGameOver = false;
       state.isRedTurn = true;
     },
+    clearError: (state) => {
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      // fetchConnectFourGame
+      .addCase(fetchConnectFourGame.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchConnectFourGame.fulfilled, (state, action) => {
+        state.loading = false;
+        if (action.payload && action.payload.length > 0) {
+          state.columns = action.payload[0].columns;
+          state.isRedTurn = action.payload[0].isRedTurn;
+          state.isGameOver = action.payload[0].isGameOver;
+        }
+      })
+      .addCase(fetchConnectFourGame.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      // createConnectFourGame
+      .addCase(createConnectFourGame.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createConnectFourGame.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(createConnectFourGame.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      // saveConnectFourGame
+      .addCase(saveConnectFourGame.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(saveConnectFourGame.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(saveConnectFourGame.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 
-export const { handleDropPiece, toggleGameOver, restart } =
+export const { handleDropPiece, toggleGameOver, restart, clearError } =
   connectFourSlice.actions;
 
 export default connectFourSlice.reducer;

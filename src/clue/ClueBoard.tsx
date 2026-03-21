@@ -10,10 +10,10 @@ import {
   setUpGame,
 } from "./clueSlice";
 import Report from "./Report";
+import { fetchClueGame, createClueGame } from "./clueThunks";
+import { AppDispatch } from "../store";
 
 export const ClueBoard = () => {
-  const newApi = import.meta.env.VITE_NEW_API_URL;
-
   const playerName = useSelector((state: any) => state.user.userId);
   const clueGame = useSelector((state: any) => state.clue);
   // const gameId = useSelector((state: any) => state.clue.gameId);
@@ -22,7 +22,7 @@ export const ClueBoard = () => {
     (state: any) => state.clue.isOpenResponseModal
   );
   const player = useSelector((state: any) => state.clue.player);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const board = useSelector((state: any) => state.clue.board);
 
   const arrowDownSwitch = () => {
@@ -174,8 +174,20 @@ export const ClueBoard = () => {
   };
 
   useEffect(() => {
-    if (playerName !== "") fetchGame();
-  }, []);
+    if (playerName !== "") {
+      dispatch(fetchClueGame(playerName)).then((result) => {
+        if (fetchClueGame.fulfilled.match(result)) {
+          if (
+            result.payload &&
+            Array.isArray(result.payload) &&
+            result.payload.length === 0
+          ) {
+            dispatch(createClueGame({ playerName, gameData: { clueGame } }));
+          }
+        }
+      });
+    }
+  }, [playerName]);
 
   useEffect(() => {
     dispatch(
@@ -202,46 +214,6 @@ export const ClueBoard = () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   });
-
-  const fetchGame = async () => {
-    if (playerName === "") return;
-
-    const response = await fetch(`${newApi}/clue/${playerName}`);
-    const game = await response.json();
-    if (game.length > 0) {
-      console.log(game[0]);
-      //error is with line 218 right here
-      dispatch(
-        setUpGame({
-          gameId: game[0]?._id,
-          eliminatedRooms: game[0]?.eliminatedRooms,
-          eliminatedWeapons: game[0]?.eliminatedWeapons,
-          eliminatedPeople: game[0]?.eliminatedPeople,
-          confidential: game[0]?.confidential,
-        })
-      );
-    } else {
-      createGame();
-    }
-  };
-
-  const createGame = async () => {
-    if (playerName === "") return;
-    //should be called only when a user plays for the very first time..otherwise they should always have an existing gae instance that can be reset to a new game
-    // const response = await fetch(`${newApi}/clue/${playerName}`, {
-    console.log(newApi + "/clue/" + playerName);
-    const response = await fetch(`${newApi}/clue/${playerName}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        clueGame,
-      }),
-    });
-    const game = await response.json();
-    console.log(game);
-  };
 
   return (
     <div className="p-4 bg-white min-h-screen text-black">

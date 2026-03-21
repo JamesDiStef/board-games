@@ -8,21 +8,27 @@ import {
   setBoardUpdate,
   setUpGame,
 } from "./ticTacSlice";
+import {
+  fetchCurrentGame,
+  createNewGame,
+  updateTicTacToeGame,
+} from "./ticTacThunks";
 import Square from "./Square";
+import { AppDispatch } from "../store";
+
 interface Square {
   num: number;
   value: string;
 }
 
 const Board = () => {
-  const api = import.meta.env.VITE_NEW_API_URL;
   const userId = useSelector((state: any) => state.user.userId);
   const numClicks = useSelector((state: any) => state.ticTacToe.numClicks);
   const gameOver = useSelector((state: any) => state.ticTacToe.isGameOver);
   const isPlayerOne = useSelector((state: any) => state.ticTacToe.isPlayerOne);
   const board = useSelector((state: any) => state.ticTacToe.board);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const gameOverCombos = [
     [0, 1, 2],
@@ -76,7 +82,12 @@ const Board = () => {
       numClicks: 0,
     };
     dispatch(setUpGame(newGame));
-    updateGame({ board: newGame.board });
+    dispatch(
+      updateTicTacToeGame({
+        userId,
+        stuffToPatch: { board: newGame.board },
+      })
+    );
   };
 
   const handleClick = (squareNumber: number) => {
@@ -89,68 +100,29 @@ const Board = () => {
     console.log(nextBoard);
     dispatch(setBoardUpdate(nextBoard));
     dispatch(setIsPlayerOne());
-    updateGame({ board: nextBoard });
+    dispatch(
+      updateTicTacToeGame({
+        userId,
+        stuffToPatch: { board: nextBoard },
+      })
+    );
     checkGameOver();
   };
 
-  const updateGame = async (stuffToPatch: any) => {
-    if (userId === "") return;
-
-    console.log(`${api}/ticTacToe/${userId}`);
-    const response = await fetch(`${api}/ticTacToe/${userId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(stuffToPatch),
-    });
-    const game = response.json();
-    console.log(game);
-  };
-
-  const fetchCurrentGame = async () => {
-    if (userId === "") return;
-
-    const response = await fetch(`${api}/ticTacToe/${userId}`);
-    const game = await response.json();
-    if (game.length === 0) {
-      createNewGame();
-    } else {
-      dispatch(
-        setUpGame({
-          board: [
-            { num: 0, value: game[0].board[0].value },
-            { num: 1, value: game[0].board[1].value },
-            { num: 2, value: game[0].board[2].value },
-            { num: 3, value: game[0].board[3].value },
-            { num: 4, value: game[0].board[4].value },
-            { num: 5, value: game[0].board[5].value },
-            { num: 6, value: game[0].board[6].value },
-            { num: 7, value: game[0].board[7].value },
-            { num: 8, value: game[0].board[8].value },
-          ],
-          isPlayerOne: game[0].isPlayerOne,
-          isGameOver: game[0].isGameOver,
-          numClicks: game[0].numClicks,
-        })
-      );
-    }
-  };
-
-  const createNewGame = async () => {
-    if (userId === "") return;
-
-    const response = await fetch(`${api}/ticTacToe/${userId}`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    await response.json();
-  };
-
   useEffect(() => {
-    if (userId !== "") fetchCurrentGame();
+    if (userId !== "") {
+      dispatch(fetchCurrentGame(userId)).then((result) => {
+        if (fetchCurrentGame.fulfilled.match(result)) {
+          if (
+            result.payload &&
+            Array.isArray(result.payload) &&
+            result.payload.length === 0
+          ) {
+            dispatch(createNewGame(userId));
+          }
+        }
+      });
+    }
   }, []);
 
   useEffect(() => {

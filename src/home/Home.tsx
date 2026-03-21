@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setUserId } from "./homeSlice";
 import { useNavigate } from "react-router-dom";
+import { fetchUser, createUser } from "./homeThunks";
+import { AppDispatch } from "../store";
 
 const Home = () => {
-  const newApi = import.meta.env.VITE_NEW_API_URL;
-
   const userId = useSelector((state: any) => state.user.userId);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const goToNextPage = () => {
@@ -18,26 +18,17 @@ const Home = () => {
     goToNextPage();
   };
 
-  const fetchUser = async () => {
-    const response = await fetch(`${newApi}/user/${userId}`);
-    const user = await response.json();
-    if (user.length > 0) {
-      console.log(user[0]);
-      dispatch(setUserId(userId));
-    } else {
-      createUser();
+  const handleSignIn = async () => {
+    const result = await dispatch(fetchUser(userId));
+    if (fetchUser.fulfilled.match(result)) {
+      if (result.payload && Array.isArray(result.payload) && result.payload.length > 0) {
+        console.log(result.payload[0]);
+        dispatch(setUserId(userId));
+      } else {
+        await dispatch(createUser(userId));
+      }
     }
     goToNextPage();
-  };
-
-  const createUser = async () => {
-    const response = await fetch(`${newApi}/user/${userId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    await response.json();
   };
 
   return (
@@ -61,14 +52,14 @@ const Home = () => {
           />
           <button
             disabled={userId.length === 0}
-            onClick={() => fetchUser()}
+            onClick={handleSignIn}
             className="bg-amber-500 text-black font-semibold h-12 mt-2 w-full rounded-md"
           >
             Sign In
           </button>
           <button
             disabled={userId.length === 0}
-            onClick={() => fetchUser()}
+            onClick={handleSignIn}
             className="bg-amber-500 text-black font-semibold h-12 mt-4 w-full rounded-md"
           >
             Create Account

@@ -11,11 +11,12 @@ import {
   setIsWin,
   setWrongGuesses,
 } from "./hangmanSlice";
+import { updateHangmanGame } from "./hangmanThunks";
+import { AppDispatch } from "../store";
 
 function HangmanBoard() {
-  const api = import.meta.env.VITE_NEW_API_URL;
   const userId = useSelector((state: any) => state.user.userId);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const isWin = useSelector((state: any) => state.hangman.isWin);
   const wordToGuess = useSelector((state: any) => state.hangman.wordToGuess);
@@ -29,10 +30,12 @@ function HangmanBoard() {
     dispatch(setGuessedLetters([...guessedLetters, letter]));
     if (!wordToGuess.includes(letter))
       dispatch(setWrongGuesses(wrongGuesses + 1));
-    updateGame({ guessedLetters: [...guessedLetters, letter] });
-    updateGame({ wordToGuess: wordToGuess });
-    updateGame({ isWin: isWin });
-    updateGame({ wrongGuesses: wrongGuesses + 1 });
+    dispatch(
+      updateHangmanGame({
+        userId,
+        stuffToPatch: { guessedLetters: [...guessedLetters, letter] },
+      })
+    );
   };
 
   const handleRestart = () => {
@@ -44,10 +47,12 @@ function HangmanBoard() {
       wrongGuesses: 0,
     };
     dispatch(setGame(newGame));
-    updateGame({ guessedLetters: [] });
-    updateGame({ wordToGuess: wordToGuess });
-    updateGame({ isWin: false });
-    updateGame({ wrongGuesses: 0 });
+    dispatch(
+      updateHangmanGame({
+        userId,
+        stuffToPatch: newGame,
+      })
+    );
   };
 
   useEffect(() => {
@@ -66,52 +71,6 @@ function HangmanBoard() {
       }
     }
   });
-
-  const updateGame = async (stuffToPatch: any) => {
-    if (userId === "") return;
-
-    await fetch(`${api}/hangman/${userId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(stuffToPatch),
-    });
-  };
-
-  const fetchCurrentGame = async () => {
-    if (userId === "") return;
-
-    const response = await fetch(`${api}/hangman/${userId}`);
-    const game = await response.json();
-    if (game.length === 0) {
-      createNewGame();
-    } else {
-      const theGame = {
-        guessedLetters: game[0].guessedLetters,
-        isWin: game[0].isWin,
-        wrongGuesses: game[0].wrongGuesses,
-        wordToGuess: game[0].wordToGuess,
-      };
-      dispatch(setGame(theGame));
-    }
-  };
-
-  const createNewGame = async () => {
-    if (userId === "") return;
-
-    const response = await fetch(`${api}/hangman/${userId}`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    await response.json();
-  };
-
-  useEffect(() => {
-    if (userId !== "") fetchCurrentGame();
-  }, []);
 
   return (
     <div

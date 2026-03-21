@@ -11,9 +11,10 @@ import {
   setThingToReveal,
   setWeaponGuess,
 } from "./clueSlice";
+import { saveClueGameState } from "./clueThunks";
+import { AppDispatch } from "../store";
 
 const GuessPanel = () => {
-  const newApi = import.meta.env.VITE_NEW_API_URL;
   const playerName = useSelector((state: any) => state.user.userId);
 
   const gameId = useSelector((state: any) => state.clue.gameId);
@@ -36,26 +37,8 @@ const GuessPanel = () => {
     (state: any) => state.clue.eliminatedRooms
   );
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   dispatch(setRoomGuess(currentRoom));
-
-  const saveGame = async (gameId: string, stuffToPatch: any) => {
-    if (playerName === "") return;
-
-    console.log(gameId);
-    //should be called on every state update
-    const url = `${newApi}/clue/${gameId}`;
-    const response = await fetch(url, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      //need to pass in the relevant field dynamically here
-      body: JSON.stringify(stuffToPatch),
-    });
-    const game = await response.json();
-    console.log(game);
-  };
 
   const selectWeapon = (weapon: string) => {
     dispatch(setWeaponGuess(weapon));
@@ -66,34 +49,50 @@ const GuessPanel = () => {
   };
 
   const handleNewGame = () => {
-    saveGame(gameId, { isGameOver: false });
+    dispatch(saveClueGameState({ gameId, stuffToPatch: { isGameOver: false } }));
     dispatch(endGame());
   };
 
   const handleEliminatePerson = () => {
     const newEliminatedPeople = [...eliminatedPeople, guesses.person];
     dispatch(setEliminatedPeople(newEliminatedPeople));
-    saveGame(gameId, {
-      eliminatedPeople: newEliminatedPeople,
-    });
-    dispatch(dispatch(setThingToReveal(guesses.person)));
+    dispatch(
+      saveClueGameState({
+        gameId,
+        stuffToPatch: {
+          eliminatedPeople: newEliminatedPeople,
+        },
+      })
+    );
+    dispatch(setThingToReveal(guesses.person));
   };
 
   const handleEliminateRoom = () => {
     const newEliminatedRooms = [...eliminatedRooms, guesses.room];
     dispatch(setEliminatedRooms(newEliminatedRooms));
-    saveGame(gameId, {
-      eliminatedRooms: newEliminatedRooms,
-    });
+    dispatch(
+      saveClueGameState({
+        gameId,
+        stuffToPatch: {
+          eliminatedRooms: newEliminatedRooms,
+        },
+      })
+    );
     dispatch(setThingToReveal(guesses.room));
   };
 
   const handleEliminateWeapon = () => {
     const newEliminatedWeapons = [...eliminatedWeapons, guesses.weapon];
     dispatch(setEliminatedWeapons(newEliminatedWeapons));
-    saveGame(gameId, {
-      eliminatedWeapon: newEliminatedWeapons,
-    });
+    dispatch(
+      saveClueGameState({
+        gameId,
+        stuffToPatch: {
+          eliminatedWeapons: newEliminatedWeapons,
+        },
+      })
+    );
+    dispatch(setThingToReveal(guesses.weapon));
   };
 
   const onGuess = () => {

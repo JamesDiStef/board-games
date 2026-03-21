@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { fetchClueGame, createClueGame, saveClueGameState } from "./clueThunks";
 
 export interface clueState {
   playerName: string;
@@ -28,6 +29,8 @@ export interface clueState {
     weapon: string;
     room: string;
   };
+  loading: boolean;
+  error: string | null;
 }
 
 const characters = [
@@ -95,6 +98,8 @@ const initialState: clueState = {
     weapon: weapons[Math.floor(Math.random() * 6)],
     room: board[Math.floor(Math.random() * 16)].type,
   },
+  loading: false,
+  error: null,
 };
 
 export const clueSlice = createSlice({
@@ -160,6 +165,55 @@ export const clueSlice = createSlice({
       state.confidential = action.payload.confidential;
       state.gameId = action.payload.gameId;
     },
+    clearError: (state) => {
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      // fetchClueGame
+      .addCase(fetchClueGame.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchClueGame.fulfilled, (state, action) => {
+        state.loading = false;
+        if (action.payload && action.payload.length > 0) {
+          state.gameId = action.payload[0]._id;
+          state.eliminatedPeople = action.payload[0].eliminatedPeople;
+          state.eliminatedWeapons = action.payload[0].eliminatedWeapons;
+          state.eliminatedRooms = action.payload[0].eliminatedRooms;
+          state.confidential = action.payload[0].confidential;
+        }
+      })
+      .addCase(fetchClueGame.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      // createClueGame
+      .addCase(createClueGame.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createClueGame.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(createClueGame.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      // saveClueGameState
+      .addCase(saveClueGameState.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(saveClueGameState.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(saveClueGameState.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 
@@ -179,6 +233,7 @@ export const {
   setRoomGuess,
   setPlayerName,
   setUpGame,
+  clearError,
 } = clueSlice.actions;
 
 export default clueSlice.reducer;
