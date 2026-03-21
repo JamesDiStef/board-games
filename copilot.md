@@ -1,8 +1,67 @@
 # Board Games Application - Copilot Working Memory
 
-**Last Updated:** March 21, 2026 - 2:15 PM (Redux Thunks Refactor Complete)
+**Last Updated:** March 21, 2026 - 3:45 PM (Production Bug Fix: Multi-User State Isolation)
 
-## Project Overview
+## Current Status
+
+✅ **Build:** Passing (88 modules, 308.87 kB gzipped)  
+✅ **Production Bug Fixed:** Multi-user state isolation now working  
+⚠️ **Testing Required:** Manual verification of multi-user flows
+
+## Recent Production Bug Fix (March 21, 2026)
+
+### Bug: User State Leakage Across Account Switches
+
+**Problem:**
+When logging in as different users sequentially, Redux game state from the previous user persisted and was visible to the new user.
+
+**Root Cause:**
+The Redux thunks refactor centralized API calls but forgot to clear game state when `userId` changes. Game slices had persistent state that wasn't being reset during user switches.
+
+**Solution Implemented:**
+1. Added `resetGameState()` reducer action to all 4 game slices:
+   - `ticTacToe/ticTacSlice.ts` - Resets board, numClicks, isPlayerOne, isGameOver
+   - `hangman/hangmanSlice.ts` - Resets wordToGuess, guessedLetters, wrongGuesses, isWin
+   - `connectFour/connectFourSlice.ts` - Resets columns, isRedTurn, isGameOver
+   - `clue/clueSlice.ts` - Resets playerName, eliminatedPeople/Weapons/Rooms, confidential
+
+2. Updated all 4 game board components to dispatch `resetGameState()` when `userId` changes:
+   - `TickTackToeBoard.tsx` - useEffect dependency on `[userId, dispatch]`
+   - `HangmanBoard.tsx` - useEffect dependency on `[userId, dispatch]`
+   - `ConnectFourBoard.tsx` - useEffect dependency on `[userId, dispatch]`
+   - `ClueBoard.tsx` - useEffect dependency on `[playerName, dispatch]`
+
+3. Each component now follows this pattern:
+```typescript
+useEffect(() => {
+  // Reset game state when user changes to prevent state leakage
+  dispatch(resetGameState());
+  
+  if (userId !== "") {
+    dispatch(fetchCurrentGame(userId)).then(/* ... */);
+  }
+}, [userId, dispatch]);
+```
+
+**Testing Checklist:**
+- [ ] Start as guest, play game → Verify guest mode works
+- [ ] Log in as User A → Verify fresh/empty board
+- [ ] Play as User A, save game
+- [ ] Stop app, restart, log in as User B → Verify User A's moves NOT visible
+- [ ] Play as User B
+- [ ] Switch back to User A → Verify User A's saved game restored
+- [ ] Verify no console errors in browser DevTools
+
+**Files Modified:**
+- `src/tickTackToe/ticTacSlice.ts` - Added resetGameState action
+- `src/hangman/hangmanSlice.ts` - Added resetGameState action
+- `src/connectFour/connectFourSlice.ts` - Added resetGameState action
+- `src/clue/clueSlice.ts` - Added resetGameState action
+- `src/tickTackToe/TickTackToeBoard.tsx` - Updated useEffect
+- `src/hangman/HangmanBoard.tsx` - Updated useEffect
+- `src/connectFour/ConnectFourBoard.tsx` - Updated useEffect
+- `src/clue/ClueBoard.tsx` - Updated useEffect
+- `PROD_BUG_MULTIUSER.md` - New feature file documenting the bug and fix
 
 A React-based board games application built with TypeScript, featuring 5 playable games with Redux state management. The app uses Vite for bundling, Tailwind CSS for styling, and React Router for navigation.
 
@@ -453,14 +512,58 @@ Games are accessing an API endpoint for game persistence/updates:
 
 ## Key Component Patterns
 
-### Game Board Components
-All game boards follow a similar pattern:
-1. Import Redux actions and selectors
-2. Use `useSelector()` to read state
-3. Use `useDispatch()` to update Redux state
-4. Call `updateGame()` to sync with backend API
-5. Use `canvas-confetti` for win animations
-6. Initialize game on mount (if `userId` is empty)
+## Lesson Learned: Multi-User State Isolation (March 21, 2026)
+
+### Key Insight
+When centralizing state management with Redux thunks, always ensure that:
+1. **Game state is scoped to the current user** - Don't persist user-specific state between account switches
+2. **Reset critical state in useEffect dependencies** - Any component that loads user-specific data should reset on user change
+3. **Test multi-user workflows** - Single-user testing often misses state leakage bugs
+
+### Pattern for User-Scoped State
+When a component depends on `userId`, its useEffect should:
+```typescript
+useEffect(() => {
+  // 1. FIRST: Clear old user's state
+  dispatch(resetGameState());
+  
+  // 2. THEN: Load new user's data
+  if (userId !== "") {
+    dispatch(fetchUserGameState(userId)).then(/* ... */);
+  }
+}, [userId, dispatch]); // Include userId and dispatch in dependencies!
+```
+
+**Why this works:**
+- Immediately clears UI from showing old user's data
+- Prevents race conditions where old data shows before fetch completes
+- Naturally handles guest → user → guest transitions
+
+### Anti-Pattern (What Caused the Bug)
+```typescript
+// DON'T: Missing userId in dependencies
+useEffect(() => {
+  if (userId !== "") {
+    dispatch(fetchCurrentGame(userId));
+  }
+}, []); // ❌ Empty deps = only runs once!
+
+// DON'T: Not resetting before fetch
+// Old game state remains visible until API response arrives
+```
+
+### Best Practices Added
+1. ✅ Each game slice exports a `resetGameState` action
+2. ✅ Every game board component has `[userId, dispatch]` dependencies
+3. ✅ Reset is called BEFORE fetching new data
+4. ✅ Loading state is automatically managed by thunks
+
+## Copilot Notes for Future Development
+
+- **Multi-user bugs are subtle:** They only appear when switching accounts, easy to miss in single-user testing
+- **Thunks are powerful but need discipline:** Centralized API logic is great, but requires careful state management
+- **useEffect dependencies are critical:** Always include all values used inside the effect (userId, dispatch, etc.)
+- **Test the full flow:** Guest → User A → User B → User A to catch state pollution bugs
 
 ### Component Props Patterns
 - **NavBar/MobileNav:** Accept route/navigation props

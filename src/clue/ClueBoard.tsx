@@ -6,6 +6,7 @@ import {
   setPlayer,
   setCurrentRoom,
   openResponseModal,
+  resetGameState,
 } from "./clueSlice";
 import Report from "./Report";
 import { fetchClueGame, createClueGame } from "./clueThunks";
@@ -172,6 +173,9 @@ export const ClueBoard = () => {
   };
 
   useEffect(() => {
+    // Reset game state when user changes to prevent state leakage
+    dispatch(resetGameState());
+    
     if (playerName !== "") {
       dispatch(fetchClueGame(playerName)).then((result) => {
         if (fetchClueGame.fulfilled.match(result)) {
@@ -185,7 +189,7 @@ export const ClueBoard = () => {
         }
       });
     }
-  }, [playerName]);
+  }, [playerName, dispatch]);
 
   useEffect(() => {
     dispatch(

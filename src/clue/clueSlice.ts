@@ -168,6 +168,34 @@ export const clueSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+    resetGameState: (state) => {
+      state.playerName = "";
+      state.gameId = "";
+      state.isGameOver = false;
+      state.eliminatedPeople = [];
+      state.eliminatedWeapons = [];
+      state.eliminatedRooms = [];
+      state.isOpenModal = false;
+      state.player = {
+        name: "",
+        roomId: 0,
+      };
+      state.currentRoom = "study";
+      state.isOpenResponseModal = false;
+      state.thingToReveal = "";
+      state.guesses = {
+        person: "",
+        weapon: "",
+        room: "",
+      };
+      state.confidential = {
+        person: state.characters[Math.floor(Math.random() * 6)],
+        weapon: state.weapons[Math.floor(Math.random() * 6)],
+        room: state.board[Math.floor(Math.random() * 16)].type,
+      };
+      state.loading = false;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -234,6 +262,7 @@ export const {
   setPlayerName,
   setUpGame,
   clearError,
+  resetGameState,
 } = clueSlice.actions;
 
 export default clueSlice.reducer;

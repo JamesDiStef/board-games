@@ -63,6 +63,24 @@ export const ticTacToeSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+    resetGameState: (state) => {
+      state.numClicks = 0;
+      state.isPlayerOne = true;
+      state.isGameOver = false;
+      state.board = [
+        { num: 0, value: "" },
+        { num: 1, value: "" },
+        { num: 2, value: "" },
+        { num: 3, value: "" },
+        { num: 4, value: "" },
+        { num: 5, value: "" },
+        { num: 6, value: "" },
+        { num: 7, value: "" },
+        { num: 8, value: "" },
+      ];
+      state.loading = false;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -118,6 +136,7 @@ export const {
   setBoardUpdate,
   setUpGame,
   clearError,
+  resetGameState,
 } = ticTacToeSlice.actions;
 
 export default ticTacToeSlice.reducer;

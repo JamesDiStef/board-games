@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import ConnectFourColumn from "./ConnectFourColumn";
 import confetti from "canvas-confetti";
 import { useDispatch, useSelector } from "react-redux";
-import { handleDropPiece, restart, toggleGameOver } from "./connectFourSlice";
+import { handleDropPiece, restart, toggleGameOver, resetGameState } from "./connectFourSlice";
 import {
   fetchConnectFourGame,
   createConnectFourGame,
@@ -151,6 +151,9 @@ const ConnectFourBoard = () => {
   };
 
   useEffect(() => {
+    // Reset game state when user changes to prevent state leakage
+    dispatch(resetGameState());
+    
     if (userId !== "") {
       dispatch(fetchConnectFourGame(userId)).then((result) => {
         if (fetchConnectFourGame.fulfilled.match(result)) {
@@ -166,7 +169,7 @@ const ConnectFourBoard = () => {
         }
       });
     }
-  }, []);
+  }, [userId, dispatch]);
 
   return (
     <div className="">

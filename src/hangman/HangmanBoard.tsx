@@ -10,6 +10,7 @@ import {
   setGuessedLetters,
   setIsWin,
   setWrongGuesses,
+  resetGameState,
 } from "./hangmanSlice";
 import { updateHangmanGame } from "./hangmanThunks";
 import { AppDispatch } from "../store";
@@ -56,8 +57,13 @@ function HangmanBoard() {
   };
 
   useEffect(() => {
-    if (userId === "") handleRestart();
-  }, []);
+    // Reset game state when user changes to prevent state leakage
+    dispatch(resetGameState());
+    
+    if (userId === "") {
+      handleRestart();
+    }
+  }, [userId, dispatch]);
 
   useEffect(() => {
     for (let i = 0; i < wordToGuess.length; i++) {

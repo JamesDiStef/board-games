@@ -60,6 +60,23 @@ export const connectFourSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+    resetGameState: (state) => {
+      state.isRedTurn = true;
+      state.isGameOver = false;
+      state.columns = Array(7).fill({
+        counter: 5,
+        squares: [
+          { id: 0, color: "" },
+          { id: 1, color: "" },
+          { id: 2, color: "" },
+          { id: 3, color: "" },
+          { id: 4, color: "" },
+          { id: 5, color: "" },
+        ],
+      });
+      state.loading = false;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -107,7 +124,7 @@ export const connectFourSlice = createSlice({
   },
 });
 
-export const { handleDropPiece, toggleGameOver, restart, clearError } =
+export const { handleDropPiece, toggleGameOver, restart, clearError, resetGameState } =
   connectFourSlice.actions;
 
 export default connectFourSlice.reducer;

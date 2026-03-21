@@ -7,6 +7,7 @@ import {
   setNumClick,
   setBoardUpdate,
   setUpGame,
+  resetGameState,
 } from "./ticTacSlice";
 import {
   fetchCurrentGame,
@@ -110,6 +111,9 @@ const Board = () => {
   };
 
   useEffect(() => {
+    // Reset game state when user changes to prevent state leakage
+    dispatch(resetGameState());
+    
     if (userId !== "") {
       dispatch(fetchCurrentGame(userId)).then((result) => {
         if (fetchCurrentGame.fulfilled.match(result)) {
@@ -123,7 +127,7 @@ const Board = () => {
         }
       });
     }
-  }, []);
+  }, [userId, dispatch]);
 
   useEffect(() => {
     if (checkGameOver()) dispatch(setIsGameOver(true));

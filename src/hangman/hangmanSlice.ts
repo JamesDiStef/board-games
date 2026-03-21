@@ -41,6 +41,14 @@ export const hangmanSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+    resetGameState: (state) => {
+      state.isWin = false;
+      state.wordToGuess = "";
+      state.guessedLetters = [];
+      state.wrongGuesses = 0;
+      state.loading = false;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -59,7 +67,7 @@ export const hangmanSlice = createSlice({
   },
 });
 
-export const { setIsWin, setGuessedLetters, setWrongGuesses, setGame, clearError } =
+export const { setIsWin, setGuessedLetters, setWrongGuesses, setGame, clearError, resetGameState } =
   hangmanSlice.actions;
 
 export default hangmanSlice.reducer;
