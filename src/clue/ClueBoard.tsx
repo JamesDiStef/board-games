@@ -218,41 +218,75 @@ export const ClueBoard = () => {
   });
 
   return (
-    <div className="p-4 bg-white min-h-screen text-black">
-      <div className="text-center text-2xl font-bold mb-4">Clue Game</div>
+    <div className="min-h-screen bg-green-950 p-4 text-black">
+      {/* Title */}
+      <div className="text-center mb-6">
+        <h1
+          className="text-5xl font-bold text-yellow-400 tracking-[0.3em] uppercase"
+          style={{ fontFamily: "Georgia, serif", textShadow: "2px 2px 6px rgba(0,0,0,0.8)" }}
+        >
+          CLUE
+        </h1>
+        <p className="text-yellow-200 text-xs tracking-widest mt-1 uppercase">
+          The Mystery Game
+        </p>
+      </div>
+
       <div className="relative">
         {isOpenResponseModal && (
-          <div className="fixed inset-0 z-40 flex justify-center items-center bg-black/50">
-            <div className="w-full max-w-3xl flex justify-center items-center">
+          <div className="fixed inset-0 z-40 flex justify-center items-center bg-black/70">
+            <div className="w-full max-w-3xl flex justify-center items-center px-4">
               <Report />
             </div>
           </div>
         )}
         {isOpenModal && (
-          <div className="fixed inset-0 z-30 flex justify-center items-center bg-black/50">
-            <div className="w-full max-w-3xl flex justify-center items-center">
+          <div className="fixed inset-0 z-30 flex justify-center items-center bg-black/70">
+            <div className="w-full max-w-4xl flex justify-center items-center px-4">
               <GuessPanel />
             </div>
           </div>
         )}
-        <div className="relative z-10">
-          <div className="grid grid-cols-4 gap-4">
-            {board.map((room: any) => (
-              <div
-                key={room.id}
-                className={`border-2 rounded-lg p-4 h-[180px] flex flex-col justify-center items-center cursor-pointer transition-transform transform hover:scale-105 ${
-                  player.roomId === room.id
-                    ? "bg-yellow-400 text-black"
-                    : "bg-pink-300"
-                }`}
-                onClick={() => dispatch(setPlayer(room.id))}
-              >
-                <div className="text-xl font-semibold">{room.type}</div>
-                {player.roomId === room.id && (
-                  <div className="mt-2">{playerName}</div>
-                )}
-              </div>
-            ))}
+
+        <div className="relative z-10 max-w-5xl mx-auto">
+          {/* Game board */}
+          <div className="border-8 border-amber-800 p-3 bg-green-900 shadow-2xl">
+            <div className="grid grid-cols-4 gap-2">
+              {board.map((room: any) => (
+                <div
+                  key={room.id}
+                  className={`border-2 p-3 h-[150px] flex flex-col justify-center items-center cursor-pointer transition-all duration-200 ${
+                    player.roomId === room.id
+                      ? "bg-yellow-400 border-yellow-600 shadow-lg scale-105"
+                      : "bg-amber-50 border-amber-800 hover:bg-amber-100 hover:shadow-md"
+                  }`}
+                  onClick={() => dispatch(setPlayer(room.id))}
+                >
+                  <div
+                    className="text-sm font-bold text-center text-amber-900 uppercase tracking-wide"
+                    style={{ fontFamily: "Georgia, serif" }}
+                  >
+                    {room.type}
+                  </div>
+                  {player.roomId === room.id && (
+                    <div className="mt-2 text-xs font-semibold text-amber-900 bg-white/60 px-2 py-1 rounded-full">
+                      {playerName}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Make Accusation button */}
+          <div className="flex justify-center mt-6">
+            <button
+              onClick={handleModal}
+              className="bg-red-900 hover:bg-red-800 text-yellow-200 font-bold py-3 px-12 border-2 border-yellow-600 uppercase tracking-widest transition-colors shadow-lg cursor-pointer"
+              style={{ fontFamily: "Georgia, serif" }}
+            >
+              Make Accusation
+            </button>
           </div>
         </div>
       </div>

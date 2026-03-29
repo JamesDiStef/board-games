@@ -140,94 +140,145 @@ const GuessPanel = () => {
   };
 
   return (
-    <div className="flex flex-col ml-[10%] mt-[3%] fixed h-[80%] w-[80%] bg-amber-700">
+    <div className="flex flex-col w-full bg-[#f5f0e0] border-4 border-amber-800 shadow-2xl overflow-hidden">
       {isOpenModal && <Report />}
-      <div className="h-3/4 flex ">
-        <div className="w-1/4 flex flex-col">
-          <div className="text-2xl m-3">Suspects</div>
+      {/* Header */}
+      <div className="bg-red-900 py-3 px-6 flex items-center justify-between flex-shrink-0">
+        <h2
+          className="text-yellow-200 text-xl font-bold tracking-widest uppercase"
+          style={{ fontFamily: "Georgia, serif" }}
+        >
+          Detective's Notebook
+        </h2>
+        <div className="text-yellow-300 text-sm italic">Current Room: {currentRoom}</div>
+      </div>
+
+      {/* Columns */}
+      <div className="flex overflow-hidden" style={{ minHeight: "380px" }}>
+        {/* Suspects */}
+        <div className="w-1/4 flex flex-col p-4 border-r border-amber-300">
+          <div
+            className="text-base font-bold text-amber-900 mb-3 uppercase tracking-wide pb-2 border-b-2 border-amber-500"
+            style={{ fontFamily: "Georgia, serif" }}
+          >
+            Suspects
+          </div>
           {characters.map((char: string) => (
-            <div key={char} className="mr-5 mt-2">
-              {eliminatedPeople.includes(char) && (
-                <div className="line-through">{char}</div>
-              )}
-              {!eliminatedPeople.includes(char) && (
-                <div className="flex">
+            <div key={char} className="mb-2">
+              {eliminatedPeople.includes(char) ? (
+                <div className="line-through text-gray-400 text-sm">{char}</div>
+              ) : (
+                <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={guesses.person === char}
                     onChange={() => selectPerson(char)}
+                    className="cursor-pointer accent-red-800"
                   />
-                  <div className="mr-5">{char}</div>{" "}
-                </div>
+                  <span
+                    className={`text-sm text-amber-900 ${guesses.person === char ? "font-bold" : ""}`}
+                  >
+                    {char}
+                  </span>
+                </label>
               )}
             </div>
           ))}
         </div>
-        <div className="w-1/4 flex flex-col">
-          <div className="text-2xl m-3">Weapons</div>
 
+        {/* Weapons */}
+        <div className="w-1/4 flex flex-col p-4 border-r border-amber-300">
+          <div
+            className="text-base font-bold text-amber-900 mb-3 uppercase tracking-wide pb-2 border-b-2 border-amber-500"
+            style={{ fontFamily: "Georgia, serif" }}
+          >
+            Weapons
+          </div>
           {weapons.map((weapon: string) => (
-            <div key={weapon} className="mr-5 mt-2">
-              {eliminatedWeapons.includes(weapon) && (
-                <div className="line-through">{weapon}</div>
-              )}
-              {!eliminatedWeapons.includes(weapon) && (
-                <div className="flex">
+            <div key={weapon} className="mb-2">
+              {eliminatedWeapons.includes(weapon) ? (
+                <div className="line-through text-gray-400 text-sm">{weapon}</div>
+              ) : (
+                <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={guesses.weapon === weapon}
                     onChange={() => selectWeapon(weapon)}
+                    className="cursor-pointer accent-red-800"
                   />
-                  <div className="mr-5">{weapon}</div>
-                </div>
+                  <span
+                    className={`text-sm text-amber-900 ${guesses.weapon === weapon ? "font-bold" : ""}`}
+                  >
+                    {weapon}
+                  </span>
+                </label>
               )}
             </div>
           ))}
         </div>
-        <div className="h-3/5 w-1/2 flex flex-col flex-wrap">
-          <div className="text-2xl self-center ">Rooms</div>
 
-          {rooms.map((room: any) => (
-            <div key={room.id} className="mr-5 mt-2">
-              {eliminatedRooms.includes(room.type) && (
-                <div className="line-through">{room.type}</div>
-              )}
-              {!eliminatedRooms.includes(room.type) && (
-                <div className="flex">
-                  <input
-                    type="checkbox"
-                    readOnly
-                    checked={room.type === currentRoom}
-                  />
-                  <div className="mr-5">{room.type}</div>
-                </div>
-              )}
-            </div>
-          ))}
+        {/* Rooms */}
+        <div className="w-1/2 flex flex-col p-4">
+          <div
+            className="text-base font-bold text-amber-900 mb-3 uppercase tracking-wide pb-2 border-b-2 border-amber-500"
+            style={{ fontFamily: "Georgia, serif" }}
+          >
+            Rooms
+          </div>
+          <div className="flex flex-wrap gap-x-4">
+            {rooms.map((room: any) => (
+              <div key={room.id} className="mb-2 w-[45%]">
+                {eliminatedRooms.includes(room.type) ? (
+                  <div className="line-through text-gray-400 text-sm">{room.type}</div>
+                ) : (
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      readOnly
+                      checked={room.type === currentRoom}
+                      className="cursor-default accent-red-800"
+                    />
+                    <span
+                      className={`text-sm text-amber-900 ${room.type === currentRoom ? "font-bold" : ""}`}
+                    >
+                      {room.type}
+                    </span>
+                  </label>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-      <div className="flex flex-col items-center space-y-4 text-center">
+
+      {/* Accusation footer */}
+      <div className="bg-amber-100 border-t-2 border-amber-400 p-4 flex flex-col items-center gap-3 flex-shrink-0">
         {guesses.person === "" && guesses.weapon === "" && (
-          <div>Please choose a person and weapon</div>
+          <div className="text-amber-800 italic text-sm">
+            Choose a suspect and weapon to make your accusation
+          </div>
         )}
         {guesses.person === "" && guesses.weapon !== "" && (
-          <div>Please choose a person</div>
+          <div className="text-amber-800 italic text-sm">Choose a suspect</div>
         )}
         {guesses.person !== "" && guesses.weapon === "" && (
-          <div>Please choose a weapon</div>
+          <div className="text-amber-800 italic text-sm">Choose a weapon</div>
         )}
         {guesses.person !== "" && guesses.weapon !== "" && (
-          <div className="text-lg font-semibold">
-            I accuse {guesses.person} in the {guesses.room} with the{" "}
-            {guesses.weapon}
+          <div
+            className="text-lg font-bold text-red-900 text-center"
+            style={{ fontFamily: "Georgia, serif" }}
+          >
+            I accuse {guesses.person} in the {guesses.room} with the {guesses.weapon}!
           </div>
         )}
         <button
           disabled={guesses.person === "" || guesses.weapon === ""}
           onClick={onGuess}
-          className="rounded border-2 bg-yellow-100 w-1/2 cursor-pointer disabled:bg-red-500"
+          className="bg-red-900 hover:bg-red-800 disabled:bg-gray-400 disabled:cursor-not-allowed text-yellow-200 font-bold py-2 px-12 border-2 border-yellow-600 uppercase tracking-widest transition-colors cursor-pointer"
+          style={{ fontFamily: "Georgia, serif" }}
         >
-          Guess
+          Accuse!
         </button>
       </div>
     </div>
