@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchUser, createUser } from "./homeThunks";
+import { loginUser, registerUser, fetchMe } from "./homeThunks";
 
 export interface userState {
   userId: string;
+  isAuthenticated: boolean;
   clueId: string;
   ticTacId: string;
   connectFourId: string;
@@ -13,6 +14,7 @@ export interface userState {
 
 const initialState: userState = {
   userId: "",
+  isAuthenticated: false,
   clueId: "",
   ticTacId: "",
   connectFourId: "",
@@ -28,6 +30,14 @@ export const userSlice = createSlice({
     setUserId: (state, action) => {
       state.userId = action.payload;
     },
+    setAuth: (state, action: { payload: { userId: string } }) => {
+      state.userId = action.payload.userId;
+      state.isAuthenticated = true;
+    },
+    clearAuth: (state) => {
+      state.userId = "";
+      state.isAuthenticated = false;
+    },
     setClueGame: (state, action) => {
       state.clueId = action.payload;
     },
@@ -40,37 +50,43 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // fetchUser
-      .addCase(fetchUser.pending, (state) => {
+      // loginUser
+      .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchUser.fulfilled, (state, action) => {
+      .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        if (action.payload && action.payload.length > 0) {
-          state.userId = action.payload[0].userId || state.userId;
-        }
+        state.isAuthenticated = true;
+        state.userId = action.payload.userId;
       })
-      .addCase(fetchUser.rejected, (state, action) => {
+      .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
-      // createUser
-      .addCase(createUser.pending, (state) => {
+      // registerUser
+      .addCase(registerUser.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(createUser.fulfilled, (state) => {
+      .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
+        state.isAuthenticated = true;
+        state.userId = action.payload.userId;
       })
-      .addCase(createUser.rejected, (state, action) => {
+      .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      // fetchMe — silent session restore on app load
+      .addCase(fetchMe.fulfilled, (state, action) => {
+        state.isAuthenticated = true;
+        state.userId = action.payload.userId;
       });
   },
 });
 
-export const { setUserId, setClueGame, setTicTacToeGame, clearError } =
+export const { setUserId, setAuth, clearAuth, setClueGame, setTicTacToeGame, clearError } =
   userSlice.actions;
 
 export default userSlice.reducer;

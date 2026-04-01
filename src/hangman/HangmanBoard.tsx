@@ -17,6 +17,7 @@ import { AppDispatch } from "../store";
 
 function HangmanBoard() {
   const userId = useSelector((state: any) => state.user.userId);
+  const isAuthenticated = useSelector((state: any) => state.user.isAuthenticated);
   const dispatch = useDispatch<AppDispatch>();
 
   const isWin = useSelector((state: any) => state.hangman.isWin);
@@ -31,12 +32,9 @@ function HangmanBoard() {
     dispatch(setGuessedLetters([...guessedLetters, letter]));
     if (!wordToGuess.includes(letter))
       dispatch(setWrongGuesses(wrongGuesses + 1));
-    dispatch(
-      updateHangmanGame({
-        userId,
-        stuffToPatch: { guessedLetters: [...guessedLetters, letter] },
-      })
-    );
+    if (isAuthenticated) {
+      dispatch(updateHangmanGame({ userId, stuffToPatch: { guessedLetters: [...guessedLetters, letter] } }));
+    }
   };
 
   const handleRestart = () => {
@@ -48,22 +46,16 @@ function HangmanBoard() {
       wrongGuesses: 0,
     };
     dispatch(setGame(newGame));
-    dispatch(
-      updateHangmanGame({
-        userId,
-        stuffToPatch: newGame,
-      })
-    );
+    if (isAuthenticated) {
+      dispatch(updateHangmanGame({ userId, stuffToPatch: newGame }));
+    }
   };
 
   useEffect(() => {
-    // Reset game state when user changes to prevent state leakage
     dispatch(resetGameState());
-    
-    if (userId === "") {
-      handleRestart();
-    }
-  }, [userId, dispatch]);
+    const newWord = words[Math.floor(Math.random() * words.length)];
+    dispatch(setGame({ wordToGuess: newWord, guessedLetters: [], isWin: false, wrongGuesses: 0 }));
+  }, [userId, isAuthenticated, dispatch]);
 
   useEffect(() => {
     for (let i = 0; i < wordToGuess.length; i++) {

@@ -24,6 +24,7 @@ interface Square {
 
 const Board = () => {
   const userId = useSelector((state: any) => state.user.userId);
+  const isAuthenticated = useSelector((state: any) => state.user.isAuthenticated);
   const numClicks = useSelector((state: any) => state.ticTacToe.numClicks);
   const gameOver = useSelector((state: any) => state.ticTacToe.isGameOver);
   const isPlayerOne = useSelector((state: any) => state.ticTacToe.isPlayerOne);
@@ -83,12 +84,9 @@ const Board = () => {
       numClicks: 0,
     };
     dispatch(setUpGame(newGame));
-    dispatch(
-      updateTicTacToeGame({
-        userId,
-        stuffToPatch: { board: newGame.board },
-      })
-    );
+    if (isAuthenticated) {
+      dispatch(updateTicTacToeGame({ userId, stuffToPatch: { board: newGame.board } }));
+    }
   };
 
   const handleClick = (squareNumber: number) => {
@@ -101,20 +99,15 @@ const Board = () => {
     console.log(nextBoard);
     dispatch(setBoardUpdate(nextBoard));
     dispatch(setIsPlayerOne());
-    dispatch(
-      updateTicTacToeGame({
-        userId,
-        stuffToPatch: { board: nextBoard },
-      })
-    );
+    if (isAuthenticated) {
+      dispatch(updateTicTacToeGame({ userId, stuffToPatch: { board: nextBoard } }));
+    }
     checkGameOver();
   };
 
   useEffect(() => {
-    // Reset game state when user changes to prevent state leakage
     dispatch(resetGameState());
-    
-    if (userId !== "") {
+    if (isAuthenticated) {
       dispatch(fetchCurrentGame(userId)).then((result) => {
         if (fetchCurrentGame.fulfilled.match(result)) {
           if (
@@ -126,8 +119,10 @@ const Board = () => {
           }
         }
       });
+    } else {
+      dispatch(setUpGame({ board: blankBoard, isPlayerOne: true, isGameOver: false, numClicks: 0 }));
     }
-  }, [userId, dispatch]);
+  }, [userId, isAuthenticated, dispatch]);
 
   useEffect(() => {
     if (checkGameOver()) dispatch(setIsGameOver(true));

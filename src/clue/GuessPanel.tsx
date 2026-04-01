@@ -15,7 +15,7 @@ import { saveClueGameState } from "./clueThunks";
 import { AppDispatch } from "../store";
 
 const GuessPanel = () => {
-  const gameId = useSelector((state: any) => state.clue.gameId);
+  const playerName = useSelector((state: any) => state.user.userId);
   const guesses = useSelector((state: any) => state.clue.guesses);
   const confidential = useSelector((state: any) => state.clue.confidential);
   const weapons = useSelector((state: any) => state.clue.weapons);
@@ -47,7 +47,7 @@ const GuessPanel = () => {
   };
 
   const handleNewGame = () => {
-    dispatch(saveClueGameState({ gameId, stuffToPatch: { isGameOver: false } }));
+    dispatch(saveClueGameState({ playerName, stuffToPatch: { isGameOver: false } }));
     dispatch(endGame());
   };
 
@@ -56,7 +56,7 @@ const GuessPanel = () => {
     dispatch(setEliminatedPeople(newEliminatedPeople));
     dispatch(
       saveClueGameState({
-        gameId,
+        playerName,
         stuffToPatch: {
           eliminatedPeople: newEliminatedPeople,
         },
@@ -70,7 +70,7 @@ const GuessPanel = () => {
     dispatch(setEliminatedRooms(newEliminatedRooms));
     dispatch(
       saveClueGameState({
-        gameId,
+        playerName,
         stuffToPatch: {
           eliminatedRooms: newEliminatedRooms,
         },
@@ -84,7 +84,7 @@ const GuessPanel = () => {
     dispatch(setEliminatedWeapons(newEliminatedWeapons));
     dispatch(
       saveClueGameState({
-        gameId,
+        playerName,
         stuffToPatch: {
           eliminatedWeapons: newEliminatedWeapons,
         },

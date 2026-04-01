@@ -22,6 +22,7 @@ export interface Square {
 
 const ConnectFourBoard = () => {
   const userId = useSelector((state: any) => state.user.userId);
+  const isAuthenticated = useSelector((state: any) => state.user.isAuthenticated);
   const isRedTurn = useSelector((state: any) => state.connectFour.isRedTurn);
   const isGameOver = useSelector((state: any) => state.connectFour.isGameOver);
   const columns = useSelector((state: any) => state.connectFour.columns);
@@ -44,12 +45,9 @@ const ConnectFourBoard = () => {
     checkVerticalWin(updatedColumns);
     checkHorizontalWin(updatedColumns);
     checkDiagonalWin(updatedColumns);
-    dispatch(
-      saveConnectFourGame({
-        userId,
-        stuffToPatch: { columns: updatedColumns },
-      })
-    );
+    if (isAuthenticated) {
+      dispatch(saveConnectFourGame({ userId, stuffToPatch: { columns: updatedColumns } }));
+    }
   };
 
   const checkVerticalWin = (updatedColumns: Column[]) => {
@@ -141,20 +139,15 @@ const ConnectFourBoard = () => {
         { id: 5, color: "" },
       ],
     });
-    dispatch(
-      saveConnectFourGame({
-        userId,
-        stuffToPatch: { columns: resetColumns },
-      })
-    );
+    if (isAuthenticated) {
+      dispatch(saveConnectFourGame({ userId, stuffToPatch: { columns: resetColumns } }));
+    }
     dispatch(restart());
   };
 
   useEffect(() => {
-    // Reset game state when user changes to prevent state leakage
     dispatch(resetGameState());
-    
-    if (userId !== "") {
+    if (isAuthenticated) {
       dispatch(fetchConnectFourGame(userId)).then((result) => {
         if (fetchConnectFourGame.fulfilled.match(result)) {
           if (
@@ -169,7 +162,7 @@ const ConnectFourBoard = () => {
         }
       });
     }
-  }, [userId, dispatch]);
+  }, [userId, isAuthenticated, dispatch]);
 
   return (
     <div className="">

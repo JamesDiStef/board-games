@@ -6,12 +6,10 @@ export const fetchCurrentGame = createAsyncThunk(
   "ticTacToe/fetchCurrentGame",
   async (userId: string, { rejectWithValue }) => {
     try {
-      if (userId === "") {
-        return null;
-      }
-      const response = await fetch(`${API_URL}/ticTacToe/${userId}`);
-      const game = await response.json();
-      return game;
+      const response = await fetch(`${API_URL}/ticTacToe/${userId}`, {
+        credentials: "include",
+      });
+      return await response.json();
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
@@ -22,17 +20,12 @@ export const createNewGame = createAsyncThunk(
   "ticTacToe/createNewGame",
   async (userId: string, { rejectWithValue }) => {
     try {
-      if (userId === "") {
-        return null;
-      }
       const response = await fetch(`${API_URL}/ticTacToe/${userId}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
       });
-      const game = await response.json();
-      return game;
+      return await response.json();
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
@@ -46,18 +39,13 @@ export const updateTicTacToeGame = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      if (userId === "") {
-        return null;
-      }
       const response = await fetch(`${API_URL}/ticTacToe/${userId}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(stuffToPatch),
       });
-      const game = await response.json();
-      return game;
+      return await response.json();
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }

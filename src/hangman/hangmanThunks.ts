@@ -9,18 +9,13 @@ export const updateHangmanGame = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      if (userId === "") {
-        return null;
-      }
       const response = await fetch(`${API_URL}/hangman/${userId}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(stuffToPatch),
       });
-      const game = await response.json();
-      return game;
+      return await response.json();
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }

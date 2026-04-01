@@ -14,6 +14,7 @@ import { AppDispatch } from "../store";
 
 export const ClueBoard = () => {
   const playerName = useSelector((state: any) => state.user.userId);
+  const isAuthenticated = useSelector((state: any) => state.user.isAuthenticated);
   const clueGame = useSelector((state: any) => state.clue);
   // const gameId = useSelector((state: any) => state.clue.gameId);
   const isOpenModal = useSelector((state: any) => state.clue.isOpenModal);
@@ -173,10 +174,8 @@ export const ClueBoard = () => {
   };
 
   useEffect(() => {
-    // Reset game state when user changes to prevent state leakage
     dispatch(resetGameState());
-    
-    if (playerName !== "") {
+    if (isAuthenticated) {
       dispatch(fetchClueGame(playerName)).then((result) => {
         if (fetchClueGame.fulfilled.match(result)) {
           if (
@@ -189,7 +188,7 @@ export const ClueBoard = () => {
         }
       });
     }
-  }, [playerName, dispatch]);
+  }, [playerName, isAuthenticated, dispatch]);
 
   useEffect(() => {
     dispatch(

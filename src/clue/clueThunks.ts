@@ -6,12 +6,10 @@ export const fetchClueGame = createAsyncThunk(
   "clue/fetchGame",
   async (playerName: string, { rejectWithValue }) => {
     try {
-      if (playerName === "") {
-        return null;
-      }
-      const response = await fetch(`${API_URL}/clue/${playerName}`);
-      const game = await response.json();
-      return game;
+      const response = await fetch(`${API_URL}/clue/${playerName}`, {
+        credentials: "include",
+      });
+      return await response.json();
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
@@ -25,18 +23,13 @@ export const createClueGame = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      if (playerName === "") {
-        return null;
-      }
       const response = await fetch(`${API_URL}/clue/${playerName}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(gameData),
       });
-      const game = await response.json();
-      return game;
+      return await response.json();
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
@@ -46,22 +39,17 @@ export const createClueGame = createAsyncThunk(
 export const saveClueGameState = createAsyncThunk(
   "clue/saveGameState",
   async (
-    { gameId, stuffToPatch }: { gameId: string; stuffToPatch: any },
+    { playerName, stuffToPatch }: { playerName: string; stuffToPatch: any },
     { rejectWithValue }
   ) => {
     try {
-      if (gameId === "") {
-        return null;
-      }
-      const response = await fetch(`${API_URL}/clue/${gameId}`, {
+      const response = await fetch(`${API_URL}/clue/${playerName}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(stuffToPatch),
       });
-      const game = await response.json();
-      return game;
+      return await response.json();
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }

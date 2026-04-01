@@ -7,26 +7,35 @@ import "./global.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import MobileNav from "./MobileNav";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ClueBoard from "./clue/ClueBoard";
 import Home from "./home/Home";
+import Register from "./home/Register";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "./store";
+import { fetchMe } from "./home/homeThunks";
 
 function App() {
   const location = useLocation();
-  console.log(location.pathname);
   const isHome = location.pathname === "/home" || location.pathname === "/";
-  console.log(isHome);
   const [openModal, setOpenModal] = useState(false);
   const [isFirstOpen, setIsFirstOpen] = useState(true);
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchMe());
+  }, [dispatch]);
+
   const close = () => {
     setOpenModal(false);
     setIsFirstOpen(false);
   };
+
   return (
     <div>
       <div className="block sm:hidden bg-amber-500">
         <button
-          className="flex p-3 sm:hidden text-3xl "
+          className="flex p-3 sm:hidden text-3xl"
           onClick={() => setOpenModal(!openModal)}
         >
           <FontAwesomeIcon icon={faBars} />
@@ -46,6 +55,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/hangman" element={<HangmanBoard />} />
         <Route path="/ticTacToe" element={<Board />} />
         <Route path="/connectFour" element={<ConnectFourBoard />} />
