@@ -73,7 +73,7 @@ const Home = () => {
 
           <button
             onClick={continueAsGuest}
-            className="h-12 w-full rounded-md bg-amber-500 text-black font-semibold"
+            className="h-12 w-full rounded-md bg-amber-500 text-black font-semibold cursor-pointer"
           >
             Continue as Guest
           </button>
