@@ -13,7 +13,6 @@ const Home = () => {
   const navigate = useNavigate();
 
   const [password, setPassword] = useState("");
-  const [mode, setMode] = useState<"default" | "signin">("default");
 
   const goToNextPage = () => navigate("/connectFour");
 
@@ -29,12 +28,7 @@ const Home = () => {
     }
   };
 
-  const handleBack = () => {
-    setMode("default");
-    setPassword("");
-  };
-
-  const canSubmit = userId.length > 0 && !loading;
+  const canSubmit = userId.length > 0 && password.length > 0 && !loading;
 
   return (
     <div className="flex justify-center items-center bg-[url('https://boardgamesj.s3.us-east-2.amazonaws.com/checkers.avif')] bg-cover bg-no-repeat bg-center min-h-screen w-full">
@@ -48,67 +42,46 @@ const Home = () => {
           </h1>
 
           <input
-            className="mb-4 h-11 px-4 rounded-md border border-gray-300"
+            className="h-12 w-full px-4 rounded-md border border-gray-300 mb-4"
             type="text"
             placeholder="Username"
             value={userId}
             onChange={(e) => dispatch(setUserId(e.target.value))}
           />
+          <input
+            className="h-12 w-full px-4 rounded-md border border-gray-300 mb-4"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-          {mode === "signin" && (
-            <>
-              <input
-                className="mb-4 h-11 px-4 rounded-md border border-gray-300"
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoFocus
-              />
-              {error && (
-                <p className="mb-3 text-sm text-red-600 text-center">{error}</p>
-              )}
-              <button
-                disabled={!canSubmit}
-                onClick={handleSignIn}
-                className="bg-amber-500 text-black font-semibold h-12 w-full rounded-md disabled:opacity-50"
-              >
-                {loading ? "Signing in…" : "Submit"}
-              </button>
-              <button
-                onClick={handleBack}
-                className="mt-3 text-sm text-gray-500 underline"
-              >
-                Back
-              </button>
-            </>
-          )}
+          <button
+            disabled={!canSubmit}
+            onClick={handleSignIn}
+            className="h-12 w-full rounded-md bg-amber-500 text-black font-semibold mb-4 disabled:opacity-50"
+          >
+            {loading ? "Signing in…" : "Sign In"}
+          </button>
 
-          {mode === "default" && (
-            <>
-              <button
-                disabled={userId.length === 0}
-                onClick={() => setMode("signin")}
-                className="bg-amber-500 text-black font-semibold h-12 w-full rounded-md disabled:opacity-50"
-              >
-                Sign In
-              </button>
-              <Link
-                to="/register"
-                className="bg-amber-500 text-black font-semibold h-12 mt-4 w-full rounded-md flex items-center justify-center"
-              >
-                Create Account
-              </Link>
-            </>
+          <Link
+            to="/register"
+            className="h-12 w-full rounded-md bg-amber-500 text-black font-semibold flex items-center justify-center mb-4"
+          >
+            Register
+          </Link>
+
+          <button
+            onClick={continueAsGuest}
+            className="h-12 w-full rounded-md bg-amber-500 text-black font-semibold"
+          >
+            Continue as Guest
+          </button>
+
+          {error && (
+            <p className="mt-4 text-sm text-red-600 text-center">{error}</p>
           )}
         </form>
-
-        <button
-          onClick={continueAsGuest}
-          className="bg-amber-500 text-black font-semibold h-10 mt-6 w-11/12 max-w-xs rounded-md"
-        >
-          Continue as Guest
-        </button>
       </div>
     </div>
   );
