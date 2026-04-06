@@ -189,51 +189,47 @@ const ConnectFourBoard = ({ mode }: Props) => {
     );
   }
 
-  const turnLabel = isRedTurn ? "Red's turn" : "Black's turn";
-  const showTurnIndicator = !isGameOver && mode === "pass-and-play";
+  const centerLabel = isGameOver
+    ? "Game Over!"
+    : mode === "pass-and-play"
+    ? (isRedTurn ? "Red's turn" : "Black's turn")
+    : "";
+
+  const centerColor = isGameOver
+    ? "#d97706"
+    : mode === "pass-and-play"
+    ? (isRedTurn ? "#dc2626" : "#222")
+    : "#6b7280";
 
   return (
     <div className="min-h-screen w-full flex flex-col justify-center items-center px-4 bg-gradient-to-br from-blue-50 to-indigo-100">
 
-      {isGameOver && (
-        <div className="mb-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold text-center rounded-lg py-3 px-6 text-lg shadow-md">
-          Game Over!
-        </div>
-      )}
+      <div className="w-full max-w-md bg-white rounded-xl shadow-md px-4 py-3 flex items-center justify-between mb-3">
+        <button
+          onClick={() => navigate("/connectFour")}
+          className="text-sm text-blue-500 hover:underline cursor-pointer"
+        >
+          ← Menu
+        </button>
+        <span className="text-sm font-semibold" style={{ color: centerColor }}>
+          {centerLabel}
+        </span>
+        <button
+          className="bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg py-1.5 px-3 text-sm transition-colors cursor-pointer"
+          onClick={handleRestart}
+        >
+          Restart
+        </button>
+      </div>
 
-      {showTurnIndicator && (
-        <div className="mb-4 font-semibold text-lg" style={{ color: isRedTurn ? "red" : "#222" }}>
-          {turnLabel}
-        </div>
-      )}
-
-      <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full flex flex-col">
-        <h1 className="text-3xl font-bold text-center mb-4 text-blue-600">Connect Four</h1>
-
-        <div className="flex justify-between items-center mb-4">
-          <button
-            onClick={() => navigate("/connectFour")}
-            className="text-sm text-blue-500 underline cursor-pointer"
-          >
-            ← Menu
-          </button>
-          <button
-            className="bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg py-2 px-4 transition-all duration-200 shadow-md hover:shadow-lg text-sm cursor-pointer"
-            onClick={handleRestart}
-          >
-            Restart
-          </button>
-        </div>
-
-        <div className="flex justify-center sm:space-x-2">
-          {columns.map((column: Column, index: number) => (
-            <ConnectFourColumn
-              key={index}
-              column={column}
-              handleClick={(col: Column) => handleClickColumn(index, col)}
-            />
-          ))}
-        </div>
+      <div className="flex justify-center sm:space-x-2">
+        {columns.map((column: Column, index: number) => (
+          <ConnectFourColumn
+            key={index}
+            column={column}
+            handleClick={(col: Column) => handleClickColumn(index, col)}
+          />
+        ))}
       </div>
     </div>
   );
