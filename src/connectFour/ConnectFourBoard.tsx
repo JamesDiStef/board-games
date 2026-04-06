@@ -9,6 +9,7 @@ import {
   saveConnectFourGame,
 } from "./connectFourThunks";
 import { AppDispatch } from "../store";
+import { useNavigate } from "react-router-dom";
 
 export interface Column {
   counter: number;
@@ -20,7 +21,13 @@ export interface Square {
   color: string;
 }
 
-const ConnectFourBoard = () => {
+type Mode = "pass-and-play" | "single-player" | "multiplayer";
+
+interface Props {
+  mode: Mode;
+}
+
+const ConnectFourBoard = ({ mode }: Props) => {
   const userId = useSelector((state: any) => state.user.userId);
   const isAuthenticated = useSelector((state: any) => state.user.isAuthenticated);
   const isRedTurn = useSelector((state: any) => state.connectFour.isRedTurn);
@@ -28,6 +35,7 @@ const ConnectFourBoard = () => {
   const columns = useSelector((state: any) => state.connectFour.columns);
 
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const handleClickColumn = (index: number, column: Column) => {
     if (isGameOver) return;
@@ -164,24 +172,68 @@ const ConnectFourBoard = () => {
     }
   }, [userId, isAuthenticated, dispatch]);
 
-  return (
-    <div className="">
-      <button
-        className="border-2 bg-amber-400 rounded-2xl mt-[30px] p-3 ml-[45%]"
-        onClick={handleRestart}
-      >
-        Restart
-      </button>
-      {isGameOver && <div className="flex justify-center">Game over!!!</div>}
+  if (mode === "multiplayer") {
+    return (
+      <div className="min-h-screen w-full flex flex-col justify-center items-center px-4 bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full flex flex-col items-center">
+          <h1 className="text-3xl font-bold text-center mb-4 text-blue-600">Connect Four</h1>
+          <p className="text-gray-500 text-center mb-6">Multiplayer is coming soon.</p>
+          <button
+            onClick={() => navigate("/connectFour")}
+            className="text-sm text-blue-500 underline cursor-pointer"
+          >
+            ← Back to menu
+          </button>
+        </div>
+      </div>
+    );
+  }
 
-      <div className="flex justify-center sm:space-x-2">
-        {columns.map((column: Column, index: number) => (
-          <ConnectFourColumn
-            key={index}
-            column={column}
-            handleClick={(col: Column) => handleClickColumn(index, col)}
-          />
-        ))}
+  const turnLabel = isRedTurn ? "Red's turn" : "Black's turn";
+  const showTurnIndicator = !isGameOver && mode === "pass-and-play";
+
+  return (
+    <div className="min-h-screen w-full flex flex-col justify-center items-center px-4 bg-gradient-to-br from-blue-50 to-indigo-100">
+
+      {isGameOver && (
+        <div className="mb-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold text-center rounded-lg py-3 px-6 text-lg shadow-md">
+          Game Over!
+        </div>
+      )}
+
+      {showTurnIndicator && (
+        <div className="mb-4 font-semibold text-lg" style={{ color: isRedTurn ? "red" : "#222" }}>
+          {turnLabel}
+        </div>
+      )}
+
+      <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full flex flex-col">
+        <h1 className="text-3xl font-bold text-center mb-4 text-blue-600">Connect Four</h1>
+
+        <div className="flex justify-between items-center mb-4">
+          <button
+            onClick={() => navigate("/connectFour")}
+            className="text-sm text-blue-500 underline cursor-pointer"
+          >
+            ← Menu
+          </button>
+          <button
+            className="bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg py-2 px-4 transition-all duration-200 shadow-md hover:shadow-lg text-sm cursor-pointer"
+            onClick={handleRestart}
+          >
+            Restart
+          </button>
+        </div>
+
+        <div className="flex justify-center sm:space-x-2">
+          {columns.map((column: Column, index: number) => (
+            <ConnectFourColumn
+              key={index}
+              column={column}
+              handleClick={(col: Column) => handleClickColumn(index, col)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

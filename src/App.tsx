@@ -1,7 +1,9 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import HangmanBoard from "./hangman/HangmanBoard";
 import Board from "./tickTackToe/TickTackToeBoard";
+import TicTacToeMenu from "./tickTackToe/TicTacToeMenu";
 import ConnectFourBoard from "./connectFour/ConnectFourBoard";
+import ConnectFourMenu from "./connectFour/ConnectFourMenu";
 import NavBar from "./NavBar";
 import "./global.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -57,8 +59,14 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/hangman" element={<HangmanBoard />} />
-        <Route path="/ticTacToe" element={<Board />} />
-        <Route path="/connectFour" element={<ConnectFourBoard />} />
+        <Route path="/ticTacToe" element={<TicTacToeMenu />} />
+        <Route path="/tic-tac-toe/pass-and-play" element={<Board mode="pass-and-play" />} />
+        <Route path="/tic-tac-toe/single-player" element={<Board mode="single-player" />} />
+        <Route path="/tic-tac-toe/multiplayer" element={<Board mode="multiplayer" />} />
+        <Route path="/connectFour" element={<ConnectFourMenu />} />
+        <Route path="/connect-four/pass-and-play" element={<ConnectFourBoard mode="pass-and-play" />} />
+        <Route path="/connect-four/single-player" element={<ConnectFourBoard mode="single-player" />} />
+        <Route path="/connect-four/multiplayer" element={<ConnectFourBoard mode="multiplayer" />} />
         <Route path="/clue" element={<ClueBoard />} />
       </Routes>
     </div>
